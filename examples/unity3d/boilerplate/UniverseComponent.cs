@@ -13,7 +13,6 @@ public class UniverseComponent : MonoBehaviour {
   [HideInInspector] public ComponentManager manager;
 
   ReadOnlyCollection<Entity> lastEntities;
-  float lastTime = 0;
 
   void Update() {
     if (reference == null) {
@@ -22,7 +21,7 @@ public class UniverseComponent : MonoBehaviour {
     }
 
     // Display
-    if (Time.time - lastTime > manager.pollRate) {
+    if (Time.time - manager.lastPoll > manager.pollRate) {
       ReadOnlyCollection<Entity> current = reference.GetAllEntities();
 
       if (lastEntities == null || lastEntities.Count != current.Count)
@@ -40,7 +39,10 @@ public class UniverseComponent : MonoBehaviour {
         target.Poll();
       }
 
-      lastTime = Time.time;
+      if (reference == Universe.root) {
+        manager.lastPoll = Time.time;
+        manager.IncrementTick();
+      }
     }
   }
 }

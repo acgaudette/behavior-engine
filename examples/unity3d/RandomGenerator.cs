@@ -25,10 +25,6 @@ public class RandomEntity : UnityEntity {
   protected override float Score(Interaction interaction, List<Entity> targets) {
     return Random.Range(0, 1f);
   }
-
-  protected override void OnPoll(
-    Interaction choice, ReadOnlyCollection<Entity> targets, float highscore
-  ) { }
 }
 
 public class RandomGenerator : MonoBehaviour {

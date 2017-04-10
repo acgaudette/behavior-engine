@@ -2,6 +2,9 @@
 // Created by Aaron C Gaudette on 04.09.17
 // All core classes are extended to add label (debug) information
 
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using UnityEngine;
 using BehaviorEngine;
 
 public interface ILabeled {
@@ -10,12 +13,22 @@ public interface ILabeled {
 }
 
 public abstract class UnityEntity : Entity, ILabeled {
-  string label;
+
+  public void SetDebug(bool to) { print = to; }
+
+  public bool Print {
+    get { return print; }
+    set { print = value; }
+  }
+  bool print = false;
 
   public string Label {
     get { return label; }
     set { label = value; }
   }
+  string label;
+
+  string Prefix { get { return "ENTITY " + Label + ":\n"; } }
 
   public UnityEntity(string label) : base() {
     Label = label;
@@ -23,6 +36,51 @@ public abstract class UnityEntity : Entity, ILabeled {
 
   public override string ToString() {
     return Label;
+  }
+
+  protected override void OnReact(Interaction interaction, Entity host, List<Effect> effects) {
+    if (!print) return;
+
+    string debug = Prefix;
+    debug += "REACTION\n";
+
+    debug += "Interaction = " + ((UnityInteraction)interaction).Label + "\n";
+    debug += "Host = " + ((UnityEntity)host).Label + (host == this ? " (self)" : "") + "\n";
+    debug += Utility.EffectsToString(effects);
+
+    Debug.Log(debug);
+  }
+
+  protected override void OnObserve(
+    Interaction interaction, Entity host, List<Entity> targets, List<Effect> effects
+  ) {
+    if (!print) return;
+
+    string debug = Prefix;
+    debug += "OBSERVATION\n";
+    debug += "Interaction = " + ((UnityInteraction)interaction).Label + "\n";
+    debug += "Host = " + ((UnityEntity)host).Label + "\n";
+
+    debug += Utility.EntityLabelsToString(new ReadOnlyCollection<Entity>(targets), "Targets");
+    debug += Utility.EffectsToString(effects);
+
+    Debug.Log(debug);
+  }
+
+  protected override void OnPoll(
+    Interaction choice, ReadOnlyCollection<Entity> targets, float highscore
+  ) {
+    if (!print) return;
+
+    string debug = Prefix;
+    debug += "POLL\n";
+    debug += "Interaction = "
+      + (choice == null ? "null" : ((UnityInteraction)choice).Label) + "\n";
+
+    debug += Utility.EntityLabelsToString(targets, "Targets");
+    debug += "Score = " + highscore + "\n";
+
+    Debug.Log(debug);
   }
 }
 

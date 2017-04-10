@@ -8,7 +8,8 @@ using BehaviorEngine;
 
 public class EntityComponent : MonoBehaviour {
 
-  public Entity reference;
+  public bool debug = false;
+  public UnityEntity reference;
 
   [System.Serializable]
   public class AttributeRenderer {
@@ -25,6 +26,8 @@ public class EntityComponent : MonoBehaviour {
   public List<AttributeRenderer> attributes = new List<AttributeRenderer>();
 
   void Update() {
+    reference.Print = debug;
+
     if (reference == null) {
       Debug.LogWarning("EntityComponent: Reference is null!");
       return;
