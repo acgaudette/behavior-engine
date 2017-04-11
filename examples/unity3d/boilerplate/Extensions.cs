@@ -14,6 +14,8 @@ public interface ILabeled {
 
 public abstract class UnityEntity : Entity, ILabeled {
 
+  public bool destroy = false;
+
   public void SetDebug(bool to) { print = to; }
 
   public bool Print {

@@ -22,6 +22,10 @@ public class UniverseComponent : MonoBehaviour {
 
     // Display
     if (Time.time - manager.lastPoll > manager.pollRate) {
+      if (reference == Universe.root) {
+        //manager.ClearConsole();
+      }
+
       ReadOnlyCollection<Entity> current = reference.GetAllEntities();
 
       if (lastEntities == null || lastEntities.Count != current.Count)
@@ -37,6 +41,14 @@ public class UniverseComponent : MonoBehaviour {
       // Poll
       foreach (Entity target in current) {
         target.Poll();
+      }
+
+      // Remove entities marked as destroyed from the universe
+      for (int i = 0; i < current.Count; ++i) {
+        if ((current[i] as UnityEntity).destroy) {
+          current[i].GetUniverse().RemoveEntity(current[i]);
+          i--;
+        }
       }
 
       if (reference == Universe.root) {

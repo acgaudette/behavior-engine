@@ -8,7 +8,7 @@ using BehaviorEngine;
 
 public class EntityComponent : MonoBehaviour {
 
-  public bool debug = false;
+  public bool debug = true;
   public UnityEntity reference;
 
   [System.Serializable]

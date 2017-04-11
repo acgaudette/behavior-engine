@@ -6,6 +6,10 @@ using System.Collections.ObjectModel;
 using UnityEngine;
 using BehaviorEngine;
 
+using System;
+using System.Reflection;
+using UnityEditor;
+
 public class ComponentManager : MonoBehaviour {
 
   public float pollRate = 4; // Rate to update all universes/entities
@@ -89,5 +93,12 @@ public class ComponentManager : MonoBehaviour {
     }
 
     return latest;
+  }
+
+  public void ClearConsole() {
+    Assembly.GetAssembly(typeof(SceneView))
+      .GetType("UnityEditorInternal.LogEntries")
+      .GetMethod("Clear")
+      .Invoke(new object(), null);
   }
 }
