@@ -16,18 +16,23 @@ namespace BehaviorEngine {
     // Trigger reactions and observations to this interaction
     // Expects a target list with count <= the limiter
     public bool Perform(Entity host, List<Entity> targets) {
-      if (host == null || targets.Count > limiter) return false; // Invalid input
+      if (host == null || targets == null || targets.Count > limiter)
+        return false; // Invalid input
 
       host.React(this, host); // React to self
 
       foreach (Entity target in targets) // Target reactions
         target.React(this, host);
 
-      foreach (Entity target in GetObservers(host, targets)) { // Observers
-        if (target == host || targets.Contains(target)) // Skip host and targets
-          continue;
+      ReadOnlyCollection<Entity> observers = GetObservers(host, targets);
 
-        target.Observe(this, host, targets);
+      if (observers != null) {
+        foreach (Entity target in GetObservers(host, targets)) { // Observers
+          if (target == host || targets.Contains(target)) // Skip host and targets
+            continue;
+
+          target.Observe(this, host, targets);
+        }
       }
 
       return true;

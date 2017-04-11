@@ -136,7 +136,9 @@ namespace BehaviorEngine {
       return GetUniverse().GetEntities(this); // By default, target everything in the root
     }
 
-    protected virtual void OnReact(Interaction interaction, Entity host, List<Effect> effects) { }
+    protected virtual void OnReact(
+      Interaction interaction, Entity host, List<Effect> effects
+    ) { }
 
     protected virtual void OnObserve(
       Interaction interaction, Entity host, List<Entity> targets, List<Effect> effects
