@@ -95,8 +95,8 @@ public class UnityAttribute : NormalizedAttribute, ILabeled {
   }
 
   public UnityAttribute(
-    string label, Class family, float initialState
-  ) : base(family, initialState) {
+    string label, Class family, InitializeState initializeState
+  ) : base(family, initializeState) {
     Label = label;
   }
 

@@ -7,7 +7,8 @@ namespace BehaviorEngine {
 
   public abstract class Attribute {
 
-    public readonly float initialState;
+    public delegate float InitializeState();
+    public readonly InitializeState initializeState;
     Class family;
 
     public bool Instance { get { return instance; } }
@@ -17,9 +18,9 @@ namespace BehaviorEngine {
     ulong id;
 
     // Creates a new Attribute archetype
-    protected Attribute(Class family, float initialState = 0) {
+    protected Attribute(Class family, InitializeState initializeState) {
       this.family = family;
-      this.initialState = initialState;
+      this.initializeState = initializeState;
       instance = false;
       id = family.RegisterAttribute(this);
     }
@@ -29,7 +30,8 @@ namespace BehaviorEngine {
       id = attribute.id;
       instance = true;
       family = attribute.family;
-      State = initialState = attribute.GetArchetype().initialState;
+      initializeState = attribute.initializeState;
+      State = attribute.GetArchetype().initializeState();
     }
 
     public Attribute GetArchetype() {
@@ -48,8 +50,8 @@ namespace BehaviorEngine {
   public class NormalizedAttribute : Attribute {
 
     // Archetype
-    public NormalizedAttribute(Class family, float initialState)
-      : base(family, initialState) { }
+    public NormalizedAttribute(Class family, InitializeState initializeState)
+      : base(family, initializeState) { }
 
     // Instance
     NormalizedAttribute(Attribute attribute) : base(attribute) { }

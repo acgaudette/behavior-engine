@@ -17,15 +17,18 @@ public class Forum : MonoBehaviour {
     Class.root = new Class();
 
     // Attributes
-    trollFactor = new UnityAttribute("Troll Factor", Class.root, 0);
-    anger = new UnityAttribute("Anger", Class.root, 0);
+    trollFactor = new UnityAttribute(
+      "Troll Factor", Class.root,
+      () => Random.Range(0, 1f)
+    );
+    anger = new UnityAttribute("Anger", Class.root);
 
     // Users
-    User julian = new User("Julian");
-    User andy = new User("Andy");
-    User mike = new User("Mike");
-
-    User[] users = { julian, andy, mike };
+    User[] users = {
+      new User("Julian"),
+      new User("Andy"),
+      new User("Mike")
+    };
 
     // Effects
     annoy = new UnityEffect("Annoy");
@@ -54,10 +57,5 @@ public class Forum : MonoBehaviour {
       user.Subscribe(Class.root);
       Universe.root.AddEntity(user);
     }
-
-    // Initialize attributes
-    julian.GetAttribute(trollFactor).Modify(.4f);
-    andy.GetAttribute(trollFactor).Modify(.7f);
-    mike.GetAttribute(trollFactor).Modify(.1f);
   }
 }
