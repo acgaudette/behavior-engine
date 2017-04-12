@@ -12,7 +12,7 @@ using UnityEditor;
 
 public class ComponentManager : MonoBehaviour {
 
-  public float pollRate = 4; // Rate to update all universes/entities
+  public float pollRate = 8; // Rate to update all universes/entities
   [HideInInspector] public float lastPoll;
 
   public void IncrementTick() { tick++; }
