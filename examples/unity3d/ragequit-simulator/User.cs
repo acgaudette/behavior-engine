@@ -10,7 +10,7 @@ public partial class User : UnityEntity {
   public User(string label) : base(label) { }
 
   protected override List<Effect> GetReaction(Interaction interaction, Entity host) {
-    if ((host as UnityEntity).destroy && interaction != Forum.quit)
+    if ((destroy || (host as UnityEntity).destroy) && interaction != Forum.quit)
       return null;
 
     if (host == this)
@@ -29,7 +29,7 @@ public partial class User : UnityEntity {
   protected override List<Effect> GetObservation(
     Interaction interaction, Entity host, List<Entity> targets
   ) {
-    if ((host as UnityEntity).destroy && interaction != Forum.quit)
+    if ((destroy || (host as UnityEntity).destroy) && interaction != Forum.quit)
       return null;
 
     if (interaction == Forum.start) {
