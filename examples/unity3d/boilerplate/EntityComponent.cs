@@ -38,7 +38,7 @@ public class EntityComponent : MonoBehaviour {
     // Display
     foreach (Attribute attribute in reference.GetAttributes()) {
       attributes.Add(new AttributeRenderer(
-        attribute.GetArchetype().ToString(), attribute.GetState()
+        attribute.GetArchetype().ToString(), attribute.State
       ));
     }
   }

@@ -29,7 +29,7 @@ public partial class User : UnityEntity {
       " after reading " + (host as ILabeled).Label + "'s post"
       : " after " + (host as ILabeled).Label + "'s massive rage";
 
-    if (effects.Contains(Forum.calm) && GetAttribute(Forum.anger).GetState() > 0) {
+    if (effects.Contains(Forum.calm) && GetAttribute(Forum.anger).State > 0) {
       if (interaction == Forum.start)
         Debug.Log("<color=cyan>" + Label + " calms down" + suffix + "</color>");
       else
@@ -52,7 +52,7 @@ public partial class User : UnityEntity {
       Logoff();
 
     else if (choice == Forum.start) {
-      float anger = GetAttribute(Forum.anger).GetState();
+      float anger = GetAttribute(Forum.anger).State;
       Debug.Log(
         Label + " starts a new thread, " + ((anger > .66f) ?
           "super angry" : (anger > .33f) ?

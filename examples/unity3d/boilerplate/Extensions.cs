@@ -101,7 +101,7 @@ public class UnityAttribute : NormalizedAttribute, ILabeled {
   }
 
   public override string ToString() {
-    return Instance ? "I" + ID + "_" + (family[ID] as UnityAttribute).Label :
+    return Instance ? "I" + ID + "_" + (GetArchetype() as ILabeled).Label :
       "A" + ID + "_" + Label;
   }
 }

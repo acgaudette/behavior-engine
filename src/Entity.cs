@@ -17,7 +17,6 @@ namespace BehaviorEngine {
       attributes = new List<Attribute>();
     }
 
-    // Input can be an instance or archetype
     public Attribute GetAttribute(Attribute attribute) {
       return attributes.Find(a => a.ID == attribute.ID);
     }
@@ -26,12 +25,11 @@ namespace BehaviorEngine {
       return attributes;
     }
 
-    // Input must be an archetype, and attributes are unique
     public bool AddAttribute(Attribute attribute) {
-      if (attribute.Instance || GetAttribute(attribute) != null)
+      if (GetAttribute(attribute) != null) // Can't have a duplicate attribute
         return false;
 
-      attributes.Add(new Attribute(attribute)); // Create instance
+      attributes.Add(attribute.GetNewInstance());
 
       return true;
     }

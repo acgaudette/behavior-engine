@@ -17,7 +17,7 @@ public partial class User : UnityEntity {
       return null;
 
     if (interaction == Forum.flame) {
-      if (GetAttribute(Forum.trollFactor).GetState() > .5f)
+      if (GetAttribute(Forum.trollFactor).State > .5f)
         return new List<Effect>(){ Forum.annoy };
       else
         return new List<Effect>(){ Forum.incite };
@@ -33,10 +33,10 @@ public partial class User : UnityEntity {
       return null;
 
     if (interaction == Forum.start) {
-      if (host.GetAttribute(Forum.anger).GetState() > .5f)
+      if (host.GetAttribute(Forum.anger).State > .5f)
         return new List<Effect>(){ Forum.incite };
 
-      else if (host.GetAttribute(Forum.anger).GetState() > .25f)
+      else if (host.GetAttribute(Forum.anger).State > .25f)
         return new List<Effect>(){ Forum.annoy };
 
       else
@@ -48,7 +48,7 @@ public partial class User : UnityEntity {
     }
 
     else if (interaction == Forum.quit) {
-      if (GetAttribute(Forum.trollFactor).GetState() > .5f)
+      if (GetAttribute(Forum.trollFactor).State > .5f)
         return new List<Effect>(){ Forum.calm };
       else
         return new List<Effect>(){ Forum.annoy };
@@ -59,10 +59,10 @@ public partial class User : UnityEntity {
 
   protected override float Score(Interaction interaction, List<Entity> targets) {
     if (interaction == Forum.quit)
-      return GetAttribute(Forum.anger).GetState() > .95f ? 1 : 0;
+      return GetAttribute(Forum.anger).State > .95f ? 1 : 0;
 
     float flameChance = .5f * (
-      GetAttribute(Forum.trollFactor).GetState() + GetAttribute(Forum.anger).GetState()
+      GetAttribute(Forum.trollFactor).State + GetAttribute(Forum.anger).State
     );
 
     float chance = interaction == Forum.flame ? flameChance : 1 - flameChance;
