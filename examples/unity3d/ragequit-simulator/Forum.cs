@@ -21,7 +21,10 @@ public class Forum : MonoBehaviour {
       "Troll Factor", Class.root,
       () => Random.Range(0, 1f)
     );
-    anger = new UnityAttribute("Anger", Class.root);
+    anger = new UnityAttribute(
+      "Anger", Class.root,
+      () => 0
+    );
 
     // Users
     User[] users = {
