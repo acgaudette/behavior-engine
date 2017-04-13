@@ -21,8 +21,16 @@ public class EntityComponent : MonoBehaviour {
     }
   }
 
-  // Display
-  public List<UnityAttributeRenderer> attributes = new List<UnityAttributeRenderer>();
+  // Display (fallback, non-editable)
+  public List<UnityAttributeRenderer> attributes
+    = new List<UnityAttributeRenderer>();
+
+  // Internal (allows for modification of Attributes in the editor)
+  public List<UnityAttribute.Instance> instances
+    = new List<UnityAttribute.Instance>();
+
+  ICollection<IAttributeInstance> lastInstances;
+  int lastCount = 0;
 
   void Update() {
     if (reference == null) return;
@@ -38,6 +46,23 @@ public class EntityComponent : MonoBehaviour {
         i == null ? "?" : i.Prototype.ToString(),
         i == null ? 0 : i.State
       ));
+    }
+
+    ICollection<IAttributeInstance> current = reference.GetAttributes();
+
+    if (lastInstances != current || lastCount != current.Count) {
+      GenerateInstances();
+      lastInstances = current;
+      lastCount = current.Count;
+    }
+  }
+
+  void GenerateInstances() {
+    instances.Clear();
+
+    foreach (IAttributeInstance instance in reference.GetAttributes()) {
+      UnityAttribute.Instance i = instance as UnityAttribute.Instance;
+      instances.Add(i == null ? null : i); // Synchronize with attribute list
     }
   }
 }

@@ -27,6 +27,9 @@ public class EntityComponentEditor : Editor {
     EditorGUI.indentLevel++;
     EditorGUIUtility.labelWidth = 64;
 
+    EntityComponent component = serializedObject.targetObject
+      as EntityComponent;
+
     for (int i = 0; i < attributes.arraySize; ++i) {
       SerializedProperty label
         = attributes.GetArrayElementAtIndex(i).FindPropertyRelative("label");
@@ -35,7 +38,8 @@ public class EntityComponentEditor : Editor {
 
       EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField(label.stringValue);
-        EditorGUILayout.Slider(state.floatValue, 0, 1);
+        component.instances[i].State
+          = EditorGUILayout.Slider(state.floatValue, 0, 1);
       EditorGUILayout.EndHorizontal();
     }
 
