@@ -7,24 +7,27 @@ using BehaviorEngine;
 
 public class UniverseComponent : MonoBehaviour {
 
+  public float pollRate;
+  [SerializeField] ulong tick = 0;
+
+  [HideInInspector] public ComponentManager manager;
   public Universe reference;
   public List<EntityComponent> entities = new List<EntityComponent>();
-  [HideInInspector] public ComponentManager manager;
 
+  float lastPoll = 0;
   ICollection<Entity> lastEntities;
   int lastCount = 0;
 
+  void Start() {
+    lastPoll = -pollRate; // Start immediately 
+  }
+
   void Update() {
-    if (reference == null) {
-      Debug.LogWarning("UniverseComponent: Reference is null!");
-      return;
-    }
+    if (reference == null) return;
 
     // Display
-    if (Time.time - manager.lastPoll > manager.pollRate) {
-      if (reference == Universe.root) {
-        //manager.ClearConsole();
-      }
+    if (Time.time - lastPoll > pollRate) {
+      //if (reference == Universe.root) manager.ClearConsole();
 
       ICollection<Entity> current = reference.entities;
 
@@ -38,13 +41,11 @@ public class UniverseComponent : MonoBehaviour {
         target.Poll();
       }
 
-      // Remove entities marked as destroyed from the universe
+      // Remove Entities marked as destroyed from the Universe
       reference.entities.RemoveWhere((e) => (e as UnityEntity).destroy);
 
-      if (reference == Universe.root) {
-        manager.lastPoll = Time.time;
-        manager.IncrementTick();
-      }
+      lastPoll = Time.time;
+      tick++;
     }
   }
 }

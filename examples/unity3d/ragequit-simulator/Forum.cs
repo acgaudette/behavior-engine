@@ -59,5 +59,9 @@ public class Forum : MonoBehaviour {
       user.Subscribe(Class.root);
       Universe.root.entities.Add(user);
     }
+
+    // Unity hooks
+    GetComponent<ComponentManager>().Hook("Universe.root", Universe.root);
+    GetComponent<ComponentManager>().Hook("Class.root", Class.root);
   }
 }

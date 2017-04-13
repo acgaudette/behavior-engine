@@ -150,7 +150,7 @@ public class UnityEffect : Effect, ILabeled {
   }
 
   public override string ToString() {
-    string s = Label + " (Mods =";
+    string s = Label + " (";
 
     foreach (IModifier modifier in modifiers) {
       UnityModifier m = modifier as UnityModifier;

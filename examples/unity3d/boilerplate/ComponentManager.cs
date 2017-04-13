@@ -11,34 +11,42 @@ using UnityEditor;
 
 public class ComponentManager : MonoBehaviour {
 
-  public float pollRate = 8; // Rate to update all universes/entities
-  [HideInInspector] public float lastPoll;
+  public float defaultPollRate = 8; // Rate to update all universes/entities
 
-  public void IncrementTick() { tick++; }
-  [SerializeField] ulong tick = 0;
-
-  // Editor references
+  // Editor mirrors to Unity components (for display purposes)
   public List<UniverseComponent> universes = new List<UniverseComponent>();
   public List<ClassComponent> classes = new List<ClassComponent>();
 
-  void Awake() {
-    lastPoll = -pollRate;
+  void Update() {
+    for (int i = universes.Count - 1; i > 0; --i) {
+      if (universes[i].reference == null) {
+        Destroy(universes[i]);
+        universes.RemoveAt(i);
+      }
+    }
+
+    for (int i = classes.Count - 1; i > 0; --i) {
+      if (classes[i].reference == null) {
+        Destroy(classes[i]);
+        classes.RemoveAt(i);
+      }
+    }
   }
 
-  void Start() {
-    // Only roots are visible for now
-    GenerateUniverse(Universe.root, "Universe.root");
-    GenerateClass(Class.root, "Class.root");
-  }
-
-  // Generate universe component within the scene
+  // Generates a Universe component within the scene
   // Returns a reference to the generated component
-  public UniverseComponent GenerateUniverse(Universe reference, string label) {
+  public UniverseComponent Hook(string label, Universe reference) {
+    foreach (UniverseComponent c in universes) {
+      if (c.reference == reference)
+        return null;
+    }
+
     GameObject o = new GameObject();
     UniverseComponent component = o.AddComponent<UniverseComponent>();
 
-    component.reference = reference;
+    component.pollRate = defaultPollRate;
     component.manager = this;
+    component.reference = reference;
 
     o.name = label;
     o.transform.parent = transform;
@@ -47,9 +55,14 @@ public class ComponentManager : MonoBehaviour {
     return component;
   }
 
-  // Generate class component within the scene
+  // Generates a Class component within the scene
   // Returns a reference to the generated component
-  public ClassComponent GenerateClass(Class reference, string label) {
+  public ClassComponent Hook(string label, Class reference) {
+    foreach (ClassComponent c in classes) {
+      if (c.reference == reference)
+        return null;
+    }
+
     GameObject o = new GameObject();
     ClassComponent component = o.AddComponent<ClassComponent>();
 
@@ -61,8 +74,8 @@ public class ComponentManager : MonoBehaviour {
     return component;
   }
 
-  // Generate entity components within the scene
-  // Returns the latest ReadOnlyCollection of the core entities
+  // Generate Entity components within the scene
+  // Returns the latest ICollection of the Universe Entities
   public ICollection<Entity> GenerateEntities(
     ICollection<EntityComponent> cache, ICollection<Entity> latest
   ) {
@@ -94,6 +107,7 @@ public class ComponentManager : MonoBehaviour {
     return latest;
   }
 
+  // Clears the Unity console via reflection
   public void ClearConsole() {
     Assembly.GetAssembly(typeof(SceneView))
       .GetType("UnityEditorInternal.LogEntries")

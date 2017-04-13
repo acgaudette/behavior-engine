@@ -15,10 +15,7 @@ public class ClassComponent : MonoBehaviour {
   public List<string> interactions = new List<string>();
 
   void Update() {
-    if (reference == null) {
-      Debug.LogWarning("ClassComponent: Reference is null!");
-      return;
-    }
+    if (reference == null) return;
 
     // Display
 

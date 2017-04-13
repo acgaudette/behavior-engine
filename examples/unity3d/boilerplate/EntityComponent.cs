@@ -25,13 +25,9 @@ public class EntityComponent : MonoBehaviour {
   public List<UnityAttributeRenderer> attributes = new List<UnityAttributeRenderer>();
 
   void Update() {
+    if (reference == null) return;
+
     reference.Print = debug;
-
-    if (reference == null) {
-      Debug.LogWarning("EntityComponent: Reference is null!");
-      return;
-    }
-
     attributes.Clear();
 
     // Display
