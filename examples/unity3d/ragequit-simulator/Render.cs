@@ -48,7 +48,7 @@ public partial class User : UnityEntity {
   ) {
     if (choice == Forum.quit)
       Ragequit();
-    else if (GetUniverse().GetEntities(this).Count == 1)
+    else if (Universe.root.GetEntities().Count == 1)
       Logoff();
 
     else if (choice == Forum.start) {

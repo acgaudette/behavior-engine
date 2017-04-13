@@ -16,19 +16,16 @@ namespace BehaviorEngine {
       entities = new List<Entity>();
     }
 
-    public ReadOnlyCollection<Entity> GetAllEntities() {
+    public ReadOnlyCollection<Entity> GetEntities() {
       return new ReadOnlyCollection<Entity>(entities);
     }
 
-    public ReadOnlyCollection<Entity> GetEntities(Entity target) {
-      if (entities.Contains(target))
-        return new ReadOnlyCollection<Entity>(entities);
-
-      return null;
+    public bool ContainsEntity(Entity target) {
+      return entities.Contains(target);
     }
 
     public bool AddEntity(Entity target) {
-      if (entities.Contains(target)) return false;
+      if (entities.Contains(target)) return false; // No duplicates
 
       entities.Add(target);
       return true;

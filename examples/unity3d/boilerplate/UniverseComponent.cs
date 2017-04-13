@@ -26,7 +26,7 @@ public class UniverseComponent : MonoBehaviour {
         //manager.ClearConsole();
       }
 
-      ReadOnlyCollection<Entity> current = reference.GetAllEntities();
+      ReadOnlyCollection<Entity> current = reference.GetEntities();
 
       if (lastEntities == null || lastEntities.Count != current.Count)
         lastEntities = manager.GenerateEntities(entities, current);
@@ -46,7 +46,7 @@ public class UniverseComponent : MonoBehaviour {
       // Remove entities marked as destroyed from the universe
       for (int i = 0; i < current.Count; ++i) {
         if ((current[i] as UnityEntity).destroy) {
-          current[i].GetUniverse().RemoveEntity(current[i]);
+          reference.RemoveEntity(current[i]);
           i--;
         }
       }

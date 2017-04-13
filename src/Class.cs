@@ -37,6 +37,7 @@ namespace BehaviorEngine {
       return attribute != null && attributes.ContainsKey(attribute.ID);
     }
 
+    // Read-only collection
     public ICollection<Attribute> GetAttributes() {
       return attributes.Values;
     }

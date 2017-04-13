@@ -17,16 +17,19 @@ namespace BehaviorEngine {
       attributes = new List<Attribute>();
     }
 
+    /* Interactions and Attributes */
+
     public Attribute GetAttribute(Attribute attribute) {
       return attributes.Find(a => a.ID == attribute.ID);
     }
 
+    // Read-only collection
     public ICollection<Attribute> GetAttributes() {
       return attributes;
     }
 
     public bool AddAttribute(Attribute attribute) {
-      if (GetAttribute(attribute) != null) // Can't have a duplicate attribute
+      if (GetAttribute(attribute) != null) // Can't have a duplicate Attribute
         return false;
 
       attributes.Add(attribute.GetNewInstance());
@@ -34,8 +37,8 @@ namespace BehaviorEngine {
       return true;
     }
 
-    // Input can be an instance or archetype
     public bool RemoveAttribute(Attribute attribute) {
+      // Input can be an instance or archetype
       Attribute a = GetAttribute(attribute);
       if (a == null) return false;
 
@@ -43,6 +46,7 @@ namespace BehaviorEngine {
       return true;
     }
 
+    // Replace Attributes and Interactions with the ones from a provided Class
     public void Subscribe(Class family) {
       attributes.Clear();
       for (ulong i = 0; i < family.AttributeCount; ++i)
@@ -51,34 +55,16 @@ namespace BehaviorEngine {
       interactions = family.interactions;
     }
 
-    public void React(Interaction interaction, Entity host) {
-      List<Effect> effects = GetReaction(interaction, host);
+    /* Reactions, observations, scoring (called externally) */
 
-      OnReact(interaction, host, effects);
-
-      if (effects == null) return;
-
-      foreach (Effect e in effects)
-        e.Trigger(this);
-    }
-
-    public void Observe(Interaction interaction, Entity host, List<Entity> targets) {
-      List<Effect> effects = GetObservation(interaction, host, targets);
-
-      OnObserve(interaction, host, targets, effects);
-
-      if (effects == null) return;
-
-      foreach (Effect e in effects)
-        e.Trigger(this);
-    }
-
+    // Given the possible Interactions and target Entities,
+    // perform the highest-scoring Interaction/target(s) combo
     public void Poll() {
       if (interactions.Count == 0) return;
 
       Interaction choice = null;
       List<Entity> targets = new List<Entity>();
-      float highscore = 0;
+      float highscore = float.MinValue;
 
       foreach (Interaction i in interactions) {
         float score = 0;
@@ -96,7 +82,10 @@ namespace BehaviorEngine {
         }
 
         else if (i.limiter == 1) {
-          foreach (Entity target in GetTargets(i)) {
+          ReadOnlyCollection<Entity> options = GetTargets(i);
+          if (options == null) continue;
+
+          foreach (Entity target in options) {
             if (target == this) continue; // Skip self
 
             score = Score(i, new List<Entity>(){ target });
@@ -111,28 +100,74 @@ namespace BehaviorEngine {
         }
 
         else {
-          continue; // Stub
+          continue; // Stub (not yet implemented)
         }
       }
 
       OnPoll(choice, new ReadOnlyCollection<Entity>(targets), highscore);
 
-      if (choice == null) return; // Should never happen
+      if (choice == null) return;
 
-      Interact(choice, targets);
+      choice.Perform(this, targets);
     }
 
-    public virtual Universe GetUniverse() {
-      return Universe.root;
+    // React (as a host or target) to an Interaction
+    internal void React(Interaction interaction, Entity host) {
+      List<Effect> effects = GetReaction(interaction, host);
+
+      OnReact(interaction, host, effects);
+
+      if (effects == null) return;
+
+      foreach (Effect e in effects)
+        e.Trigger(this);
     }
 
-    public virtual Class GetClass() {
-      return Class.root;
+    // Observe an Interaction this Entity is not a part of
+    internal void Observe(Interaction interaction, Entity host, List<Entity> targets) {
+      List<Effect> effects = GetObservation(interaction, host, targets);
+
+      OnObserve(interaction, host, targets, effects);
+
+      if (effects == null) return;
+
+      foreach (Effect e in effects)
+        e.Trigger(this);
     }
 
+    /* Reactions, observations, scoring (called internally, override these) */
+
+    // Get the possible targets to interact with
     public virtual ReadOnlyCollection<Entity> GetTargets(Interaction interaction) {
-      return GetUniverse().GetEntities(this); // By default, target everything in the root
+      return Universe.root == null ? // By default, target everything in the root Universe
+        null : Universe.root.GetEntities();
     }
+
+    // Return a list (one or more) of effects on reaction to an Interaction with a host Entity
+    protected virtual List<Effect> GetReaction(Interaction interaction, Entity host) {
+      // Is this an interaction with the self?
+      if (host == this) {
+        return null;
+      }
+
+      // Compare a subset of the host's Attributes to a subset of this Entity's
+
+      return null; // Does nothing by default
+    }
+
+    // Return a list (one or more) of effects on observation
+    // of an Interaction with a host Entity and target Entities
+    protected virtual List<Effect> GetObservation(
+      Interaction interaction, Entity host, List<Entity> targets
+    ) {
+      return null; // Does nothing by default
+    }
+
+    // Given an interaction and its target(s), return a value--
+    // higher values are more likely to be performed
+    protected abstract float Score(Interaction interaction, List<Entity> targets = null);
+
+    /* Events */
 
     protected virtual void OnReact(
       Interaction interaction, Entity host, List<Effect> effects
@@ -145,29 +180,5 @@ namespace BehaviorEngine {
     protected virtual void OnPoll(
       Interaction choice, ReadOnlyCollection<Entity> targets, float highscore
     ) { }
-
-    protected virtual List<Effect> GetReaction(Interaction interaction, Entity host) {
-      if (host == this) {
-        return null; // React to self
-      }
-
-      // Given an interaction, and host attributes
-      // Compare a subset of these attributes to a subset of yours
-      // Then, select an effect from the class
-
-      return GetClass().effects; // By default, applies every effect
-    }
-
-    protected virtual List<Effect> GetObservation(
-      Interaction interaction, Entity host, List<Entity> targets
-    ) {
-      return GetClass().effects;
-    }
-
-    protected abstract float Score(Interaction interaction, List<Entity> targets = null);
-
-    void Interact(Interaction interaction, List<Entity> targets) {
-      interaction.Perform(this, targets);
-    }
   }
 }

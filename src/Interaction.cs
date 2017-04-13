@@ -39,7 +39,7 @@ namespace BehaviorEngine {
     }
 
     public virtual ReadOnlyCollection<Entity> GetObservers(Entity host, List<Entity> targets) {
-      return Universe.root.GetEntities(host);
+      return Universe.root.GetEntities();
     }
   }
 }

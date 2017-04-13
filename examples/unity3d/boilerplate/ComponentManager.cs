@@ -85,7 +85,7 @@ public class ComponentManager : MonoBehaviour {
 
       // Parent
       foreach (UniverseComponent universe in universes) {
-        if (universe.reference == target.GetUniverse())
+        if (universe.reference.ContainsEntity(target))
           o.transform.parent = universe.transform;
       }
 
