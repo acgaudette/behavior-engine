@@ -1,38 +1,31 @@
 // Utility.cs
 // Created by Aaron C Gaudette on 09.04.17
 
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using BehaviorEngine;
 
+public interface ILabeled {
+  string Label { get; set; }
+}
+
 public class Utility {
-  public static string EntityLabelsToString(
-    ReadOnlyCollection<Entity> entities, string prefix = "Entities"
+
+  public static string CollectionToString<L>(
+    string prefix, ICollection<L> collection, Func<L, string> result
   ) {
-    string s = prefix + " ";
+    prefix += " ";
 
-    if (entities == null || entities.Count == 0) s += "= null\n";
+    if (collection == null || collection.Count == 0)
+      prefix += "= null\n";
+
     else {
-      s += "(" + entities.Count + ") = ";
-      foreach (Entity entity in entities)
-        s += ((UnityEntity)entity).Label + " ";
-      s += "\n";
+      prefix += "(" + collection.Count + ") = ";
+      foreach (L l in collection)
+        prefix += "[" + result(l) + "] ";
+      prefix += "\n";
     }
 
-    return s;
-  }
-
-  public static string EffectsToString(List<Effect> effects) {
-    string s = "Effects ";
-
-    if (effects == null || effects.Count == 0) s += "= null\n";
-    else {
-      s += "(" + effects.Count + ") = ";
-      foreach (Effect e in effects)
-        s += (UnityEffect)e + " ";
-      s += "\n";
-    }
-
-    return s;
+    return prefix;
   }
 }

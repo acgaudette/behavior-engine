@@ -58,6 +58,9 @@ public partial class User : UnityEntity {
   }
 
   protected override float Score(Interaction interaction, List<Entity> targets) {
+    if (destroy || targets != null && (targets[0] as UnityEntity).destroy)
+      return 0;
+
     if (interaction == Forum.quit)
       return GetAttribute(Forum.anger).State > .95f ? 1 : 0;
 

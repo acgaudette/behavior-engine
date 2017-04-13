@@ -54,7 +54,7 @@ namespace BehaviorEngine {
       : base(family, initializeState) { }
 
     // Instance
-    NormalizedAttribute(Attribute attribute) : base(attribute) { }
+    protected NormalizedAttribute(Attribute attribute) : base(attribute) { }
 
     public override Attribute GetNewInstance() {
       return new NormalizedAttribute(this);

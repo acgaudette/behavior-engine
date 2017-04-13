@@ -1,5 +1,6 @@
 // Render.cs
 // Created by Aaron C Gaudette on 10.04.17
+// Comment this out to use the basic Extensions debug information
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
