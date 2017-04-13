@@ -25,7 +25,7 @@ namespace BehaviorEngine {
     }
 
     public ICollection<IAttributeInstance> GetAttributes() {
-      return attributes.Values;
+      return attributes.Values; // ReadOnlyDictionary not available in .NET 3.5
     }
 
     public bool AddAttribute(IAttribute prototype) {
@@ -81,13 +81,13 @@ namespace BehaviorEngine {
         }
 
         else if (i.limiter == 1) {
-          IEnumerable<Entity> options = GetTargets(i);
+          ICollection<Entity> options = GetTargets(i);
           if (options == null) continue;
 
           foreach (Entity target in options) {
             if (target == this) continue; // Skip self
 
-            score = Score(i, new List<Entity>(){ target });
+            score = Score(i, new List<Entity>(1){ target });
 
             if (score >= highscore) {
               choice = i;
@@ -141,11 +141,10 @@ namespace BehaviorEngine {
     // Get the possible targets to interact with
     public virtual ICollection<Entity> GetTargets(Interaction interaction) {
       // By default, target everything in the root Universe
-      return Universe.root == null ?
-        null : Universe.root.entities;
+      return Universe.root == null ? null : Universe.root.entities;
     }
 
-    // Return a list (one or more) of effects on reaction
+    // Return an IList (one or more) of effects on reaction
     // to an Interaction with a host Entity
     protected virtual IList<Effect> GetReaction(
       Interaction interaction, Entity host
@@ -160,7 +159,7 @@ namespace BehaviorEngine {
       return null; // Does nothing by default
     }
 
-    // Return a list (one or more) of effects on observation
+    // Return an IList (one or more) of effects on observation
     // of an Interaction with a host Entity and target Entities
     protected virtual IList<Effect> GetObservation(
       Interaction interaction, Entity host, ICollection<Entity> targets
