@@ -75,14 +75,13 @@ public class ComponentManager : MonoBehaviour {
   }
 
   // Generate Entity components within the scene
-  // Returns the latest ICollection of the Universe Entities
-  public ICollection<Entity> GenerateEntities(
-    ICollection<EntityComponent> cache, ICollection<Entity> latest
+  public void GenerateEntities(
+    UniverseComponent parent, ICollection<Entity> latest
   ) {
-    foreach (EntityComponent target in cache)
+    foreach (EntityComponent target in parent.entities)
       Destroy(target.gameObject);
 
-    cache.Clear();
+    parent.entities.Clear();
     foreach (Entity target in latest) {
       if (!(target is UnityEntity)) continue;
 
@@ -95,16 +94,9 @@ public class ComponentManager : MonoBehaviour {
         o.name = (target as ILabeled).Label;
       else o.name = "Unlabeled";
 
-      // Parent
-      foreach (UniverseComponent universe in universes) {
-        if (universe.reference.entities.Contains(target))
-          o.transform.parent = universe.transform;
-      }
-
-      cache.Add(component);
+      o.transform.parent = parent.transform;
+      parent.entities.Add(component);
     }
-
-    return latest;
   }
 
   // Clears the Unity console via reflection

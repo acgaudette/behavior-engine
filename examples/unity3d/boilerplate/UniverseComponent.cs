@@ -32,7 +32,8 @@ public class UniverseComponent : MonoBehaviour {
       ICollection<Entity> current = reference.entities;
 
       if (lastEntities != current || lastCount != current.Count) {
-        lastEntities = manager.GenerateEntities(entities, current);
+        manager.GenerateEntities(this, current);
+        lastEntities = current;
         lastCount = current.Count;
       }
 
