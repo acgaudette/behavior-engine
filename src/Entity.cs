@@ -10,26 +10,26 @@ namespace BehaviorEngine {
   public abstract class Entity {
 
     public List<Interaction> interactions;
-    List<Attribute> attributes;
+    List<IAttributeInstance> attributes;
 
     public Entity() {
       interactions = new List<Interaction>();
-      attributes = new List<Attribute>();
+      attributes = new List<IAttributeInstance>();
     }
 
     /* Interactions and Attributes */
 
-    public Attribute GetAttribute(Attribute attribute) {
-      return attributes.Find(a => a.ID == attribute.ID);
+    public IAttributeInstance GetAttribute(IAttribute attribute) {
+      return attributes.Find(a => a.Prototype == attribute);
     }
 
     // Read-only collection
-    public ICollection<Attribute> GetAttributes() {
+    public ICollection<IAttributeInstance> GetAttributes() {
       return attributes;
     }
 
-    public bool AddAttribute(Attribute attribute) {
-      if (GetAttribute(attribute) != null) // Can't have a duplicate Attribute
+    public bool AddAttribute(IAttribute attribute) {
+      if (GetAttribute(attribute) != null) // No duplicates
         return false;
 
       attributes.Add(attribute.GetNewInstance());
@@ -37,20 +37,18 @@ namespace BehaviorEngine {
       return true;
     }
 
-    public bool RemoveAttribute(Attribute attribute) {
-      // Input can be an instance or archetype
-      Attribute a = GetAttribute(attribute);
-      if (a == null) return false;
+    public bool RemoveAttribute(IAttribute attribute) {
+      IAttributeInstance instance = GetAttribute(attribute);
+      if (instance == null) return false;
 
-      attributes.Remove(a);
+      attributes.Remove(instance);
       return true;
     }
 
     // Replace Attributes and Interactions with the ones from a provided Class
     public void Subscribe(Class family) {
-      attributes.Clear();
-      for (ulong i = 0; i < family.AttributeCount; ++i)
-        AddAttribute(family[i]);
+      foreach (IAttribute attribute in family.attributes)
+        AddAttribute(attribute);
 
       interactions = family.interactions;
     }

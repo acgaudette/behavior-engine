@@ -7,45 +7,52 @@ namespace BehaviorEngine {
 
   public class Effect {
 
-    public class Modifier {
-      public Attribute attribute = null;
-      public float offset;
+    public interface IModifier {
+      IAttribute Attribute { get; }
+      bool Apply(Entity e);
+    }
 
-      public Modifier(Attribute attribute, float offset) {
-        SetAttribute(attribute);
+    public abstract class Modifier<T> : IModifier {
+      public T offset;
+      Attribute<T> attribute;
+
+      public Modifier(Attribute<T> attribute, T offset) {
+        this.attribute = attribute;
         this.offset = offset;
       }
 
-      public bool SetAttribute(Attribute attribute) {
-        if (attribute.Instance) return false;
-        this.attribute = attribute;
-        return true;
-      }
+      public IAttribute Attribute { get { return attribute; } }
 
       public bool Apply(Entity e) {
-        if (attribute == null) return false;
-
-        Attribute target = e.GetAttribute(attribute);
+        Attribute<T>.Instance instance = e.GetAttribute(attribute)
+          as Attribute<T>.Instance;
 
         // Target entity does not have the attribute being affected
-        if (target == null) return false;
+        if (instance == null) return false;
 
-        target.Modify(offset);
+        Modify(instance);
         return true;
       }
+
+      protected abstract void Modify(Attribute<T>.Instance instance);
     }
 
-    public List<Modifier> modifiers;
+    public List<IModifier> modifiers;
 
     public Effect() {
-      modifiers = new List<Modifier>();
+      modifiers = new List<IModifier>();
     }
 
     public bool Trigger(Entity target) {
-      foreach (Modifier m in modifiers)
-        m.Apply(target);
+      if (modifiers.Count == 0)
+        return false;
 
-      return true;
+      bool effective = true;
+
+      foreach (IModifier m in modifiers)
+        effective &= m.Apply(target);
+
+      return effective;
     }
   }
 }

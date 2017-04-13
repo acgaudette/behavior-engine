@@ -5,66 +5,61 @@ using System;
 
 namespace BehaviorEngine {
 
-  public abstract class Attribute {
+  public interface IAttribute {
+    IAttributeInstance GetNewInstance();
+  }
 
-    public delegate float InitializeState();
-    public readonly InitializeState initializeState;
-    Class family;
+  public interface IAttributeInstance {
+    IAttribute Prototype { get; }
+  };
 
-    public bool Instance { get { return instance; } }
-    bool instance;
+  public class Attribute<T> : IAttribute {
 
-    public ulong ID { get { return id; } }
-    ulong id;
+    public delegate T InitializeState();
+    InitializeState initializeState;
 
-    // Creates a new Attribute archetype
-    protected Attribute(Class family, InitializeState initializeState) {
-      this.family = family;
+    public InitializeState Initializer {
+      get { return initializeState; }
+    }
+
+    protected Attribute(InitializeState initializeState) {
       this.initializeState = initializeState;
-      instance = false;
-      id = family.RegisterAttribute(this);
     }
 
-    // Creates a new Attribute instance
-    protected Attribute(Attribute attribute) {
-      id = attribute.id;
-      instance = true;
-      family = attribute.family;
-      initializeState = attribute.initializeState;
-      State = attribute.GetArchetype().initializeState();
+    public virtual IAttributeInstance GetNewInstance() {
+      return new Attribute<T>.Instance(this);
     }
 
-    public Attribute GetArchetype() {
-      return family[ID];
+    protected virtual T TransformState(T raw) {
+      return raw;
     }
 
-    public abstract Attribute GetNewInstance();
+    public class Instance : IAttributeInstance {
+      T state;
 
-    public abstract float State { get; protected set; }
+      Attribute<T> prototype;
 
-    public virtual void Modify(float offset) {
-      State += offset;
+      internal Instance(Attribute<T> prototype) {
+        this.prototype = prototype;
+        State = prototype.Initializer();
+      }
+
+      public IAttribute Prototype { get { return prototype as IAttribute; } }
+
+      public T State {
+        get { return state; }
+        set { state = prototype.TransformState(value); }
+      }
     }
   }
 
-  public class NormalizedAttribute : Attribute {
+  public class NormalizedAttribute : Attribute<float> {
 
-    // Archetype
-    public NormalizedAttribute(Class family, InitializeState initializeState)
-      : base(family, initializeState) { }
+    protected NormalizedAttribute(InitializeState initializeState)
+      : base(initializeState) { }
 
-    // Instance
-    protected NormalizedAttribute(Attribute attribute) : base(attribute) { }
-
-    public override Attribute GetNewInstance() {
-      return new NormalizedAttribute(this);
+    protected override float TransformState(float raw) {
+      return Math.Min(1, Math.Max(0, raw));
     }
-
-    public override float State {
-      get { return state; }
-      // Clamp between 0 and 1
-      protected set { state = Math.Min(1, Math.Max(0, value)); }
-    }
-    float state;
   }
 }

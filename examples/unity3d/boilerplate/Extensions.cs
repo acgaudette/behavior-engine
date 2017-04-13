@@ -29,11 +29,20 @@ public abstract class UnityEntity : Entity, ILabeled {
     Label = label;
   }
 
+  public float GetAttributeState(IAttribute attribute) {
+    return (GetAttribute(attribute) as UnityAttribute.Instance).State;
+  }
+
   public override string ToString() {
     string s = Prefix;
     s += "STATUS\n";
 
-    s += Utility.CollectionToString("Attributes", GetAttributes(), a => a + " (" + a.State + ")");
+    s += Utility.CollectionToString(
+      "Attributes", GetAttributes(), (a) => {
+      UnityAttribute.Instance i = a as UnityAttribute.Instance;
+      return i == null ? "?" : i.Prototype + " (" + i.State + ")";
+      }
+    );
     s += Utility.CollectionToString("Interactions", interactions, i => i.ToString());
 
     return s;
@@ -94,23 +103,18 @@ public class UnityAttribute : NormalizedAttribute, ILabeled {
     set { label = value; }
   }
 
-  // Archetype
   public UnityAttribute(
-    string label, Class family, InitializeState initializeState
-  ) : base(family, initializeState) {
+    string label, InitializeState initializeState
+  ) : base(initializeState) {
     Label = label;
   }
 
-  // Instance
-  protected UnityAttribute(Attribute attribute) : base(attribute) { }
-
-  public override Attribute GetNewInstance() {
-    return new UnityAttribute(this);
+  public override IAttributeInstance GetNewInstance() {
+    return new UnityAttribute.Instance(this);
   }
 
   public override string ToString() {
-    return Instance ? ID + "E_" + (GetArchetype() as ILabeled).Label :
-      ID + "A_" + Label;
+    return Label;
   }
 }
 
@@ -146,12 +150,25 @@ public class UnityEffect : Effect, ILabeled {
   public override string ToString() {
     string s = Label + " (Mods = ";
 
-    foreach (Effect.Modifier modifier in modifiers) {
-      s += "<" + (modifier.attribute == null ?
-        "null" : modifier.attribute.ToString())
-        + ", " + (modifier.offset >= 0 ? "+" : "") + modifier.offset + "> ";
+    foreach (IModifier modifier in modifiers) {
+      UnityModifier m = modifier as UnityModifier;
+
+      if (m == null)
+        s += "?";
+      else
+        s += "<" + (m.Attribute == null ? "null" : m.Attribute.ToString())
+          + ", " + (m.offset >= 0 ? "+" : "") + m.offset + "> ";
     }
 
     return s + ")";
+  }
+
+  public class UnityModifier : Modifier<float> {
+
+    public UnityModifier(Attribute<float> attribute, float offset) : base(attribute, offset) { }
+
+    protected override void Modify(Attribute<float>.Instance instance) {
+      instance.State += offset;
+    }
   }
 }

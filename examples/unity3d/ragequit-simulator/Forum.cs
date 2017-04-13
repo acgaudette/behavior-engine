@@ -18,13 +18,12 @@ public class Forum : MonoBehaviour {
 
     // Attributes
     trollFactor = new UnityAttribute(
-      "Troll Factor", Class.root,
-      () => Random.Range(0, 1f)
+      "Troll Factor", () => Random.Range(0, 1f)
     );
-    anger = new UnityAttribute(
-      "Anger", Class.root,
-      () => 0
-    );
+    anger = new UnityAttribute("Anger", () => 0);
+
+    Class.root.attributes.Add(trollFactor);
+    Class.root.attributes.Add(anger);
 
     // Users
     User[] users = {
@@ -35,15 +34,15 @@ public class Forum : MonoBehaviour {
 
     // Effects
     annoy = new UnityEffect("Annoy");
-    annoy.modifiers.Add(new Effect.Modifier(anger, .2f));
+    annoy.modifiers.Add(new UnityEffect.UnityModifier(anger, .2f));
     Class.root.effects.Add(annoy);
 
     incite = new UnityEffect("Anger");
-    incite.modifiers.Add(new Effect.Modifier(anger, .4f));
+    incite.modifiers.Add(new UnityEffect.UnityModifier(anger, .4f));
     Class.root.effects.Add(incite);
 
     calm = new UnityEffect("Calm Down");
-    calm.modifiers.Add(new Effect.Modifier(anger, -.1f));
+    calm.modifiers.Add(new UnityEffect.UnityModifier(anger, -.1f));
     Class.root.effects.Add(calm);
 
     // Interactions

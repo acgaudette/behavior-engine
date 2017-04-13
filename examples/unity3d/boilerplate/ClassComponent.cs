@@ -23,8 +23,8 @@ public class ClassComponent : MonoBehaviour {
     // Display
 
     attributes.Clear();
-    foreach (Attribute attribute in reference.GetAttributes())
-      attributes.Add(attribute.ToString());
+    foreach (IAttribute attribute in reference.attributes)
+      attributes.Add(attribute is ILabeled ? attribute.ToString() : "Unlabeled");
 
     effects.Clear();
     foreach (Effect effect in reference.effects) {

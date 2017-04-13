@@ -12,18 +12,18 @@ public class EntityComponent : MonoBehaviour {
   public UnityEntity reference;
 
   [System.Serializable]
-  public class AttributeRenderer {
+  public class UnityAttributeRenderer {
     [HideInInspector] public string label;
     [Range(0, 1)] public float state;
 
-    public AttributeRenderer(string label, float state) {
+    public UnityAttributeRenderer(string label, float state) {
       this.label = label;
       this.state = state;
     }
   }
 
   // Display
-  public List<AttributeRenderer> attributes = new List<AttributeRenderer>();
+  public List<UnityAttributeRenderer> attributes = new List<UnityAttributeRenderer>();
 
   void Update() {
     reference.Print = debug;
@@ -36,9 +36,12 @@ public class EntityComponent : MonoBehaviour {
     attributes.Clear();
 
     // Display
-    foreach (Attribute attribute in reference.GetAttributes()) {
-      attributes.Add(new AttributeRenderer(
-        attribute.GetArchetype().ToString(), attribute.State
+    foreach (IAttributeInstance instance in reference.GetAttributes()) {
+      UnityAttribute.Instance i = instance as UnityAttribute.Instance;
+
+      attributes.Add(new UnityAttributeRenderer(
+        i == null ? "?" : i.Prototype.ToString(),
+        i == null ? 0 : i.State
       ));
     }
   }
