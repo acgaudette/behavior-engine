@@ -2,7 +2,6 @@
 // Created by Aaron C Gaudette on 09.04.17
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace BehaviorEngine {
 
@@ -15,7 +14,7 @@ namespace BehaviorEngine {
 
     // Trigger reactions and observations to this interaction
     // Expects a target list with count <= the limiter
-    public bool Perform(Entity host, List<Entity> targets) {
+    public bool Perform(Entity host, ICollection<Entity> targets) {
       if (host == null || targets == null || targets.Count > limiter)
         return false; // Invalid input
 
@@ -24,11 +23,12 @@ namespace BehaviorEngine {
       foreach (Entity target in targets) // Target reactions
         target.React(this, host);
 
-      ReadOnlyCollection<Entity> observers = GetObservers(host, targets);
+      IEnumerable<Entity> observers = GetObservers(host, targets);
 
       if (observers != null) {
-        foreach (Entity target in GetObservers(host, targets)) { // Observers
-          if (target == host || targets.Contains(target)) // Skip host and targets
+        foreach (Entity target in observers) { // Observers
+          // Skip host and targets
+          if (target == host || targets.Contains(target))
             continue;
 
           target.Observe(this, host, targets);
@@ -38,8 +38,10 @@ namespace BehaviorEngine {
       return true;
     }
 
-    public virtual ReadOnlyCollection<Entity> GetObservers(Entity host, List<Entity> targets) {
-      return Universe.root.GetEntities();
+    public virtual IEnumerable<Entity> GetObservers(
+      Entity host, ICollection<Entity> targets
+    ) {
+      return Universe.root.entities;
     }
   }
 }

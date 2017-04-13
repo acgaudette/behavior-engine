@@ -2,7 +2,6 @@
 // Created by Aaron C Gaudette on 09.04.17
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 using BehaviorEngine;
 
@@ -12,7 +11,8 @@ public class UniverseComponent : MonoBehaviour {
   public List<EntityComponent> entities = new List<EntityComponent>();
   [HideInInspector] public ComponentManager manager;
 
-  ReadOnlyCollection<Entity> lastEntities;
+  ICollection<Entity> lastEntities;
+  int lastCount = 0;
 
   void Update() {
     if (reference == null) {
@@ -26,16 +26,11 @@ public class UniverseComponent : MonoBehaviour {
         //manager.ClearConsole();
       }
 
-      ReadOnlyCollection<Entity> current = reference.GetEntities();
+      ICollection<Entity> current = reference.entities;
 
-      if (lastEntities == null || lastEntities.Count != current.Count)
+      if (lastEntities != current || lastCount != current.Count) {
         lastEntities = manager.GenerateEntities(entities, current);
-
-      for (int i = 0; i < current.Count; ++i) {
-        if (lastEntities[i] != current[i]) {
-          lastEntities = manager.GenerateEntities(entities, current);
-          break;
-        }
+        lastCount = current.Count;
       }
 
       // Poll
@@ -44,12 +39,7 @@ public class UniverseComponent : MonoBehaviour {
       }
 
       // Remove entities marked as destroyed from the universe
-      for (int i = 0; i < current.Count; ++i) {
-        if ((current[i] as UnityEntity).destroy) {
-          reference.RemoveEntity(current[i]);
-          i--;
-        }
-      }
+      reference.entities.RemoveWhere((e) => (e as UnityEntity).destroy);
 
       if (reference == Universe.root) {
         manager.lastPoll = Time.time;

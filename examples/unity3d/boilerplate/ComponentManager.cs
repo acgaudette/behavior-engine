@@ -2,7 +2,6 @@
 // Created by Aaron C Gaudette on 09.04.17
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 using BehaviorEngine;
 
@@ -64,8 +63,8 @@ public class ComponentManager : MonoBehaviour {
 
   // Generate entity components within the scene
   // Returns the latest ReadOnlyCollection of the core entities
-  public ReadOnlyCollection<Entity> GenerateEntities(
-    List<EntityComponent> cache, ReadOnlyCollection<Entity> latest
+  public ICollection<Entity> GenerateEntities(
+    ICollection<EntityComponent> cache, ICollection<Entity> latest
   ) {
     foreach (EntityComponent target in cache)
       Destroy(target.gameObject);
@@ -85,7 +84,7 @@ public class ComponentManager : MonoBehaviour {
 
       // Parent
       foreach (UniverseComponent universe in universes) {
-        if (universe.reference.ContainsEntity(target))
+        if (universe.reference.entities.Contains(target))
           o.transform.parent = universe.transform;
       }
 

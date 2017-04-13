@@ -3,50 +3,51 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace BehaviorEngine {
 
   public abstract class Entity {
 
-    public List<Interaction> interactions;
-    List<IAttributeInstance> attributes;
+    public HashSet<Interaction> interactions;
+    Dictionary<IAttribute, IAttributeInstance> attributes;
 
     public Entity() {
-      interactions = new List<Interaction>();
-      attributes = new List<IAttributeInstance>();
+      interactions = new HashSet<Interaction>();
+      attributes = new Dictionary<IAttribute, IAttributeInstance>();
     }
 
     /* Interactions and Attributes */
 
-    public IAttributeInstance GetAttribute(IAttribute attribute) {
-      return attributes.Find(a => a.Prototype == attribute);
+    public IAttributeInstance GetAttribute(IAttribute prototype) {
+      if (!attributes.ContainsKey(prototype))
+        return null;
+      return attributes[prototype];
     }
 
-    // Read-only collection
     public ICollection<IAttributeInstance> GetAttributes() {
-      return attributes;
+      return attributes.Values;
     }
 
-    public bool AddAttribute(IAttribute attribute) {
-      if (GetAttribute(attribute) != null) // No duplicates
+    public bool AddAttribute(IAttribute prototype) {
+      if (GetAttribute(prototype) != null)
         return false;
 
-      attributes.Add(attribute.GetNewInstance());
-
+      attributes[prototype] = prototype.GetNewInstance();
       return true;
     }
 
-    public bool RemoveAttribute(IAttribute attribute) {
-      IAttributeInstance instance = GetAttribute(attribute);
-      if (instance == null) return false;
+    public bool RemoveAttribute(IAttribute prototype) {
+      if (GetAttribute(prototype) == null)
+        return false;
 
-      attributes.Remove(instance);
+      attributes.Remove(prototype);
       return true;
     }
 
     // Replace Attributes and Interactions with the ones from a provided Class
     public void Subscribe(Class family) {
+      attributes.Clear();
+
       foreach (IAttribute attribute in family.attributes)
         AddAttribute(attribute);
 
@@ -80,7 +81,7 @@ namespace BehaviorEngine {
         }
 
         else if (i.limiter == 1) {
-          ReadOnlyCollection<Entity> options = GetTargets(i);
+          IEnumerable<Entity> options = GetTargets(i);
           if (options == null) continue;
 
           foreach (Entity target in options) {
@@ -102,7 +103,7 @@ namespace BehaviorEngine {
         }
       }
 
-      OnPoll(choice, new ReadOnlyCollection<Entity>(targets), highscore);
+      OnPoll(choice, targets, highscore);
 
       if (choice == null) return;
 
@@ -111,7 +112,7 @@ namespace BehaviorEngine {
 
     // React (as a host or target) to an Interaction
     internal void React(Interaction interaction, Entity host) {
-      List<Effect> effects = GetReaction(interaction, host);
+      IList<Effect> effects = GetReaction(interaction, host);
 
       OnReact(interaction, host, effects);
 
@@ -122,8 +123,10 @@ namespace BehaviorEngine {
     }
 
     // Observe an Interaction this Entity is not a part of
-    internal void Observe(Interaction interaction, Entity host, List<Entity> targets) {
-      List<Effect> effects = GetObservation(interaction, host, targets);
+    internal void Observe(
+      Interaction interaction, Entity host, ICollection<Entity> targets
+    ) {
+      IList<Effect> effects = GetObservation(interaction, host, targets);
 
       OnObserve(interaction, host, targets, effects);
 
@@ -136,13 +139,17 @@ namespace BehaviorEngine {
     /* Reactions, observations, scoring (called internally, override these) */
 
     // Get the possible targets to interact with
-    public virtual ReadOnlyCollection<Entity> GetTargets(Interaction interaction) {
-      return Universe.root == null ? // By default, target everything in the root Universe
-        null : Universe.root.GetEntities();
+    public virtual ICollection<Entity> GetTargets(Interaction interaction) {
+      // By default, target everything in the root Universe
+      return Universe.root == null ?
+        null : Universe.root.entities;
     }
 
-    // Return a list (one or more) of effects on reaction to an Interaction with a host Entity
-    protected virtual List<Effect> GetReaction(Interaction interaction, Entity host) {
+    // Return a list (one or more) of effects on reaction
+    // to an Interaction with a host Entity
+    protected virtual IList<Effect> GetReaction(
+      Interaction interaction, Entity host
+    ) {
       // Is this an interaction with the self?
       if (host == this) {
         return null;
@@ -155,28 +162,31 @@ namespace BehaviorEngine {
 
     // Return a list (one or more) of effects on observation
     // of an Interaction with a host Entity and target Entities
-    protected virtual List<Effect> GetObservation(
-      Interaction interaction, Entity host, List<Entity> targets
+    protected virtual IList<Effect> GetObservation(
+      Interaction interaction, Entity host, ICollection<Entity> targets
     ) {
       return null; // Does nothing by default
     }
 
-    // Given an interaction and its target(s), return a value--
+    // Given an interaction and its target(s), return a value;
     // higher values are more likely to be performed
-    protected abstract float Score(Interaction interaction, List<Entity> targets = null);
+    protected abstract float Score(
+      Interaction interaction, ICollection<Entity> targets = null
+    );
 
     /* Events */
 
     protected virtual void OnReact(
-      Interaction interaction, Entity host, List<Effect> effects
+      Interaction interaction, Entity host, IList<Effect> effects
     ) { }
 
     protected virtual void OnObserve(
-      Interaction interaction, Entity host, List<Entity> targets, List<Effect> effects
+      Interaction interaction, Entity host,
+      ICollection<Entity> targets, IList<Effect> effects
     ) { }
 
     protected virtual void OnPoll(
-      Interaction choice, ReadOnlyCollection<Entity> targets, float highscore
+      Interaction choice, ICollection<Entity> targets, float highscore
     ) { }
   }
 }

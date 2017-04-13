@@ -57,7 +57,7 @@ public class Forum : MonoBehaviour {
     // Attribution
     foreach (User user in users) {
       user.Subscribe(Class.root);
-      Universe.root.AddEntity(user);
+      Universe.root.entities.Add(user);
     }
   }
 }

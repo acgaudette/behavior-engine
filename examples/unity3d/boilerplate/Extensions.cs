@@ -3,7 +3,6 @@
 // All Behavior Engine core classes are extended here with debug information
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 using BehaviorEngine;
 
@@ -48,7 +47,9 @@ public abstract class UnityEntity : Entity, ILabeled {
     return s;
   }
 
-  protected override void OnReact(Interaction interaction, Entity host, List<Effect> effects) {
+  protected override void OnReact(
+    Interaction interaction, Entity host, IList<Effect> effects
+  ) {
     if (print) {
       string debug = Prefix;
       debug += "REACTION\n";
@@ -63,7 +64,8 @@ public abstract class UnityEntity : Entity, ILabeled {
   }
 
   protected override void OnObserve(
-    Interaction interaction, Entity host, List<Entity> targets, List<Effect> effects
+    Interaction interaction, Entity host,
+    ICollection<Entity> targets, IList<Effect> effects
   ) {
     if (print) {
       string debug = Prefix;
@@ -79,7 +81,7 @@ public abstract class UnityEntity : Entity, ILabeled {
   }
 
   protected override void OnPoll(
-    Interaction choice, ReadOnlyCollection<Entity> targets, float highscore
+    Interaction choice, ICollection<Entity> targets, float highscore
   ) {
     if (print) {
       string debug = Prefix;
@@ -148,16 +150,16 @@ public class UnityEffect : Effect, ILabeled {
   }
 
   public override string ToString() {
-    string s = Label + " (Mods = ";
+    string s = Label + " (Mods =";
 
     foreach (IModifier modifier in modifiers) {
       UnityModifier m = modifier as UnityModifier;
 
-      if (m == null)
-        s += "?";
-      else
-        s += "<" + (m.Attribute == null ? "null" : m.Attribute.ToString())
-          + ", " + (m.offset >= 0 ? "+" : "") + m.offset + "> ";
+      if (m == null) s += "?";
+      else {
+        s += " " + (m.offset >= 0 ? "+" : "") + m.offset
+          + " " + (m.Attribute == null ? "null" : m.Attribute.ToString());
+      }
     }
 
     return s + ")";

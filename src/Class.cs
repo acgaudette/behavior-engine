@@ -2,7 +2,6 @@
 // Created by Aaron C Gaudette on 09.04.17
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace BehaviorEngine {
 
@@ -11,15 +10,15 @@ namespace BehaviorEngine {
 
     public static Class root = null; // Static access to root class (assign manually)
 
-    // Reference lists
-    public List<IAttribute> attributes;
-    public List<Effect> effects;
-    public List<Interaction> interactions;
+    // Reference prototypes
+    public HashSet<IAttribute> attributes;
+    public HashSet<Effect> effects;
+    public HashSet<Interaction> interactions;
 
     public Class() {
-      attributes = new List<IAttribute>();
-      effects = new List<Effect>();
-      interactions = new List<Interaction>();
+      attributes = new HashSet<IAttribute>();
+      effects = new HashSet<Effect>();
+      interactions = new HashSet<Interaction>();
     }
   }
 }
