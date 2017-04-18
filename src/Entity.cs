@@ -144,7 +144,7 @@ namespace BehaviorEngine {
       return Universe.root == null ? null : Universe.root.entities;
     }
 
-    // Return an IList (one or more) of effects on reaction
+    // Return an IList (one or more) of Effects on reaction
     // to an Interaction with a host Entity
     protected virtual IList<Effect> GetReaction(
       Interaction interaction, Entity host
@@ -159,7 +159,7 @@ namespace BehaviorEngine {
       return null; // Does nothing by default
     }
 
-    // Return an IList (one or more) of effects on observation
+    // Return an IList (one or more) of Effects on observation
     // of an Interaction with a host Entity and target Entities
     protected virtual IList<Effect> GetObservation(
       Interaction interaction, Entity host, ICollection<Entity> targets
