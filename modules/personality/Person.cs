@@ -3,7 +3,11 @@ using UnityEngine;
 using BehaviorEngine;
 
 public class Person : Entity, ILabeled {
-  public Person(string label) : base(label) {
+
+  public string Label { set; get; }
+
+  public Person(string label) : base() {
+    Label = label;
   }
 
   protected override IList<Effect> GetReaction(
@@ -21,9 +25,6 @@ public class Person : Entity, ILabeled {
   protected override float Score(
     Interaction interaction, ICollection<Entity> targets
   ) {
-    if (destroy) {
-      return 0;
-    }
     return 1;
   }
 }
