@@ -1,38 +1,39 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using BehaviorEngine;
 
-public class PersonalityClass : Class {
+namespace BehaviorEngine.Personality {
 
-  private static string[] names = {
-    "Agreeableness",
-    "Conscientiousness",
-    "Extraversion",
-    "Neuroticism",
-    "Openness"
-  };
+  public class PersonalityClass : Class {
 
-  public Dictionary<string, PersonalityFactor> personalityFactors;
+    private static string[] names = {
+      "Agreeableness",
+      "Conscientiousness",
+      "Extraversion",
+      "Neuroticism",
+      "Openness"
+    };
 
-  public PersonalityClass(Dictionary<string, 
-    BehaviorEngine.Attribute<float>.InitializeState> delegates = null) : base() {
+    public Dictionary<string, PersonalityFactor> personalityFactors;
 
-    Random r = new Random ();
+    public PersonalityClass(Dictionary<string, 
+      BehaviorEngine.Attribute<float>.InitializeState> delegates = null) : base() {
 
-    personalityFactors = new Dictionary<string, PersonalityFactor> ();
+      Random r = new Random ();
 
-    foreach (string factor in names) {
-      if (delegates == null ||
-          !delegates.ContainsKey (factor)) {
-        float val = ((float)r.NextDouble ());
-        personalityFactors.Add (factor,
-          new PersonalityFactor (factor, () => val));
-      } else {
-        var del = delegates [factor];
-        personalityFactors.Add (factor, new PersonalityFactor (factor, del));
+      personalityFactors = new Dictionary<string, PersonalityFactor> ();
+
+      foreach (string factor in names) {
+        if (delegates == null ||
+            !delegates.ContainsKey (factor)) {
+          float val = ((float)r.NextDouble ());
+          personalityFactors.Add (factor,
+            new PersonalityFactor (factor, () => val));
+        } else {
+          var del = delegates [factor];
+          personalityFactors.Add (factor, new PersonalityFactor (factor, del));
+        }
+        attributes.Add(personalityFactors[factor]);
       }
-      attributes.Add(personalityFactors[factor]);
     }
   }
 }

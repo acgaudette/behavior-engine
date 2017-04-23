@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using BehaviorEngine;
+﻿namespace BehaviorEngine.Personality {
 
-public class PersonalityFactor : NormalizedAttribute, ILabeled {
+  public class PersonalityFactor : NormalizedAttribute, ILabeled {
 
-  public float value;
+    public float value;
 
-  public string Label { get; set; }
+    public string Label { get; set; }
 
-  public PersonalityFactor(string Name, InitializeState i) : base(i) {
-    Label = Name;
+    public PersonalityFactor(string Name, InitializeState i) : base(i) {
+      Label = Name;
+    }
   }
 }

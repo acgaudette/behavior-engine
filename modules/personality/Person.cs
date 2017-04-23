@@ -1,30 +1,31 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using BehaviorEngine;
 
-public class Person : Entity, ILabeled {
+namespace BehaviorEngine.Personality {
 
-  public string Label { set; get; }
+  public class Person : Entity, ILabeled {
 
-  public Person(string label) : base() {
-    Label = label;
-  }
+    public string Label { set; get; }
 
-  protected override IList<Effect> GetReaction(
-    Interaction interaction, Entity host
-  ) {
-    return new List<Effect> ();
-  }
+    public Person(string label) : base() {
+      Label = label;
+    }
 
-  protected override IList<Effect> GetObservation(
-    Interaction interaction, Entity host, ICollection<Entity> targets
-  ) {
-    return new List<Effect> ();
-  }
+    protected override IList<Effect> GetReaction(
+      Interaction interaction, Entity host
+    ) {
+      return new List<Effect> ();
+    }
 
-  protected override float Score(
-    Interaction interaction, ICollection<Entity> targets
-  ) {
-    return 1;
+    protected override IList<Effect> GetObservation(
+      Interaction interaction, Entity host, ICollection<Entity> targets
+    ) {
+      return new List<Effect> ();
+    }
+
+    protected override float Score(
+      Interaction interaction, ICollection<Entity> targets
+    ) {
+      return 1;
+    }
   }
 }
