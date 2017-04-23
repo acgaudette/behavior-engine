@@ -12,7 +12,7 @@ namespace BehaviorEngine {
       this.limiter = limiter;
     }
 
-    // Trigger reactions and observations to this interaction
+    // Trigger reactions and observations to this Interaction
     // Expects a target list with count <= the limiter
     public bool Perform(Entity host, ICollection<Entity> targets) {
       if (host == null || targets == null || targets.Count > limiter)
@@ -38,10 +38,12 @@ namespace BehaviorEngine {
       return true;
     }
 
+    // Determine the observers of this Interaction given a host and  target(s)
     public virtual IEnumerable<Entity> GetObservers(
       Entity host, ICollection<Entity> targets
     ) {
-      return Universe.root.entities;
+      // By default, target everything in the root Universe
+      return Universe.root == null ? null : Universe.root.entities;
     }
   }
 }

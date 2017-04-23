@@ -138,7 +138,7 @@ namespace BehaviorEngine {
 
     /* Reactions, observations, scoring (called internally, override these) */
 
-    // Get the possible targets to interact with
+    // Determine the targets of a particular Interaction
     public virtual ICollection<Entity> GetTargets(Interaction interaction) {
       // By default, target everything in the root Universe
       return Universe.root == null ? null : Universe.root.entities;
@@ -167,7 +167,7 @@ namespace BehaviorEngine {
       return null; // Does nothing by default
     }
 
-    // Given an interaction and its target(s), return a value;
+    // Given an Interaction and its target(s), return a value;
     // higher values are more likely to be performed
     protected abstract float Score(
       Interaction interaction, ICollection<Entity> targets = null

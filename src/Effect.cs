@@ -27,7 +27,7 @@ namespace BehaviorEngine {
         Attribute<T>.Instance instance = e.GetAttribute(attribute)
           as Attribute<T>.Instance;
 
-        // Target entity does not have the attribute being affected
+        // Target Entity does not have the Attribute being affected
         if (instance == null) return false;
 
         Modify(instance);
