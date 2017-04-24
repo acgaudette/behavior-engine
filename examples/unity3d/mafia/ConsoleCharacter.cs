@@ -5,9 +5,9 @@ using BehaviorEngine.Personality;
 
 public abstract class ConsoleCharacter : UnityEntity {
 
-  public CharacterUnit unit;
+  public CharacterUnit<ConsoleAction> unit;
 
   public ConsoleCharacter(string label) : base(label) {
-    unit = new CharacterUnit();
+    unit = new CharacterUnit<ConsoleAction>();
   }
 }

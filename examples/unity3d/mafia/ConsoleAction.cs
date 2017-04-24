@@ -4,7 +4,7 @@
 using UnityEngine;
 using BehaviorEngine.Personality;
 
-public struct ConsoleAction : CharacterUnit.IAction {
+public struct ConsoleAction : CharacterUnit<ConsoleAction>.IAction {
 
   string[] messages;
 
