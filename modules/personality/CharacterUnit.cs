@@ -5,19 +5,15 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
-  public class CharacterUnit<A> where A : CharacterUnit<A>.IAction {
+  public class CharacterUnit<T> where T:ICharacterAction {
 
-    public interface IAction {
-      void Perform();
-    }
-
-    public HashSet<A> actions;
+    public HashSet<T> actions;
 
     public CharacterUnit() {
-      actions = new HashSet<A>();
+      actions = new HashSet<T>();
     }
 
-    public bool Perform(A a) {
+    public bool Perform(T a) {
       if (!actions.Contains(a))
         return false;
 

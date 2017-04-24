@@ -29,9 +29,21 @@ namespace BehaviorEngine.Personality {
     }
 
     PersonalityClass fiveFactors;
+    public Dictionary<PersonalityInteraction, ICharacterAction> d;
 
+    /** Make sure BrainInteractionFactory is loaded with interactions that 
+     * will be evolved on before instatiating any instances of this
+     * class
+     */
     public Brain(PersonalityClass fiveFactors) {
       this.fiveFactors = fiveFactors;
+
+
+
+      foreach(PersonalityInteraction i in 
+        BrainInteractionFactory.getAllInteractions()) {
+
+      }
     }
 
 
