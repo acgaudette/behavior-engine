@@ -16,4 +16,11 @@ public struct ConsoleAction : ICharacterAction {
     int r = Random.Range(0, messages.Length);
     Debug.Log(messages[r]);
   }
+
+  public override string ToString() {
+    string s = "";
+    foreach (string message in messages)
+      s += "\"" + message + "\" ";
+    return s;
+  }
 }
