@@ -1,4 +1,8 @@
-﻿namespace BehaviorEngine.Personality {
+﻿// PersonalityFactor.cs
+// Created by Daniel W. Zhang on 04.23.17
+// General structure for a personality factor
+
+namespace BehaviorEngine.Personality {
 
   public class PersonalityFactor : NormalizedAttribute, ILabeled {
 

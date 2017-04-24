@@ -1,28 +1,25 @@
-﻿using System;
+﻿// PersonalityClass.cs
+// Created by Daniel W. Zhang on 04.23.17
+// Extension of BehaviorEngine's Class for the personality module
+
+using System;
 using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
   public class PersonalityClass : Class {
 
-    private static string[] names = {
-      "Agreeableness",
-      "Conscientiousness",
-      "Extraversion",
-      "Neuroticism",
-      "Openness"
-    };
-
     public Dictionary<string, PersonalityFactor> personalityFactors;
 
     public PersonalityClass(Dictionary<string, 
-      BehaviorEngine.Attribute<float>.InitializeState> delegates = null) : base() {
+      BehaviorEngine.Attribute<float>.InitializeState> delegates = null) : 
+      base() {
 
       Random r = new Random ();
 
       personalityFactors = new Dictionary<string, PersonalityFactor> ();
 
-      foreach (string factor in names) {
+      foreach (string factor in SharedData.names) {
         if (delegates == null ||
             !delegates.ContainsKey (factor)) {
           float val = ((float)r.NextDouble ());
