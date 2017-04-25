@@ -16,6 +16,15 @@ public class ConsoleActionReader {
       return false;
 
     int count = 0;
+
+    if (!File.Exists(@path)) {
+      Debug.LogError(
+        "ConsoleActionReader: File does not exist at "
+          + new FileInfo(@path).FullName
+      );
+      return false;
+    }
+
     try {
       using (StreamReader reader = File.OpenText(@path)) {
         List<string> buffer = new List<string>();
