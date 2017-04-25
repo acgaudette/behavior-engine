@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 
+using BehaviorEngine.Float;
+
 namespace BehaviorEngine.Personality {
   public class PersonalityEffect : Effect {
 
-    HashSet<PersonalityFactor> strongFactorInfluences;
-    HashSet<PersonalityProperty> strongPropertyInfluences;
-    PersonalityProperty targetProperty;
+    public HashSet<PersonalityFactor> strongFactorInfluences;
+    public HashSet<PersonalityProperty> strongPropertyInfluences;
 
     public PersonalityEffect(
         HashSet<PersonalityFactor> factors = null,
         HashSet<PersonalityProperty> properties = null,
-        PersonalityProperty target = null) : base() {
+        Dictionary<PersonalityProperty,float> targets = null) : base() {
       strongFactorInfluences = factors;
       if(factors == null) {
         strongFactorInfluences = new HashSet<PersonalityFactor>();
@@ -19,7 +20,14 @@ namespace BehaviorEngine.Personality {
       if(properties == null) {
         strongPropertyInfluences = new HashSet<PersonalityProperty>();
       }
-      this.targetProperty = target;
+      if(targets == null) {
+        return;
+      }
+      foreach(var entry in targets) {
+        var property = entry.Key;
+        var offset = entry.Value;
+        modifiers.Add(new FloatModifier(property, offset));
+      }
     }
   }
 }

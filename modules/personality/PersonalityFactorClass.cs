@@ -1,5 +1,5 @@
 ﻿// PersonalityClass.cs
-// Created by Daniel W. Zhang on 04.23.17
+// Created by Daniel W. Zhang on 23.04.17
 // Extension of BehaviorEngine's Class for the personality module
 
 using System;
@@ -27,7 +27,7 @@ namespace BehaviorEngine.Personality {
               new PersonalityFactor(factor, () => val);
         } else {
           var del = delegates [factor];
-          personalityFactors[factor] = new PersonalityFactor (factor, del);
+          personalityFactors[factor] = new PersonalityFactor(factor, del);
         }
         attributes.Add(personalityFactors[factor]);
       }
