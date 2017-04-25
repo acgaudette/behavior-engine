@@ -15,25 +15,47 @@ public class Mafia : MonoBehaviour {
     Class.root = new Class();
 
     HashSet<PersonalityFactor> inputFactors = new HashSet<PersonalityFactor>();
-    inputFactors.Add(new PersonalityFactor(SharedData.PersonalityFactorNames[1],
-      () => .2f));
+    inputFactors.Add(
+      new PersonalityFactor(SharedData.PersonalityFactorNames[1],
+      () => .2f)
+    );
+
     HashSet<PersonalityProperty> inputProperties = 
       new HashSet<PersonalityProperty>();
-    inputProperties.Add(new PersonalityProperty(
-      SharedData.PersonalityPropertyNames[0], () => .5f));
+    inputProperties.Add(
+      new PersonalityProperty(
+        SharedData.PersonalityPropertyNames[0],
+        () => .5f
+      )
+    );
+
     Dictionary<PersonalityProperty, float> inputTargets = 
       new Dictionary<PersonalityProperty, float>();
-    inputTargets[new PersonalityProperty(
-      SharedData.PersonalityPropertyNames[3], () => .2f)] = .3f;
-    Brain.CentralBrainRepository.registerEffect(
-      new PersonalityEffect(inputFactors, inputProperties, inputTargets, null));
+    inputTargets[
+      new PersonalityProperty(
+        SharedData.PersonalityPropertyNames[3],
+        () => .2f
+      )
+    ] = .3f;
 
-    // Users
+    Brain.CentralBrainRepository.registerEffect(
+      new PersonalityEffect(inputFactors, inputProperties, inputTargets, null)
+    );
+
+    // Characters
     Character[] characters = {
       new Character("Julian", null, null),
       new Character("Andy", null, null),
       new Character("Eugene", null, null)
     };
+
+    // Actions
+    foreach (Character character in characters) {
+      ConsoleActionReader.LoadFile(
+        "./Assets/behavior-engine/examples/unity3d/mafia/actions.txt",
+        character.unit
+      );
+    }
 
     /* See Forum.cs for examples */
 

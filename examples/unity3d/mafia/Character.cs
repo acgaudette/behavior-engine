@@ -1,4 +1,5 @@
 // Placeholder
+// TODO: Inherit Person
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +12,13 @@ public class Character : ConsoleCharacter {
   private PersonalityFactorClass fiveFactors;
   private PersonalityPropertyClass personalityProperties;
 
-  public Character(string name, 
+  public Character(
+    string name, 
     Dictionary<string,
     Attribute<float>.InitializeState> initFactorsl,
     Dictionary<string,
     BehaviorEngine.Attribute<float>.InitializeState> initProperties) : 
-    base(name) { 
+  base(name) { 
     fiveFactors = new PersonalityFactorClass();
     personalityProperties = new PersonalityPropertyClass();
     brain = new Brain(fiveFactors, personalityProperties);
