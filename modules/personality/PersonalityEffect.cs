@@ -3,21 +3,28 @@
 using BehaviorEngine.Float;
 
 namespace BehaviorEngine.Personality {
+
   public class PersonalityEffect : Effect {
 
     public HashSet<PersonalityFactor> strongFactorInfluences;
     public HashSet<PersonalityProperty> strongPropertyInfluences;
 
+    ICharacterAction action;
+
     public PersonalityEffect(
-        HashSet<PersonalityFactor> factors = null,
-        HashSet<PersonalityProperty> properties = null,
-        Dictionary<PersonalityProperty,float> targets = null) : base() {
+      HashSet<PersonalityFactor> factors,
+      HashSet<PersonalityProperty> properties,
+      Dictionary<PersonalityProperty,float> targets,
+      ICharacterAction action
+    ) : base() {
       strongFactorInfluences = factors;
-      if(factors == null) {
+
+      if (factors == null) {
         strongFactorInfluences = new HashSet<PersonalityFactor>();
       }
       strongPropertyInfluences = properties;
-      if(properties == null) {
+
+      if (properties == null) {
         strongPropertyInfluences = new HashSet<PersonalityProperty>();
       }
       if(targets == null) {
@@ -28,6 +35,13 @@ namespace BehaviorEngine.Personality {
         var offset = entry.Value;
         modifiers.Add(new FloatModifier(property, offset));
       }
+
+      this.action = action;
+    }
+
+    protected override void OnTrigger(Entity target, bool effective) {
+      if (action !=null)
+        action.Perform();
     }
   }
 }

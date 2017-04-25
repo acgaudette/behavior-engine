@@ -5,9 +5,14 @@ using BehaviorEngine.Personality;
 
 public abstract class ConsoleCharacter : UnityEntity {
 
+  public string Name {
+    get; private set;
+  }
+
   public CharacterUnit<ConsoleAction> unit;
 
-  public ConsoleCharacter() : base() {
+  public ConsoleCharacter(string name) : base() {
+    Name = name;
     unit = new CharacterUnit<ConsoleAction>();
   }
 }

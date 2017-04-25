@@ -5,7 +5,7 @@ namespace BehaviorEngine.Personality {
   public class Brain {
 
     public static class CentralBrainRepository {
-
+      
       public static HashSet<PersonalityEffect> allEffects =
           new HashSet<PersonalityEffect>();
 
