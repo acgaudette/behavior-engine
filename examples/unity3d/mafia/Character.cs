@@ -24,6 +24,11 @@ public class Character : ConsoleCharacter {
     brain = new Brain(fiveFactors, personalityProperties);
   }
 
+  protected override IList<Effect> GetReaction(Interaction interaction, Entity host)
+  {
+    brain.GetEffectsFromInteraction(interaction);
+  }
+
   protected override float Score(
     Interaction interaction, ICollection<Entity> targets
   ) {
