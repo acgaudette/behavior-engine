@@ -16,15 +16,18 @@ public class Mafia : MonoBehaviour {
 
     HashSet<PersonalityFactor> inputFactors = new HashSet<PersonalityFactor>();
     inputFactors.Add(
-      new PersonalityFactor(SharedData.PersonalityFactorNames[1],
-      () => .2f)
+      // Should be unique
+      new PersonalityFactor(
+        SharedData.PersonalityFactorNames[1], // Conscientiousness
+        () => .2f // Shouldn't be state
+      )
     );
 
     HashSet<PersonalityProperty> inputProperties = 
       new HashSet<PersonalityProperty>();
     inputProperties.Add(
       new PersonalityProperty(
-        SharedData.PersonalityPropertyNames[0],
+        SharedData.PersonalityPropertyNames[0], // angry
         () => .5f
       )
     );
@@ -33,10 +36,10 @@ public class Mafia : MonoBehaviour {
       new Dictionary<PersonalityProperty, float>();
     inputTargets[
       new PersonalityProperty(
-        SharedData.PersonalityPropertyNames[3],
+        SharedData.PersonalityPropertyNames[3], // confused
         () => .2f
       )
-    ] = .3f;
+    ] = .3f; // Offset
 
     Brain.CentralBrainRepository.registerEffect(
       new PersonalityEffect(inputFactors, inputProperties, inputTargets, null)
@@ -66,7 +69,8 @@ public class Mafia : MonoBehaviour {
     }
 
     // Unity hooks
-    GetComponent<ComponentManager>().Hook("Universe.root", Universe.root);
-    GetComponent<ComponentManager>().Hook("Class.root", Class.root);
+    ComponentManager hook = GetComponent<ComponentManager>();
+    hook.Hook("Universe.root", Universe.root);
+    hook.Hook("Class.root", Class.root);
   }
 }

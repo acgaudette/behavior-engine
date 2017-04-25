@@ -35,18 +35,22 @@ namespace BehaviorEngine.Personality {
       r = new Random();
     }
 
+    // Called from GetReaction()
     public List<PersonalityEffect> GetEffectsFromInteraction(
       PersonalityInteraction i
     ) {
+      // Return value
       List<PersonalityEffect> effects = new List<PersonalityEffect>();
 
       var allEffects = new List<PersonalityEffect>(
         CentralBrainRepository.getAllEffects()
       );
+      // Guarantee that default Effect will be different every time
       Shuffle(allEffects);
 
       int position = 0, total = allEffects.Count;
-      foreach (PersonalityEffect e in CentralBrainRepository.getAllEffects()) {
+      foreach (PersonalityEffect e in allEffects) {
+        // Difference in influence (zero = the same)
         int differential = 0;
         foreach (var factor in i.strongFactorInfluences) {
           if (!e.strongFactorInfluences.Contains(factor)) {
@@ -67,10 +71,13 @@ namespace BehaviorEngine.Personality {
           double currentCount = effects.Count;
           double s = r.NextDouble() * differential;
           double toTheEnd = (total - position) / total;
+
+          // s / top is always guaranteed to be positive
           if (s / top > Math.Min(toTheEnd, currentCount)) {
             effects.Add(e);
           }
         }
+
         position++;
       }
 
