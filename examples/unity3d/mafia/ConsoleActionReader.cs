@@ -20,25 +20,41 @@ public class ConsoleActionReader {
       using (StreamReader reader = File.OpenText(@path)) {
         List<string> buffer = new List<string>();
 
-        for (string line = null;;) {
+        for (string key = null, line = null;;) {
           line = reader.ReadLine();
 
           if (line == null || line[0] != '\t') {
-            if (buffer.Count > 0) {
-              unit.actions.Add(new ConsoleAction(buffer.ToArray()));
-              count++;
+            // Catch first, single-line Action
+            if (key == null && buffer.Count == 0) {
+              key = line;
+            // Error
+            } else if (key == null) {
+              Debug.LogError(
+                "ConsoleActionReader: Parse error: tabbed data with no header"
+              );
+              return false;
             }
 
-            if (line == null) break;
+            // Add Action
+            unit.actions[key] = new ConsoleAction(
+              buffer.Count == 0 ? new string[] { key } : buffer.ToArray()
+            );
+            count++;
 
-            buffer = new List<string>() { line };
-          } else {
-            buffer.Add(line.Substring(1));
+            // Exit loop
+            if (line == null)
+              break;
+
+            key = line;
+            buffer = new List<string>();
           }
+
+          // Add tabbed data
+          else buffer.Add(line.Substring(1));
         }
       }
     } catch (Exception e) {
-      Debug.LogError(e);
+      Debug.LogError("ConsoleActionReader: " + e);
       return false;
     }
 

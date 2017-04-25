@@ -11,17 +11,17 @@ namespace BehaviorEngine.Personality {
 
   public class CharacterUnit<A> where A : ICharacterAction {
 
-    public HashSet<A> actions;
+    public Dictionary<string, A> actions;
 
     public CharacterUnit() {
-      actions = new HashSet<A>();
+      actions = new Dictionary<string, A>();
     }
 
-    public bool Perform(A a) {
-      if (!actions.Contains(a))
+    public bool Perform(string key) {
+      if (!actions.ContainsKey(key))
         return false;
 
-      a.Perform();
+      actions[key].Perform();
 
       return true;
     }
