@@ -11,6 +11,7 @@ namespace BehaviorEngine {
     IAttribute Prototype { get; }
   }
 
+  // Attribute prototype
   public partial class Attribute<T> : Root, IAttribute {
 
     public delegate T InitializeState();
@@ -32,6 +33,7 @@ namespace BehaviorEngine {
       return raw;
     }
 
+    // Attribute instance
     public partial class Instance : Root, IAttributeInstance {
       T state;
 
