@@ -7,19 +7,26 @@ namespace BehaviorEngine.Personality {
 
     public static class CentralBrainRepository {
 
-      public static HashSet<PersonalityEffect> allEffects =
-        new HashSet<PersonalityEffect>();
+      public static Dictionary<FactorEnum, Factor> factorPrototypes =
+        new Dictionary<FactorEnum, Factor>();
 
-      public static void registerEffect(PersonalityEffect e) {
+      public static HashSet<InfluencedEffect> allEffects =
+        new HashSet<InfluencedEffect>();
+
+      public static void registerFactor(Factor f) {
+        factorPrototypes[f.factorType] = f;
+      }
+
+      public static void registerEffect(InfluencedEffect e) {
         allEffects.Add(e);
       }
 
-      public static List<PersonalityEffect> getAllEffects() {
-        return new List<PersonalityEffect>(allEffects);
+      public static List<InfluencedEffect> getAllEffects() {
+        return new List<InfluencedEffect>(allEffects);
       }
     }
 
-    PersonalityFactorClass fiveFactors; // Never used
+    FactorClass fiveFactors; // Never used
     PersonalityPropertyClass properties; // Never used
     Random r;
 
@@ -27,7 +34,7 @@ namespace BehaviorEngine.Personality {
      * properties before instatiating any instances of this class
      */
     public Brain(
-      PersonalityFactorClass fiveFactors,
+      FactorClass fiveFactors,
       PersonalityPropertyClass properties
     ) {
       this.fiveFactors = fiveFactors;
@@ -37,29 +44,29 @@ namespace BehaviorEngine.Personality {
 
     // Called from GetReaction()
     public IList<Effect> GetEffectsFromInteraction(
-      PersonalityInteraction i
+      InfluencedInteraction i
     ) {
       // Return value
       List<Effect> effects = new List<Effect>();
 
-      var allEffects = new List<PersonalityEffect>(
+      var allEffects = new List<InfluencedEffect>(
         CentralBrainRepository.getAllEffects()
       );
       // Guarantee that default Effect will be different every time
       Shuffle(allEffects);
 
       int position = 0, total = allEffects.Count;
-      foreach (PersonalityEffect e in allEffects) {
+      foreach (InfluencedEffect e in allEffects) {
         // Difference in influence (zero = the same)
         int differential = 0;
         foreach (var factor in i.strongFactorInfluences) {
-          if (!e.strongFactorInfluences.Contains(factor)) {
+          if (!e.strongFactorInfluences.ContainsKey(factor.factorType)) {
             differential++;
           }
         }
 
         foreach (var prop in i.strongPropertyInfluences) {
-          if (!e.strongPropertyInfluences.Contains(prop)) {
+          if (!e.strongPropertyInfluences.ContainsKey(prop.Name)) {
             differential++;
           }
         }
@@ -70,7 +77,7 @@ namespace BehaviorEngine.Personality {
           double top = r.NextDouble() * differential;
           double currentCount = effects.Count;
           double s = r.NextDouble() * differential;
-          double toTheEnd = (total - position) / total;
+          double toTheEnd = (total - position) / (total * differential);
 
           // s / top is always guaranteed to be positive
           if (s / top > Math.Min(toTheEnd, currentCount)) {
@@ -84,7 +91,7 @@ namespace BehaviorEngine.Personality {
       return effects;
     }
 
-    private void Shuffle(IList<PersonalityEffect> list) {
+    private void Shuffle(IList<InfluencedEffect> list) {
       int n = list.Count;
       while (n > 1) {
         int k = (r.Next(0, n) % n);

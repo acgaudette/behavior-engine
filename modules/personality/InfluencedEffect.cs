@@ -3,29 +3,34 @@ using BehaviorEngine.Float;
 
 namespace BehaviorEngine.Personality {
 
-  public class PersonalityEffect : Effect {
+  public class InfluencedEffect : Effect {
 
-    public HashSet<PersonalityFactor> strongFactorInfluences;
-    public HashSet<PersonalityProperty> strongPropertyInfluences;
+    public string name;
+
+    public Dictionary<FactorEnum, Factor> strongFactorInfluences;
+    public Dictionary<string, Property> strongPropertyInfluences;
 
     ICharacterAction action;
 
-    public PersonalityEffect(
-      HashSet<PersonalityFactor> strongFactorInfluences,
-      HashSet<PersonalityProperty> strongPropertyInfluences,
-      Dictionary<PersonalityProperty,float> targets,
+    public InfluencedEffect(
+      string name,
+      Dictionary<FactorEnum, Factor> strongFactorInfluences,
+      Dictionary<string, Property> strongPropertyInfluences,
+      Dictionary<Property,float> targets,
       ICharacterAction action
     ) : base() {
+      this.name = name;
+
       this.strongFactorInfluences = strongFactorInfluences;
 
       if (strongFactorInfluences == null) {
-        this.strongFactorInfluences = new HashSet<PersonalityFactor>();
+        this.strongFactorInfluences = new Dictionary<FactorEnum, Factor>();
       }
 
       this.strongPropertyInfluences = strongPropertyInfluences;
 
       if (strongPropertyInfluences == null) {
-        this.strongPropertyInfluences = new HashSet<PersonalityProperty>();
+        this.strongPropertyInfluences = new Dictionary<string, Property>();
       }
 
       if(targets == null) {

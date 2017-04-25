@@ -2,13 +2,13 @@
 
 namespace BehaviorEngine.Personality {
 
-  public class PersonalityProperty : NormalizedAttribute {
+  public class Property : NormalizedAttribute {
 
     public string Name {
       get; private set;
     }
 
-    public PersonalityProperty(string name, InitializeState i):base(i) {
+    public Property(string name, InitializeState i):base(i) {
       Name = name;
     }
   }

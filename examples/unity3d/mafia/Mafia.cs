@@ -38,36 +38,36 @@ public class Mafia : MonoBehaviour {
 
     /* Effects */
 
-    HashSet<PersonalityFactor> inputFactors = new HashSet<PersonalityFactor>();
-    inputFactors.Add(
-      new PersonalityFactor(
+    Dictionary<FactorEnum, Factor> inputFactors = 
+      new Dictionary<FactorEnum, Factor>();
+    inputFactors[FactorEnum.CONSCIENTIOUSNESS] =
+      new Factor(
         // Should probably reference instances in PersonalityPropertyClass instead?
         // An enum would also be useful here
-        SharedData.PersonalityFactorNames[1], // Conscientiousness
+        FactorEnum.CONSCIENTIOUSNESS, // Conscientiousness
         () => .2f // Shouldn't have state
-      )
-    );
+      );
 
-    HashSet<PersonalityProperty> inputProperties = 
-      new HashSet<PersonalityProperty>();
-    inputProperties.Add(
-      new PersonalityProperty(
+    Dictionary<string, Property> inputProperties = 
+      new Dictionary<string, Property>();
+    inputProperties[SharedData.PersonalityPropertyNames[0]] =
+      new Property(
         SharedData.PersonalityPropertyNames[0], // angry
         () => .5f
-      )
-    );
+      );
 
-    Dictionary<PersonalityProperty, float> inputTargets = 
-      new Dictionary<PersonalityProperty, float>();
+    Dictionary<Property, float> inputTargets = 
+      new Dictionary<Property, float>();
     inputTargets[
-      new PersonalityProperty(
+      new Property(
         SharedData.PersonalityPropertyNames[3], // confused
         () => .2f
       )
     ] = .3f; // Offset
 
     Brain.CentralBrainRepository.registerEffect(
-      new PersonalityEffect(
+      new InfluencedEffect(
+        "example",
         inputFactors, inputProperties, inputTargets,
         null
       )

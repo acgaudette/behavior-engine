@@ -7,27 +7,27 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
-  public class PersonalityFactorClass : Class {
+  public class FactorClass : Class {
 
-    public Dictionary<string, PersonalityFactor> personalityFactors;
+    public Dictionary<FactorEnum, Factor> personalityFactors;
 
-    public PersonalityFactorClass(Dictionary<string, 
+    public FactorClass(Dictionary<FactorEnum, 
       BehaviorEngine.Attribute<float>.InitializeState> delegates = null) : 
       base() {
 
       Random r = new Random ();
 
-      personalityFactors = new Dictionary<string, PersonalityFactor> ();
+      personalityFactors = new Dictionary<FactorEnum, Factor> ();
 
-      foreach (string factor in SharedData.PersonalityFactorNames) {
+      foreach (FactorEnum factor in Enum.GetValues(typeof(FactorEnum))) {
         if (delegates == null ||
             !delegates.ContainsKey (factor)) {
           float val = ((float)r.NextDouble ());
           personalityFactors[factor] =
-              new PersonalityFactor(factor, () => val);
+              new Factor(factor, () => val);
         } else {
           var del = delegates [factor];
-          personalityFactors[factor] = new PersonalityFactor(factor, del);
+          personalityFactors[factor] = new Factor(factor, del);
         }
         attributes.Add(personalityFactors[factor]);
       }

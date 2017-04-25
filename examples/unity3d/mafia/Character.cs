@@ -25,7 +25,7 @@ public class Character : Person, IUnityEntity {
 
   public Character(
     string name,
-    Dictionary<string, Attribute<float>.InitializeState>
+    Dictionary<FactorEnum, Attribute<float>.InitializeState>
       initFactors,
     Dictionary<string, BehaviorEngine.Attribute<float>.InitializeState>
       initProperties
