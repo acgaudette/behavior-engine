@@ -7,16 +7,16 @@ namespace BehaviorEngine.Personality {
 
       public static Dictionary<string, PersonalityInteraction> allInteractions =
           new Dictionary<string, PersonalityInteraction>();
-      
+
       public static Dictionary<string, PersonalityEffect> allEffects =
           new Dictionary<string, PersonalityEffect>();
 
       public static void registerInteraction(PersonalityInteraction i) {
-        allInteractions.Add(i.Label, i);
+        allInteractions.Add(i.GetLabel(), i); // GetLabel() not sustainable!
       }
 
       public static void registerEffect(PersonalityEffect e) {
-        allEffects.Add(e.Label, e);
+        allEffects.Add(e.GetLabel(), e); // GetLabel() not sustainable!
       }
 
       public static List<PersonalityInteraction> getAllInteractions() {

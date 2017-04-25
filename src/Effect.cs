@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine {
 
-  public class Effect {
+  public partial class Effect : Root {
 
-    public interface IModifier {
+    public partial interface IModifier {
       IAttribute Attribute { get; }
       bool Apply(Entity e);
     }
 
-    public abstract class Modifier<T> : IModifier {
+    public abstract class Modifier<T> : Root, IModifier {
       public T offset;
       Attribute<T> attribute;
 
