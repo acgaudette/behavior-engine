@@ -13,6 +13,9 @@ namespace BehaviorEngine.Personality {
       public static HashSet<InfluencedEffect> allEffects =
         new HashSet<InfluencedEffect>();
 
+      public static CharacterUnit<ICharacterAction> characterUnit =
+        new CharacterUnit<ICharacterAction>();
+
       public static void registerFactor(Factor f) {
         factorPrototypes[f.factorType] = f;
       }
