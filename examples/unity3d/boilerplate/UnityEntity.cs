@@ -10,6 +10,7 @@ public abstract class UnityEntity : Entity {
 
   public bool destroy = false;
 
+  // Helper function
   public float GetAttributeState(IAttribute attribute) {
     return (GetAttribute(attribute) as NormalizedAttribute.Instance).State;
   }
