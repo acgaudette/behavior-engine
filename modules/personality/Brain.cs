@@ -19,8 +19,8 @@ namespace BehaviorEngine.Personality {
       }
     }
 
-    PersonalityFactorClass fiveFactors;
-    PersonalityPropertyClass properties;
+    PersonalityFactorClass fiveFactors; // Never used
+    PersonalityPropertyClass properties; // Never used
     Random r;
 
     /** Make sure BrainInteractionFactory is loaded with interactions and
@@ -36,11 +36,11 @@ namespace BehaviorEngine.Personality {
     }
 
     // Called from GetReaction()
-    public List<PersonalityEffect> GetEffectsFromInteraction(
+    public IList<Effect> GetEffectsFromInteraction(
       PersonalityInteraction i
     ) {
       // Return value
-      List<PersonalityEffect> effects = new List<PersonalityEffect>();
+      List<Effect> effects = new List<Effect>();
 
       var allEffects = new List<PersonalityEffect>(
         CentralBrainRepository.getAllEffects()

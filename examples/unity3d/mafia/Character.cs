@@ -1,37 +1,28 @@
-// Placeholder
-// TODO: Inherit Person
+// Character.cs
+// Created by Aaron C Gaudette on 24.04.17
 
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorEngine;
 using BehaviorEngine.Personality;
 
-public class Character : ConsoleCharacter {
+public class Character : Person {
 
-  private Brain brain;
-  private PersonalityFactorClass fiveFactors;
-  private PersonalityPropertyClass personalityProperties;
+  public CharacterUnit<ConsoleAction> unit;
 
   public Character(
-    string name, 
-    Dictionary<string,
-    Attribute<float>.InitializeState> initFactorsl,
-    Dictionary<string,
-    BehaviorEngine.Attribute<float>.InitializeState> initProperties) : 
-  base(name) { 
-    fiveFactors = new PersonalityFactorClass();
-    personalityProperties = new PersonalityPropertyClass();
-    brain = new Brain(fiveFactors, personalityProperties);
-  }
-
-  protected override IList<Effect> GetReaction(Interaction interaction, Entity host)
-  {
-    brain.GetEffectsFromInteraction(interaction);
+    string name,
+    Dictionary<string, Attribute<float>.InitializeState>
+      initFactors,
+    Dictionary<string, BehaviorEngine.Attribute<float>.InitializeState>
+      initProperties
+  ) : base(name, initFactors, initProperties) {
+    unit = new CharacterUnit<ConsoleAction>();
   }
 
   protected override float Score(
     Interaction interaction, ICollection<Entity> targets
   ) {
-    return Random.Range(0, 1f);
+    return Random.Range(0, 1f); // ! (placeholder)
   }
 }
