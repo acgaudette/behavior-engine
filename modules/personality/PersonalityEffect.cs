@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using BehaviorEngine.Float;
 
 namespace BehaviorEngine.Personality {
@@ -22,14 +21,17 @@ namespace BehaviorEngine.Personality {
       if (strongFactorInfluences == null) {
         this.strongFactorInfluences = new HashSet<PersonalityFactor>();
       }
+
       this.strongPropertyInfluences = strongPropertyInfluences;
 
       if (strongPropertyInfluences == null) {
         this.strongPropertyInfluences = new HashSet<PersonalityProperty>();
       }
+
       if(targets == null) {
         return;
       }
+
       foreach(var entry in targets) {
         var property = entry.Key;
         var offset = entry.Value;
