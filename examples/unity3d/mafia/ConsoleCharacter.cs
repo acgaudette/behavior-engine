@@ -7,7 +7,7 @@ public abstract class ConsoleCharacter : UnityEntity {
 
   public CharacterUnit<ConsoleAction> unit;
 
-  public ConsoleCharacter(string label) : base(label) {
+  public ConsoleCharacter() : base() {
     unit = new CharacterUnit<ConsoleAction>();
   }
 }

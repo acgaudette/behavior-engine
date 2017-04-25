@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine {
 
-  public abstract class Entity {
+  public abstract partial class Entity : Root {
 
     public HashSet<Interaction> interactions;
     Dictionary<IAttribute, IAttributeInstance> attributes;
@@ -47,6 +47,8 @@ namespace BehaviorEngine {
     // Replace Attributes and Interactions with the ones from a provided Class
     public void Subscribe(Class family) {
       attributes.Clear();
+
+      // Somewhat undefined: Attributes can't change, but Interactions can
 
       foreach (IAttribute attribute in family.attributes)
         AddAttribute(attribute);
@@ -103,6 +105,7 @@ namespace BehaviorEngine {
         }
       }
 
+      LogPoll(choice, targets, highscore);
       OnPoll(choice, targets, highscore);
 
       if (choice == null) return;
@@ -114,6 +117,7 @@ namespace BehaviorEngine {
     internal void React(Interaction interaction, Entity host) {
       IList<Effect> effects = GetReaction(interaction, host);
 
+      LogReaction(interaction, host, effects);
       OnReact(interaction, host, effects);
 
       if (effects == null) return;
@@ -128,6 +132,7 @@ namespace BehaviorEngine {
     ) {
       IList<Effect> effects = GetObservation(interaction, host, targets);
 
+      LogObservation(interaction, host, targets, effects);
       OnObserve(interaction, host, targets, effects);
 
       if (effects == null) return;

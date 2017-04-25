@@ -17,6 +17,10 @@ public class ComponentManager : MonoBehaviour {
   public List<UniverseComponent> universes = new List<UniverseComponent>();
   public List<ClassComponent> classes = new List<ClassComponent>();
 
+  void Awake() {
+    Root.logger = m => Debug.Log(m);
+  }
+
   void Update() {
     for (int i = universes.Count - 1; i > 0; --i) {
       if (universes[i].reference == null) {
@@ -89,10 +93,7 @@ public class ComponentManager : MonoBehaviour {
       EntityComponent component = o.AddComponent<EntityComponent>();
       component.reference = target as UnityEntity;
 
-      // Name
-      if (target is ILabeled)
-        o.name = (target as ILabeled).Label;
-      else o.name = "Unlabeled";
+      o.name = target.GetLabel();
 
       o.transform.parent = parent.transform;
       parent.entities.Add(component);

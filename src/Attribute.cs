@@ -1,19 +1,17 @@
 // Attribute.cs
 // Created by Aaron C Gaudette on 09.04.17
 
-using System;
-
 namespace BehaviorEngine {
 
-  public interface IAttribute {
+  public partial interface IAttribute {
     IAttributeInstance GetNewInstance();
   }
 
-  public interface IAttributeInstance {
+  public partial interface IAttributeInstance {
     IAttribute Prototype { get; }
-  };
+  }
 
-  public class Attribute<T> : IAttribute {
+  public partial class Attribute<T> : Root, IAttribute {
 
     public delegate T InitializeState();
     InitializeState initializeState;
@@ -34,7 +32,7 @@ namespace BehaviorEngine {
       return raw;
     }
 
-    public class Instance : IAttributeInstance {
+    public partial class Instance : Root, IAttributeInstance {
       T state;
 
       Attribute<T> prototype;
@@ -50,16 +48,6 @@ namespace BehaviorEngine {
         get { return state; }
         set { state = prototype.TransformState(value); }
       }
-    }
-  }
-
-  public class NormalizedAttribute : Attribute<float> {
-
-    protected NormalizedAttribute(InitializeState initializeState)
-      : base(initializeState) { }
-
-    protected override float TransformState(float raw) {
-      return Math.Min(1, Math.Max(0, raw));
     }
   }
 }

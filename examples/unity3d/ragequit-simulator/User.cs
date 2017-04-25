@@ -7,7 +7,9 @@ using BehaviorEngine;
 
 public partial class User : UnityEntity {
 
-  public User(string label) : base(label) { }
+  public User(string label) : base() {
+    SetLabel(label);
+  }
 
   protected override IList<Effect> GetReaction(
     Interaction interaction, Entity host
