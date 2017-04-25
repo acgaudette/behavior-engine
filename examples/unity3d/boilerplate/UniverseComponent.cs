@@ -43,7 +43,7 @@ public class UniverseComponent : MonoBehaviour {
       }
 
       // Remove Entities marked as destroyed from the Universe
-      reference.entities.RemoveWhere((e) => (e as UnityEntity).destroy);
+      reference.entities.RemoveWhere((e) => (e as IUnityEntity).Destroy);
 
       lastPoll = Time.time;
       tick++;

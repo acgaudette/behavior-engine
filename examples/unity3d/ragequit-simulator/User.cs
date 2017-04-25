@@ -4,11 +4,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorEngine;
+using BehaviorEngine.Float;
 
-public partial class User : UnityEntity {
+public partial class User : Entity, IUnityEntity {
+
+  public bool Destroy {
+    get { return destroy; }
+    set { destroy = value; }
+  }
+  bool destroy = false;
+
+  public bool Print {
+    get { return print; }
+    set { print = value; }
+  }
+  bool print = false;
 
   public User(string label) : base() {
     SetLabel(label);
+  }
+
+  // Helper function
+  public float GetAttributeState(IAttribute attribute) {
+    return (GetAttribute(attribute) as NormalizedAttribute.Instance).State;
   }
 
   protected override IList<Effect> GetReaction(
@@ -16,7 +34,7 @@ public partial class User : UnityEntity {
   ) {
     if (
       interaction != Forum.quit
-      && (destroy || (host as UnityEntity).destroy)
+      && (destroy || (host as IUnityEntity).Destroy)
     ) {
       return null;
     }
@@ -39,16 +57,16 @@ public partial class User : UnityEntity {
   ) {
     if (
       interaction != Forum.quit
-      && (destroy || (host as UnityEntity).destroy)
+      && (destroy || (host as IUnityEntity).Destroy)
     ) {
       return null;
     }
 
     if (interaction == Forum.start) {
-      if ((host as UnityEntity).GetAttributeState(Forum.anger) > .5f)
+      if ((host as IUnityEntity).GetAttributeState(Forum.anger) > .5f)
         return new List<Effect>(1){ Forum.incite };
 
-      else if ((host as UnityEntity).GetAttributeState(Forum.anger) > .25f)
+      else if ((host as IUnityEntity).GetAttributeState(Forum.anger) > .25f)
         return new List<Effect>(1){ Forum.annoy };
 
       else
@@ -76,7 +94,7 @@ public partial class User : UnityEntity {
 
     if (targets != null) {
       foreach (Entity target in targets) {
-        if ((target as UnityEntity).destroy)
+        if ((target as IUnityEntity).Destroy)
           return 0;
       }
     }
@@ -92,5 +110,26 @@ public partial class User : UnityEntity {
 
     return Random.Range(0, 1f) < chance ?
       1 : interaction == Forum.start ? .2f : .1f;
+  }
+
+  /* Debug */
+
+  public override void LogReaction(
+    Interaction interaction, Entity host, IList<Effect> effects
+  ) {
+    if (print) base.LogReaction(interaction, host, effects);
+  }
+
+  public override void LogObservation(
+    Interaction interaction, Entity host,
+    ICollection<Entity> targets, IList<Effect> effects
+  ) {
+    if (print) base.LogObservation(interaction, host, targets, effects);
+  }
+
+  public override void LogPoll(
+    Interaction choice, ICollection<Entity> targets, float highscore
+  ) {
+    if (print) base.LogPoll(choice, targets, highscore);
   }
 }

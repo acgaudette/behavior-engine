@@ -87,11 +87,9 @@ public class ComponentManager : MonoBehaviour {
 
     parent.entities.Clear();
     foreach (Entity target in latest) {
-      if (!(target is UnityEntity)) continue;
-
       GameObject o = new GameObject();
       EntityComponent component = o.AddComponent<EntityComponent>();
-      component.reference = target as UnityEntity;
+      component.reference = target;
 
       o.name = target.GetLabel();
 

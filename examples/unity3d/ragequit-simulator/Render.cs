@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 using BehaviorEngine;
+using BehaviorEngine.Float;
 
-public partial class User : UnityEntity {
+public partial class User : Entity, IUnityEntity {
 
   protected override void OnReact(
     Interaction interaction, Entity host, IList<Effect> effects

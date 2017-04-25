@@ -9,7 +9,7 @@ using BehaviorEngine.Float;
 public class EntityComponent : MonoBehaviour {
 
   public bool debug = false;
-  public UnityEntity reference;
+  public Entity reference;
 
   [System.Serializable]
   public class NormalizedAttributeRenderer {
@@ -36,7 +36,7 @@ public class EntityComponent : MonoBehaviour {
   void Update() {
     if (reference == null) return;
 
-    reference.print = debug;
+    (reference as IUnityEntity).Print = debug;
     attributes.Clear();
 
     // Display
