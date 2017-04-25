@@ -17,12 +17,34 @@ public class Mafia : MonoBehaviour {
     Universe.root = new Universe();
     Class.root = new Class();
 
+    // Characters
+    Character[] characters = {
+      new Character("Julian", null, null),
+      new Character("Andy", null, null),
+      new Character("Eugene", null, null)
+    };
+
+    // Actions
+    foreach (Character character in characters) {
+      ConsoleActionReader.LoadFile(
+        DATA_PATH + "/actions.txt",
+        // There should be a global/subscription CU,
+        // not an instance for every Character
+        character.unit
+      );
+    }
+
+    // Attributes are defined in the Personality module
+
+    /* Effects */
+
     HashSet<PersonalityFactor> inputFactors = new HashSet<PersonalityFactor>();
     inputFactors.Add(
-      // Should be unique
       new PersonalityFactor(
+        // Should probably reference instances in PersonalityPropertyClass instead?
+        // An enum would also be useful here
         SharedData.PersonalityFactorNames[1], // Conscientiousness
-        () => .2f // Shouldn't be state
+        () => .2f // Shouldn't have state
       )
     );
 
@@ -45,25 +67,13 @@ public class Mafia : MonoBehaviour {
     ] = .3f; // Offset
 
     Brain.CentralBrainRepository.registerEffect(
-      new PersonalityEffect(inputFactors, inputProperties, inputTargets, null)
+      new PersonalityEffect(
+        inputFactors, inputProperties, inputTargets,
+        null
+      )
     );
 
-    // Characters
-    Character[] characters = {
-      new Character("Julian", null, null),
-      new Character("Andy", null, null),
-      new Character("Eugene", null, null)
-    };
-
-    // Actions
-    foreach (Character character in characters) {
-      ConsoleActionReader.LoadFile(
-        DATA_PATH + "/actions.txt",
-        character.unit
-      );
-    }
-
-    /* See Forum.cs for examples */
+    // Generate Interactions
 
     // Attribution
     foreach (Character character in characters) {
