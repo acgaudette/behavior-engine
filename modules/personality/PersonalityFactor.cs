@@ -3,7 +3,6 @@
 // General structure for a personality factor
 
 namespace BehaviorEngine.Personality {
-
   public class PersonalityFactor : NormalizedAttribute, ILabeled {
 
     public float value;

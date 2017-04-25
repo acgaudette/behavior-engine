@@ -28,24 +28,21 @@ namespace BehaviorEngine.Personality {
       }
     }
 
-    PersonalityClass fiveFactors;
-    public Dictionary<PersonalityInteraction, ICharacterAction> d;
+    PersonalityFactorClass fiveFactors;
+    PersonalityPropertyClass properties; 
 
-    /** Make sure BrainInteractionFactory is loaded with interactions that 
-     * will be evolved on before instatiating any instances of this
-     * class
+    /** Make sure BrainInteractionFactory is loaded with interactions and
+     * properties before instatiating any instances of this class
      */
-    public Brain(PersonalityClass fiveFactors) {
+    public Brain(PersonalityFactorClass fiveFactors,
+        PersonalityPropertyClass properties) {
       this.fiveFactors = fiveFactors;
-
-
-
-      foreach(PersonalityInteraction i in 
-        BrainInteractionFactory.getAllInteractions()) {
-
-      }
+      this.properties = properties;
     }
 
-
+    public PersonalityEffect EffectFromInteraction(Interaction i) {
+      //TODO
+      return null;
+    }
   }
 }

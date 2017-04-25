@@ -6,15 +6,20 @@ namespace BehaviorEngine.Personality {
 
     public string Label { set; get; }
     private Brain oracle;
-    private PersonalityClass fiveFactors;
+    private PersonalityFactorClass fiveFactors;
+    private PersonalityPropertyClass personalityProperties;
 
     public Person(string label, 
-        Dictionary<string, BehaviorEngine.Attribute<float>.InitializeState> init
+        Dictionary<string,
+            Attribute<float>.InitializeState> initFactors = null,
+        Dictionary<string,
+            BehaviorEngine.Attribute<float>.InitializeState> initProperties
         = null
         ) : base() {
       Label = label;
-      fiveFactors = new PersonalityClass(init);
-      oracle = new Brain(fiveFactors);
+      fiveFactors = new PersonalityFactorClass(initFactors);
+      personalityProperties = new PersonalityPropertyClass(initProperties);
+      oracle = new Brain(fiveFactors, personalityProperties);
     }
 
     private Dictionary<Interaction, 
