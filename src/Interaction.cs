@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine {
 
-  public class Interaction {
+  public class Interaction : Root {
     public int limiter;
 
     public Interaction(int limiter) {

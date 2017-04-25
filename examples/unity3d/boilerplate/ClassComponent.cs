@@ -17,24 +17,16 @@ public class ClassComponent : MonoBehaviour {
   void Update() {
     if (reference == null) return;
 
-    // Display
-
     attributes.Clear();
     foreach (IAttribute attribute in reference.attributes)
-      attributes.Add(attribute is ILabeled ? attribute.ToString() : "Unlabeled");
+      attributes.Add(attribute.GetLabel());
 
     effects.Clear();
-    foreach (Effect effect in reference.effects) {
-      effects.Add(
-        effect is ILabeled ? (effect as ILabeled).ToString() : "Unlabeled"
-      );
-    }
+    foreach (Effect effect in reference.effects)
+      effects.Add(effect.GetLabel());
 
     interactions.Clear();
-    foreach (Interaction interaction in reference.interactions) {
-      interactions.Add(
-        interaction is ILabeled ? (interaction as ILabeled).ToString() : "Unlabeled"
-      );
-    }
+    foreach (Interaction interaction in reference.interactions)
+      interactions.Add(interaction.GetLabel());
   }
 }

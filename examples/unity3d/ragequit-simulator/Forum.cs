@@ -3,13 +3,13 @@
 
 using UnityEngine;
 using BehaviorEngine;
+using BehaviorEngine.Float;
 
 public class Forum : MonoBehaviour {
 
-  // Probably should be storing these in a Class, not here
-  public static UnityAttribute trollFactor, anger;
-  public static UnityEffect annoy, incite, calm;
-  public static UnityInteraction start, flame, quit;
+  public static NormalizedAttribute trollFactor, anger;
+  public static Effect annoy, incite, calm;
+  public static Interaction start, flame, quit;
 
   void Awake() {
     // Initialize environment
@@ -17,13 +17,16 @@ public class Forum : MonoBehaviour {
     Class.root = new Class();
 
     // Attributes
-    trollFactor = new UnityAttribute(
-      "Troll Factor", () => Random.Range(0, 1f)
+    trollFactor = new NormalizedAttribute(
+      () => Random.Range(0, 1f)
     );
-    anger = new UnityAttribute("Anger", () => 0);
+    anger = new NormalizedAttribute(() => 0);
 
     Class.root.attributes.Add(trollFactor);
     Class.root.attributes.Add(anger);
+
+    trollFactor.SetLabel("Troll Factor");
+    anger.SetLabel("Anger");
 
     // Users
     User[] users = {
@@ -33,26 +36,33 @@ public class Forum : MonoBehaviour {
     };
 
     // Effects
-    annoy = new UnityEffect("Annoy");
-    annoy.modifiers.Add(new UnityEffect.UnityModifier(anger, .2f));
+    annoy = new Effect();
+    annoy.modifiers.Add(new FloatModifier(anger, .2f));
     Class.root.effects.Add(annoy);
+    annoy.SetLabel("Annoy");
 
-    incite = new UnityEffect("Anger");
-    incite.modifiers.Add(new UnityEffect.UnityModifier(anger, .4f));
+    incite = new Effect();
+    incite.modifiers.Add(new FloatModifier(anger, .4f));
     Class.root.effects.Add(incite);
+    incite.SetLabel("Anger");
 
-    calm = new UnityEffect("Calm Down");
-    calm.modifiers.Add(new UnityEffect.UnityModifier(anger, -.1f));
+    calm = new Effect();
+    calm.modifiers.Add(new FloatModifier(anger, -.1f));
     Class.root.effects.Add(calm);
+    calm.SetLabel("Calm Down");
 
     // Interactions
-    start = new UnityInteraction("Start Thread", 0);
-    flame = new UnityInteraction("Flame", 1);
-    quit = new UnityInteraction("Ragequit", 0);
+    start = new Interaction(0);
+    flame = new Interaction(1);
+    quit = new Interaction(0);
 
     Class.root.interactions.Add(start);
     Class.root.interactions.Add(flame);
     Class.root.interactions.Add(quit);
+
+    start.SetLabel("Start Thread");
+    flame.SetLabel("Flame");
+    quit.SetLabel("Ragequit");
 
     // Attribution
     foreach (User user in users) {

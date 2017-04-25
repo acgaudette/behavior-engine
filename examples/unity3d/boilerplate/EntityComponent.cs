@@ -4,30 +4,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorEngine;
+using BehaviorEngine.Float;
 
 public class EntityComponent : MonoBehaviour {
 
-  public bool debug = true;
+  public bool debug = false;
   public UnityEntity reference;
 
   [System.Serializable]
-  public class UnityAttributeRenderer {
+  public class NormalizedAttributeRenderer {
     [HideInInspector] public string label;
     [Range(0, 1)] public float state;
 
-    public UnityAttributeRenderer(string label, float state) {
+    public NormalizedAttributeRenderer(string label, float state) {
       this.label = label;
       this.state = state;
     }
   }
 
   // Display (fallback, non-editable)
-  public List<UnityAttributeRenderer> attributes
-    = new List<UnityAttributeRenderer>();
+  public List<NormalizedAttributeRenderer> attributes
+    = new List<NormalizedAttributeRenderer>();
 
   // Internal (allows for modification of Attributes in the editor)
-  public List<UnityAttribute.Instance> instances
-    = new List<UnityAttribute.Instance>();
+  public List<NormalizedAttribute.Instance> instances
+    = new List<NormalizedAttribute.Instance>();
 
   ICollection<IAttributeInstance> lastInstances;
   int lastCount = 0;
@@ -35,15 +36,15 @@ public class EntityComponent : MonoBehaviour {
   void Update() {
     if (reference == null) return;
 
-    reference.Print = debug;
+    reference.print = debug;
     attributes.Clear();
 
     // Display
     foreach (IAttributeInstance instance in reference.GetAttributes()) {
-      UnityAttribute.Instance i = instance as UnityAttribute.Instance;
+      NormalizedAttribute.Instance i = instance as NormalizedAttribute.Instance;
 
-      attributes.Add(new UnityAttributeRenderer(
-        i == null ? "?" : i.Prototype.ToString(),
+      attributes.Add(new NormalizedAttributeRenderer(
+        i == null ? "?" : i.GetLabel(),
         i == null ? 0 : i.State
       ));
     }
@@ -61,7 +62,7 @@ public class EntityComponent : MonoBehaviour {
     instances.Clear();
 
     foreach (IAttributeInstance instance in reference.GetAttributes()) {
-      UnityAttribute.Instance i = instance as UnityAttribute.Instance;
+      NormalizedAttribute.Instance i = instance as NormalizedAttribute.Instance;
       instances.Add(i == null ? null : i); // Synchronize with attribute list
     }
   }

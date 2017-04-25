@@ -2,17 +2,15 @@
 
 namespace BehaviorEngine.Personality {
 
-  public class Person : Entity, ILabeled {
+  public class Person : Entity {
 
-    public string Label { set; get; }
     private Brain oracle;
     private PersonalityClass fiveFactors;
 
-    public Person(string label, 
+    public Person(
         Dictionary<string, BehaviorEngine.Attribute<float>.InitializeState> init
         = null
         ) : base() {
-      Label = label;
       fiveFactors = new PersonalityClass(init);
       oracle = new Brain(fiveFactors);
     }
@@ -37,6 +35,5 @@ namespace BehaviorEngine.Personality {
     ) {
       return 1;
     }
-      
   }
 }

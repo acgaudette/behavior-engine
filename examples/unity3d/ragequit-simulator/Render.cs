@@ -14,14 +14,14 @@ public partial class User : UnityEntity {
   ) {
     if (effects == null) return;
 
-    string suffix = " by " + (host as ILabeled).Label + "'s flame message";
+    string suffix = " by " + host.GetLabel() + "'s flame message";
 
     if (effects.Contains(Forum.annoy))
-      Debug.Log(Label + " is frustrated" + suffix);
+      Debug.Log(GetLabel() + " is frustrated" + suffix);
 
     else if (effects.Contains(Forum.incite))
       Debug.Log(
-        "<color=#fc4e4e>" + Label + " is enraged" + suffix + "</color>"
+        "<color=#fc4e4e>" + GetLabel() + " is enraged" + suffix + "</color>"
       );
   }
 
@@ -32,27 +32,27 @@ public partial class User : UnityEntity {
     if (effects == null) return;
 
     string suffix = interaction == Forum.start ?
-      " after reading " + (host as ILabeled).Label + "'s post"
-      : " after " + (host as ILabeled).Label + "'s massive rage";
+      " after reading " + host.GetLabel() + "'s post"
+      : " after " + host.GetLabel() + "'s massive rage";
 
     if (effects.Contains(Forum.calm) && GetAttributeState(Forum.anger) > 0) {
       if (interaction == Forum.start) {
         Debug.Log(
-          "<color=cyan>" + Label + " calms down" + suffix + "</color>"
+          "<color=cyan>" + GetLabel() + " calms down" + suffix + "</color>"
         );
       } else {
         Debug.Log(
-          "<color=cyan>" + Label + " feels pretty great" + suffix + "</color>"
+          "<color=cyan>" + GetLabel() + " feels pretty great" + suffix + "</color>"
         );
       }
     }
 
     else if (effects.Contains(Forum.annoy))
-      Debug.Log(Label + " is annoyed" + suffix);
+      Debug.Log(GetLabel() + " is annoyed" + suffix);
 
     else if (effects.Contains(Forum.incite))
       Debug.Log(
-        "<color=#fc4e4e>" + Label + " is totally triggered"
+        "<color=#fc4e4e>" + GetLabel() + " is totally triggered"
         + suffix + "</color>"
       );
   }
@@ -68,36 +68,33 @@ public partial class User : UnityEntity {
     else if (choice == Forum.start) {
       float anger = GetAttributeState(Forum.anger);
       Debug.Log(
-        Label + " starts a new thread, " + ((anger > .66f) ?
+        GetLabel() + " starts a new thread, " + ((anger > .66f) ?
           "super angry" : (anger > .33f) ?
           "pretty controversial" : "easy topic")
       );
     }
 
     else if (choice == Forum.flame) {
-      ILabeled labeled = null;
-      foreach (Entity target in targets) {
-        labeled = target as ILabeled;
-        break;
-      }
+      Entity e = null;
+      foreach (Entity target in targets) { e = target; break; }
 
       Debug.Log(
-        "<color=orange>" + Label + " sends an angry DM to "
-        + labeled.Label + "!</color>"
+        "<color=orange>" + GetLabel() + " sends an angry DM to "
+        + e.GetLabel() + "!</color>"
       );
     }
   }
 
   void Ragequit() {
     Debug.Log(
-      "<b><color=red>" + Label + " flipped out and ragequit!</color></b>"
+      "<b><color=red>" + GetLabel() + " flipped out and ragequit!</color></b>"
     );
     destroy = true;
   }
 
   void Logoff() {
     Debug.Log(
-      "<b>Nobody is left, so " + Label + " logs off the server</b>"
+      "<b>Nobody is left, so " + GetLabel() + " logs off the server</b>"
     );
     destroy = true;
   }

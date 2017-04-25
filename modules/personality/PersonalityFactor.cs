@@ -4,14 +4,10 @@
 
 namespace BehaviorEngine.Personality {
 
-  public class PersonalityFactor : NormalizedAttribute, ILabeled {
+  public class PersonalityFactor : Float.NormalizedAttribute {
 
-    public float value;
-
-    public string Label { get; set; }
-
-    public PersonalityFactor(string Name, InitializeState i) : base(i) {
-      Label = Name;
+    public PersonalityFactor(string name, InitializeState i) : base(i) {
+      SetLabel(name); // SetLabel() not sustainable!
     }
   }
 }
