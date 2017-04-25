@@ -9,6 +9,9 @@ using BehaviorEngine.Personality;
 
 public class Mafia : MonoBehaviour {
 
+  const string DATA_PATH
+    = "./Assets/behavior-engine/examples/unity3d/mafia";
+
   void Awake() {
     // Initialize environment
     Universe.root = new Universe();
@@ -55,7 +58,7 @@ public class Mafia : MonoBehaviour {
     // Actions
     foreach (Character character in characters) {
       ConsoleActionReader.LoadFile(
-        "./Assets/behavior-engine/examples/unity3d/mafia/actions.txt",
+        DATA_PATH + "/actions.txt",
         character.unit
       );
     }

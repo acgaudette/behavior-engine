@@ -1,0 +1,8 @@
+Smile
+	smiles
+Laugh
+	laughs
+Frown
+	frowns
+Cry
+	cries
