@@ -52,7 +52,12 @@ namespace BehaviorEngine {
       foreach (IModifier m in modifiers)
         effective &= m.Apply(target);
 
+      OnTrigger(target, effective);
+
       return effective;
     }
+
+    // Event
+    protected virtual void OnTrigger(Entity target, bool effective) { }
   }
 }
