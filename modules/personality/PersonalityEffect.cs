@@ -12,20 +12,20 @@ namespace BehaviorEngine.Personality {
     ICharacterAction action;
 
     public PersonalityEffect(
-      HashSet<PersonalityFactor> factors,
-      HashSet<PersonalityProperty> properties,
+      HashSet<PersonalityFactor> strongFactorInfluences,
+      HashSet<PersonalityProperty> strongPropertyInfluences,
       Dictionary<PersonalityProperty,float> targets,
       ICharacterAction action
     ) : base() {
-      strongFactorInfluences = factors;
+      this.strongFactorInfluences = strongFactorInfluences;
 
-      if (factors == null) {
-        strongFactorInfluences = new HashSet<PersonalityFactor>();
+      if (strongFactorInfluences == null) {
+        this.strongFactorInfluences = new HashSet<PersonalityFactor>();
       }
-      strongPropertyInfluences = properties;
+      this.strongPropertyInfluences = strongPropertyInfluences;
 
-      if (properties == null) {
-        strongPropertyInfluences = new HashSet<PersonalityProperty>();
+      if (strongPropertyInfluences == null) {
+        this.strongPropertyInfluences = new HashSet<PersonalityProperty>();
       }
       if(targets == null) {
         return;
