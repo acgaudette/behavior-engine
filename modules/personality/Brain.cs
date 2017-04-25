@@ -12,11 +12,11 @@ namespace BehaviorEngine.Personality {
           new Dictionary<string, PersonalityEffect>();
 
       public static void registerInteraction(PersonalityInteraction i) {
-        allInteractions.Add(i.GetLabel(), i); // GetLabel() not sustainable!
+        allInteractions.Add(i.Name, i);
       }
 
       public static void registerEffect(PersonalityEffect e) {
-        allEffects.Add(e.GetLabel(), e); // GetLabel() not sustainable!
+        allEffects.Add(e.Name, e);
       }
 
       public static List<PersonalityInteraction> getAllInteractions() {
