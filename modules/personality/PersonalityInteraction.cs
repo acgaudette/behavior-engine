@@ -7,15 +7,20 @@ namespace BehaviorEngine.Personality {
     public HashSet<PersonalityFactor> strongFactorInfluences;
     public HashSet<PersonalityProperty> strongPropertyInfluences;
 
-    public PersonalityInteraction(int limiter,
-        HashSet<PersonalityFactor> factors = null,
-        HashSet<PersonalityProperty> properties = null) : base(limiter) {
+    public PersonalityInteraction(
+      int limiter,
+      HashSet<PersonalityFactor> factors = null,
+      HashSet<PersonalityProperty> properties = null
+    ) : base(limiter) {
       strongFactorInfluences = factors;
+
       if(factors == null) {
         factors = new HashSet<PersonalityFactor>();
       }
+
       strongPropertyInfluences = properties;
-      if(properties == null) {
+
+      if (properties == null) {
         strongPropertyInfluences = new HashSet<PersonalityProperty>();
       }
     }
