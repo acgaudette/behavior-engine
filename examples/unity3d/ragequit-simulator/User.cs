@@ -6,22 +6,13 @@ using UnityEngine;
 using BehaviorEngine;
 using BehaviorEngine.Float;
 
-public partial class User : Entity, IUnityEntity {
+public partial class User : Entity, IDestroyable {
 
-  public bool Destroy {
-    get { return destroy; }
-    set { destroy = value; }
-  }
-  bool destroy = false;
-
-  public bool Print {
-    get { return print; }
-    set { print = value; }
-  }
-  bool print = false;
+  public bool Destroy { get; set; }
 
   public User(string label) : base() {
     SetLabel(label);
+    HookRenderer();
   }
 
   // Helper function
@@ -29,12 +20,12 @@ public partial class User : Entity, IUnityEntity {
     return (GetAttribute(attribute) as NormalizedAttribute.Instance).State;
   }
 
-  protected override IList<Effect> GetReaction(
-    Interaction interaction, Entity host
+  protected override IList<Effect> Reaction(
+    Interaction interaction, IEntity host
   ) {
     if (
       interaction != Forum.quit
-      && (destroy || (host as IUnityEntity).Destroy)
+      && (Destroy || (host as IDestroyable).Destroy)
     ) {
       return null;
     }
@@ -52,21 +43,21 @@ public partial class User : Entity, IUnityEntity {
     return null;
   }
 
-  protected override IList<Effect> GetObservation(
-    Interaction interaction, Entity host, ICollection<Entity> targets
+  protected override IList<Effect> Observation(
+    Interaction interaction, IEntity host, ICollection<IEntity> targets
   ) {
     if (
       interaction != Forum.quit
-      && (destroy || (host as IUnityEntity).Destroy)
+      && (Destroy || (host as IDestroyable).Destroy)
     ) {
       return null;
     }
 
     if (interaction == Forum.start) {
-      if ((host as IUnityEntity).GetAttributeState(Forum.anger) > .5f)
+      if ((host as User).GetAttributeState(Forum.anger) > .5f)
         return new List<Effect>(1){ Forum.incite };
 
-      else if ((host as IUnityEntity).GetAttributeState(Forum.anger) > .25f)
+      else if ((host as User).GetAttributeState(Forum.anger) > .25f)
         return new List<Effect>(1){ Forum.annoy };
 
       else
@@ -88,13 +79,13 @@ public partial class User : Entity, IUnityEntity {
   }
 
   protected override float Score(
-    Interaction interaction, ICollection<Entity> targets
+    Interaction interaction, ICollection<IEntity> targets
   ) {
-    if (destroy) return 0;
+    if (Destroy) return 0;
 
     if (targets != null) {
-      foreach (Entity target in targets) {
-        if ((target as IUnityEntity).Destroy)
+      foreach (IEntity target in targets) {
+        if ((target as IDestroyable).Destroy)
           return 0;
       }
     }
@@ -110,26 +101,5 @@ public partial class User : Entity, IUnityEntity {
 
     return Random.Range(0, 1f) < chance ?
       1 : interaction == Forum.start ? .2f : .1f;
-  }
-
-  /* Debug */
-
-  public override void LogReaction(
-    Interaction interaction, Entity host, IList<Effect> effects
-  ) {
-    if (print) base.LogReaction(interaction, host, effects);
-  }
-
-  public override void LogObservation(
-    Interaction interaction, Entity host,
-    ICollection<Entity> targets, IList<Effect> effects
-  ) {
-    if (print) base.LogObservation(interaction, host, targets, effects);
-  }
-
-  public override void LogPoll(
-    Interaction choice, ICollection<Entity> targets, float highscore
-  ) {
-    if (print) base.LogPoll(choice, targets, highscore);
   }
 }

@@ -15,7 +15,7 @@ public class UniverseComponent : MonoBehaviour {
   public List<EntityComponent> entities = new List<EntityComponent>();
 
   float lastPoll = 0;
-  ICollection<Entity> lastEntities;
+  ICollection<IEntity> lastEntities;
   int lastCount = 0;
 
   void Start() {
@@ -29,7 +29,7 @@ public class UniverseComponent : MonoBehaviour {
     if (Time.time - lastPoll > pollRate) {
       //if (reference == Universe.root) manager.ClearConsole();
 
-      ICollection<Entity> current = reference.entities;
+      ICollection<IEntity> current = reference.entities;
 
       if (lastEntities != current || lastCount != current.Count) {
         manager.GenerateEntities(this, current);
@@ -38,12 +38,14 @@ public class UniverseComponent : MonoBehaviour {
       }
 
       // Poll
-      foreach (Entity target in current) {
+      foreach (IEntity target in current) {
         target.Poll();
       }
 
       // Remove Entities marked as destroyed from the Universe
-      reference.entities.RemoveWhere((e) => (e as IUnityEntity).Destroy);
+      reference.entities.RemoveWhere(
+        e => e is IDestroyable && (e as IDestroyable).Destroy
+      );
 
       lastPoll = Time.time;
       tick++;

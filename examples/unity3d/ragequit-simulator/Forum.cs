@@ -14,7 +14,7 @@ public class Forum : MonoBehaviour {
   void Awake() {
     // Initialize environment
     Universe.root = new Universe();
-    Class.root = new Class();
+    SimpleRepo repo = new SimpleRepo();
 
     // Attributes
     trollFactor = new NormalizedAttribute(
@@ -22,8 +22,8 @@ public class Forum : MonoBehaviour {
     );
     anger = new NormalizedAttribute(() => 0);
 
-    Class.root.attributes.Add(trollFactor);
-    Class.root.attributes.Add(anger);
+    repo.RegisterAttribute(trollFactor);
+    repo.RegisterAttribute(anger);
 
     trollFactor.SetLabel("Troll Factor");
     anger.SetLabel("Anger");
@@ -38,17 +38,17 @@ public class Forum : MonoBehaviour {
     // Effects
     annoy = new Effect();
     annoy.modifiers.Add(new FloatModifier(anger, .2f));
-    Class.root.effects.Add(annoy);
+    repo.effects.Add(annoy);
     annoy.SetLabel("Annoy");
 
     incite = new Effect();
     incite.modifiers.Add(new FloatModifier(anger, .4f));
-    Class.root.effects.Add(incite);
+    repo.effects.Add(incite);
     incite.SetLabel("Anger");
 
     calm = new Effect();
     calm.modifiers.Add(new FloatModifier(anger, -.1f));
-    Class.root.effects.Add(calm);
+    repo.effects.Add(calm);
     calm.SetLabel("Calm Down");
 
     // Interactions
@@ -56,9 +56,9 @@ public class Forum : MonoBehaviour {
     flame = new Interaction(1);
     quit = new Interaction(0);
 
-    Class.root.interactions.Add(start);
-    Class.root.interactions.Add(flame);
-    Class.root.interactions.Add(quit);
+    repo.RegisterInteraction(start);
+    repo.RegisterInteraction(flame);
+    repo.RegisterInteraction(quit);
 
     start.SetLabel("Start Thread");
     flame.SetLabel("Flame");
@@ -66,12 +66,12 @@ public class Forum : MonoBehaviour {
 
     // Attribution
     foreach (User user in users) {
-      user.Subscribe(Class.root);
+      user.Subscribe(repo);
       Universe.root.entities.Add(user);
     }
 
     // Unity hooks
     GetComponent<ComponentManager>().Hook("Universe.root", Universe.root);
-    GetComponent<ComponentManager>().Hook("Class.root", Class.root);
+    GetComponent<ComponentManager>().Hook("repo", repo);
   }
 }

@@ -9,7 +9,9 @@ using BehaviorEngine.Float;
 public class EntityComponent : MonoBehaviour {
 
   public bool debug = false;
-  public Entity reference;
+  bool lastDebug = false;
+
+  public UnityEntity reference;
 
   [System.Serializable]
   public class NormalizedAttributeRenderer {
@@ -36,16 +38,27 @@ public class EntityComponent : MonoBehaviour {
   void Update() {
     if (reference == null) return;
 
-    (reference as IUnityEntity).Print = debug;
+    if (debug != lastDebug) {
+      if (debug)
+        reference.StartDebug();
+      else
+        reference.StopDebug();
+      lastDebug = debug;
+    }
+
     attributes.Clear();
 
     // Display
     foreach (IAttributeInstance instance in reference.GetAttributes()) {
       NormalizedAttribute.Instance i = instance as NormalizedAttribute.Instance;
 
+      string label = "unassigned";
+      bool valid = i != null;
+      if (valid)
+        i.AssignLabel(ref label);
+
       attributes.Add(new NormalizedAttributeRenderer(
-        i == null ? "?" : i.GetLabel(),
-        i == null ? 0 : i.State
+        label, valid ? i.State : 0
       ));
     }
 
@@ -63,7 +76,7 @@ public class EntityComponent : MonoBehaviour {
 
     foreach (IAttributeInstance instance in reference.GetAttributes()) {
       NormalizedAttribute.Instance i = instance as NormalizedAttribute.Instance;
-      instances.Add(i == null ? null : i); // Synchronize with attribute list
+      instances.Add(i == null ? null : i); // Synchronize with Attribute list
     }
   }
 }

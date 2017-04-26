@@ -15,10 +15,10 @@ public class ComponentManager : MonoBehaviour {
 
   // Editor mirrors to Unity components (for display purposes)
   public List<UniverseComponent> universes = new List<UniverseComponent>();
-  public List<ClassComponent> classes = new List<ClassComponent>();
+  public List<RepoComponent> repos = new List<RepoComponent>();
 
   void Awake() {
-    Root.logger = m => Debug.Log(m);
+    BehaviorEngine.Debug.Debugger.SetLogger(m => Debug.Log(m));
   }
 
   void Update() {
@@ -29,10 +29,10 @@ public class ComponentManager : MonoBehaviour {
       }
     }
 
-    for (int i = classes.Count - 1; i > 0; --i) {
-      if (classes[i].reference == null) {
-        Destroy(classes[i]);
-        classes.RemoveAt(i);
+    for (int i = repos.Count - 1; i > 0; --i) {
+      if (repos[i].reference == null) {
+        Destroy(repos[i]);
+        repos.RemoveAt(i);
       }
     }
   }
@@ -59,28 +59,28 @@ public class ComponentManager : MonoBehaviour {
     return component;
   }
 
-  // Generates a Class component within the scene
+  // Generates a IRepository component within the scene
   // Returns a reference to the generated component
-  public ClassComponent Hook(string label, Class reference) {
-    foreach (ClassComponent c in classes) {
+  public RepoComponent Hook(string label, IRepository reference) {
+    foreach (RepoComponent c in repos) {
       if (c.reference == reference)
         return null;
     }
 
     GameObject o = new GameObject();
-    ClassComponent component = o.AddComponent<ClassComponent>();
+    RepoComponent component = o.AddComponent<RepoComponent>();
 
     component.reference = reference;
     o.name = label;
     o.transform.parent = transform;
 
-    classes.Add(component);
+    repos.Add(component);
     return component;
   }
 
   // Generate Entity components within the scene
   public void GenerateEntities(
-    UniverseComponent parent, ICollection<Entity> latest
+    UniverseComponent parent, ICollection<IEntity> latest
   ) {
     foreach (EntityComponent target in parent.entities)
       Destroy(target.gameObject);
@@ -89,7 +89,7 @@ public class ComponentManager : MonoBehaviour {
     foreach (Entity target in latest) {
       GameObject o = new GameObject();
       EntityComponent component = o.AddComponent<EntityComponent>();
-      component.reference = target;
+      component.reference = new UnityEntity(target); // Decorate
 
       o.name = target.GetLabel();
 
