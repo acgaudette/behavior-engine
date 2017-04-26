@@ -8,14 +8,13 @@ namespace BehaviorEngine {
   public abstract partial class Entity : Debug.Labeled, IEntity {
 
     Dictionary<IAttribute, IAttributeInstance> attributes;
+    public ICollection<Interaction> Interactions { get; set; }
 
     public Entity() {
       attributes = new Dictionary<IAttribute, IAttributeInstance>();
     }
 
-    /* Interactions and Attributes */
-
-    public ICollection<Interaction> Interactions { get; set; }
+    /* Attributes */
 
     public IAttributeInstance GetAttribute(IAttribute prototype) {
       if (!attributes.ContainsKey(prototype))
@@ -42,6 +41,16 @@ namespace BehaviorEngine {
 
       attributes.Remove(prototype);
       return true;
+    }
+
+    public void Subscribe(IRepository repo) {
+      // still undefined !
+
+      attributes.Clear();
+      foreach (IAttribute prototype in repo.AttributePrototypes)
+        AddAttribute(prototype);
+
+      Interactions = repo.Interactions;
     }
 
     /* Reactions, observations, scoring (called externally) */

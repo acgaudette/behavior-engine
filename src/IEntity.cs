@@ -15,6 +15,8 @@ namespace BehaviorEngine {
     bool AddAttribute(IAttribute prototype);
     bool RemoveAttribute(IAttribute prototype);
 
+    void Subscribe(IRepository repo);
+
     void Poll();
 
     void React(Interaction interaction, IEntity host);
