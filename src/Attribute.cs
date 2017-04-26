@@ -14,21 +14,26 @@ namespace BehaviorEngine {
   // Attribute prototype
   public partial class Attribute<T> : Root, IAttribute {
 
-    public delegate T InitializeState();
-    InitializeState initializeState;
+    public delegate T Initializer();
+    Initializer defaultInitializer;
 
-    public InitializeState Initializer {
-      get { return initializeState; }
+    // Construct with default initializer
+    public Attribute(Initializer defaultInitializer) {
+      this.defaultInitializer = defaultInitializer;
     }
 
-    protected Attribute(InitializeState initializeState) {
-      this.initializeState = initializeState;
+    // Get instance from prototype
+    public virtual IAttributeInstance GetNewInstance(
+      Initializer initializeState
+    ) {
+      return new Attribute<T>.Instance(this, initializeState);
     }
 
-    public virtual IAttributeInstance GetNewInstance() {
-      return new Attribute<T>.Instance(this);
+    public IAttributeInstance GetNewInstance() {
+      return GetNewInstance(defaultInitializer);
     }
 
+    // The prototype determines how instance state is transformed
     protected virtual T TransformState(T raw) {
       return raw;
     }
@@ -36,16 +41,17 @@ namespace BehaviorEngine {
     // Attribute instance
     public partial class Instance : Root, IAttributeInstance {
       T state;
-
       Attribute<T> prototype;
 
-      internal Instance(Attribute<T> prototype) {
+      internal Instance(Attribute<T> prototype, Initializer initializeState) {
         this.prototype = prototype;
-        State = prototype.Initializer();
+        State = initializeState();
       }
 
+      // Prototype reference
       public IAttribute Prototype { get { return prototype as IAttribute; } }
 
+      // Only instances have state
       public T State {
         get { return state; }
         set { state = prototype.TransformState(value); }

@@ -7,7 +7,8 @@ namespace BehaviorEngine {
 
   public class Universe {
 
-    public static Universe root = null; // Static access to root universe (assign manually)
+    // Static access to root universe (assign manually)
+    public static Universe root = null;
 
     public HashSet<Entity> entities;
 

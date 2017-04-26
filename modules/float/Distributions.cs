@@ -3,7 +3,7 @@
 
 using System;
 
-using Distribution = BehaviorEngine.Attribute<float>.InitializeState;
+using Distribution = BehaviorEngine.Attribute<float>.Initializer;
 
 namespace BehaviorEngine.Float {
 

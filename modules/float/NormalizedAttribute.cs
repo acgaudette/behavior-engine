@@ -7,11 +7,13 @@ namespace BehaviorEngine.Float {
 
   public class NormalizedAttribute : Attribute<float> {
 
-    public NormalizedAttribute(InitializeState initializeState)
-      : base(initializeState) { }
+    public NormalizedAttribute(Initializer defaultInitializer)
+      : base (defaultInitializer) { }
 
-    public override IAttributeInstance GetNewInstance() {
-      return new NormalizedAttribute.Instance(this);
+    public override IAttributeInstance GetNewInstance(
+      Initializer initializeState
+    ) {
+      return new NormalizedAttribute.Instance(this, initializeState);
     }
 
     protected override float TransformState(float raw) {
