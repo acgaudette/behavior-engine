@@ -2,13 +2,14 @@
 // Created by Aaron C Gaudette on 09.04.17
 
 using System.Collections.Generic;
+using BehaviorEngine;
 
 // If you extend from UnityEntity, you'll get labeling and
 // automatic debugging within the Unity editor (go take a look at that class)
 public class EntityTemplate : Entity {
 
   // Get the possible targets to interact with
-  public override ICollection<IEntity> Targets(Interaction interaction) {
+  protected override ICollection<IEntity> Targets(Interaction interaction) {
     // By default, target everything in the root Universe
     return Universe.root == null ? null : Universe.root.entities;
   }
