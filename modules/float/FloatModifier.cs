@@ -13,12 +13,9 @@ namespace BehaviorEngine.Float {
     }
 
     // Debug
-    public override void AssignVerboseLabel(ref string label) {
-      string l = "unassigned";
-      (Attribute as Attribute<float>).AssignLabel(ref l);
-
+    protected override void AssignVerboseDebugLabel(ref string label) {
       label = (offset > 0 ? "+" : "") + offset + " "
-        + (Attribute == null ? "null" : l);
+        + (Attribute == null ? "null" : Attribute.GetDebugLabel());
     }
   }
 }

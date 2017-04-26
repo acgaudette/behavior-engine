@@ -5,9 +5,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 using BehaviorEngine;
+using BehaviorEngine.Debug;
 using BehaviorEngine.Float;
 
 public partial class User : Entity, IDestroyable {
+
+  // Helper method
+  static string SenderDebugLabel(object sender) {
+    return (sender as ILabeled).GetDebugLabel();
+  }
 
   EntityEvents.OnReactEventHandler RenderReaction = (
     object sender,
@@ -15,14 +21,14 @@ public partial class User : Entity, IDestroyable {
   ) => {
     if (effects == null) return;
 
-    string suffix = " by " + host.GetLabel() + "'s flame message";
+    string suffix = " by " + host.GetDebugLabel() + "'s flame message";
 
     if (effects.Contains(Forum.annoy))
-      Debug.Log((sender as IEntity).GetLabel() + " is frustrated" + suffix);
+      Debug.Log((sender as ILabeled).GetDebugLabel() + " is frustrated" + suffix);
 
     else if (effects.Contains(Forum.incite))
       Debug.Log(
-        "<color=#fc4e4e>" + (sender as IEntity).GetLabel()
+        "<color=#fc4e4e>" + SenderDebugLabel(sender)
           + " is enraged" + suffix + "</color>"
       );
   };
@@ -35,8 +41,8 @@ public partial class User : Entity, IDestroyable {
     if (effects == null) return;
 
     string suffix = interaction == Forum.start ?
-      " after reading " + host.GetLabel() + "'s post"
-      : " after " + host.GetLabel() + "'s massive rage";
+      " after reading " + host.GetDebugLabel() + "'s post"
+      : " after " + host.GetDebugLabel() + "'s massive rage";
 
     if (
       effects.Contains(Forum.calm)
@@ -44,23 +50,23 @@ public partial class User : Entity, IDestroyable {
     ) {
       if (interaction == Forum.start) {
         Debug.Log(
-          "<color=cyan>" + (sender as IEntity).GetLabel()
+          "<color=cyan>" + SenderDebugLabel(sender)
             + " calms down" + suffix + "</color>"
         );
       } else {
         Debug.Log(
-          "<color=cyan>" + (sender as IEntity).GetLabel()
+          "<color=cyan>" + SenderDebugLabel(sender)
             + " feels pretty great" + suffix + "</color>"
         );
       }
     }
 
     else if (effects.Contains(Forum.annoy))
-      Debug.Log((sender as IEntity).GetLabel() + " is annoyed" + suffix);
+      Debug.Log(SenderDebugLabel(sender) + " is annoyed" + suffix);
 
     else if (effects.Contains(Forum.incite))
       Debug.Log(
-        "<color=#fc4e4e>" + (sender as IEntity).GetLabel()
+        "<color=#fc4e4e>" + SenderDebugLabel(sender)
           + " is totally triggered" + suffix + "</color>"
       );
   };
@@ -77,7 +83,7 @@ public partial class User : Entity, IDestroyable {
     else if (choice == Forum.start) {
       float anger = (sender as User).GetAttributeState(Forum.anger);
       Debug.Log(
-        (sender as IEntity).GetLabel() + " starts a new thread, "
+        SenderDebugLabel(sender) + " starts a new thread, "
           + ((anger > .66f) ?
             "super angry" : (anger > .33f) ?
             "pretty controversial" : "easy topic")
@@ -89,8 +95,8 @@ public partial class User : Entity, IDestroyable {
       foreach (IEntity target in targets) { e = target; break; }
 
       Debug.Log(
-        "<color=orange>" + (sender as IEntity).GetLabel()
-          + " sends an angry DM to " + e.GetLabel() + "!</color>"
+        "<color=orange>" + SenderDebugLabel(sender)
+          + " sends an angry DM to " + e.GetDebugLabel() + "!</color>"
       );
     }
   };
@@ -103,14 +109,14 @@ public partial class User : Entity, IDestroyable {
 
   void Ragequit() {
     Debug.Log(
-      "<b><color=red>" + GetLabel() + " flipped out and ragequit!</color></b>"
+      "<b><color=red>" + GetDebugLabel() + " flipped out and ragequit!</color></b>"
     );
     Destroy = true;
   }
 
   void Logoff() {
     Debug.Log(
-      "<b>Nobody is left, so " + GetLabel() + " logs off the server</b>"
+      "<b>Nobody is left, so " + GetDebugLabel() + " logs off the server</b>"
     );
     Destroy = true;
   }

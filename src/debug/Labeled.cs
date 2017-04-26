@@ -5,28 +5,33 @@ using System.Diagnostics;
 
 namespace BehaviorEngine.Debug {
 
-  public abstract class Labeled {
+  public interface ILabeled {
+    string GetDebugLabel();
+    string GetVerboseDebugLabel();
+  }
+
+  public abstract class Labeled : ILabeled {
 
 #if BEHAVIORENGINE_DEBUG
 
     string label = "unlabeled";
 
-    public string GetLabel() {
-      string label = "unassigned";
-      AssignLabel(ref label);
-      return label;
-    }
-
-    public string GetVerboseLabel() {
-      string label = "unassigned";
-      AssignVerboseLabel(ref label);
-      return label;
-    }
-
 #endif
 
+    public string GetDebugLabel() {
+      string label = "unassigned";
+      AssignDebugLabel(ref label);
+      return label;
+    }
+
+    public string GetVerboseDebugLabel() {
+      string label = "unassigned";
+      AssignVerboseDebugLabel(ref label);
+      return label;
+    }
+
     [Conditional("BEHAVIORENGINE_DEBUG")]
-    public virtual void AssignLabel(ref string label) {
+    protected virtual void AssignDebugLabel(ref string label) {
 
 #if BEHAVIORENGINE_DEBUG
 
@@ -37,12 +42,12 @@ namespace BehaviorEngine.Debug {
     }
 
     [Conditional("BEHAVIORENGINE_DEBUG")]
-    public virtual void AssignVerboseLabel(ref string label) {
-      AssignLabel(ref label);
+    protected virtual void AssignVerboseDebugLabel(ref string label) {
+      AssignDebugLabel(ref label);
     }
 
     [Conditional("BEHAVIORENGINE_DEBUG")]
-    public void SetLabel(string label) {
+    public void SetDebugLabel(string label) {
 
 #if BEHAVIORENGINE_DEBUG
 

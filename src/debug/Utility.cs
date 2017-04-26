@@ -1,8 +1,6 @@
 // Utility.cs
 // Created by Aaron C Gaudette on 09.04.17
 
-#if BEHAVIORENGINE_DEBUG
-
 using System;
 using System.Collections.Generic;
 
@@ -30,5 +28,3 @@ namespace BehaviorEngine.Debug {
   }
 
 }
-
-#endif

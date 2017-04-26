@@ -86,12 +86,12 @@ public class ComponentManager : MonoBehaviour {
       Destroy(target.gameObject);
 
     parent.entities.Clear();
-    foreach (Entity target in latest) {
+    foreach (IEntity target in latest) {
       GameObject o = new GameObject();
       EntityComponent component = o.AddComponent<EntityComponent>();
       component.reference = new UnityEntity(target); // Decorate
 
-      o.name = target.GetLabel();
+      o.name = target.GetDebugLabel();
 
       o.transform.parent = parent.transform;
       parent.entities.Add(component);

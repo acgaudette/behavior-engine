@@ -3,50 +3,16 @@
 
 namespace BehaviorEngine {
 
-  public partial interface IAttribute {
-
-#if BEHAVIORENGINE_DEBUG
-
-    string GetLabel();
-    string GetVerboseLabel();
-
-#endif
-
-  }
-
-  public partial interface IAttributeInstance {
-
-#if BEHAVIORENGINE_DEBUG
-
-    string GetLabel();
-    string GetVerboseLabel();
-
-#endif
-
-  }
-
   public partial class Attribute<T> : Debug.Labeled, IAttribute {
 
     public partial class Instance : Debug.Labeled, IAttributeInstance {
 
-      public override void AssignLabel(ref string label) {
-
-#if BEHAVIORENGINE_DEBUG
-
-        label = Prototype.GetLabel();
-
-#endif
-
+      protected override void AssignDebugLabel(ref string label) {
+        label = Prototype.GetDebugLabel();
       }
 
-      public override void AssignVerboseLabel(ref string label) {
-
-#if BEHAVIORENGINE_DEBUG
-
-        label = Prototype.GetLabel() + " (" + State + ")";
-
-#endif
-
+      protected override void AssignVerboseDebugLabel(ref string label) {
+        label = Prototype.GetDebugLabel() + " (" + State + ")";
       }
     }
   }

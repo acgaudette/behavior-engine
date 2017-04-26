@@ -52,13 +52,8 @@ public class EntityComponent : MonoBehaviour {
     foreach (IAttributeInstance instance in reference.GetAttributes()) {
       NormalizedAttribute.Instance i = instance as NormalizedAttribute.Instance;
 
-      string label = "unassigned";
-      bool valid = i != null;
-      if (valid)
-        i.AssignLabel(ref label);
-
       attributes.Add(new NormalizedAttributeRenderer(
-        label, valid ? i.State : 0
+        i.GetDebugLabel(), i == null ? 0 : i.State
       ));
     }
 

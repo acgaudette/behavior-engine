@@ -11,7 +11,7 @@ public partial class User : Entity, IDestroyable {
   public bool Destroy { get; set; }
 
   public User(string label) : base() {
-    SetLabel(label);
+    SetDebugLabel(label);
     HookRenderer();
   }
 

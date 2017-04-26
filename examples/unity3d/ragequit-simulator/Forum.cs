@@ -25,8 +25,8 @@ public class Forum : MonoBehaviour {
     repo.RegisterAttribute(trollFactor);
     repo.RegisterAttribute(anger);
 
-    trollFactor.SetLabel("Troll Factor");
-    anger.SetLabel("Anger");
+    trollFactor.SetDebugLabel("Troll Factor");
+    anger.SetDebugLabel("Anger");
 
     // Users
     User[] users = {
@@ -39,17 +39,17 @@ public class Forum : MonoBehaviour {
     annoy = new Effect();
     annoy.modifiers.Add(new FloatModifier(anger, .2f));
     repo.effects.Add(annoy);
-    annoy.SetLabel("Annoy");
+    annoy.SetDebugLabel("Annoy");
 
     incite = new Effect();
     incite.modifiers.Add(new FloatModifier(anger, .4f));
     repo.effects.Add(incite);
-    incite.SetLabel("Anger");
+    incite.SetDebugLabel("Anger");
 
     calm = new Effect();
     calm.modifiers.Add(new FloatModifier(anger, -.1f));
     repo.effects.Add(calm);
-    calm.SetLabel("Calm Down");
+    calm.SetDebugLabel("Calm Down");
 
     // Interactions
     start = new Interaction(0);
@@ -60,9 +60,9 @@ public class Forum : MonoBehaviour {
     repo.RegisterInteraction(flame);
     repo.RegisterInteraction(quit);
 
-    start.SetLabel("Start Thread");
-    flame.SetLabel("Flame");
-    quit.SetLabel("Ragequit");
+    start.SetDebugLabel("Start Thread");
+    flame.SetDebugLabel("Flame");
+    quit.SetDebugLabel("Ragequit");
 
     // Attribution
     foreach (User user in users) {

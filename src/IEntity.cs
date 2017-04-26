@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine {
 
-  public partial interface IEntity {
+  public interface IEntity : Debug.ILabeled {
 
     ICollection<Interaction> Interactions { get; set; }
 

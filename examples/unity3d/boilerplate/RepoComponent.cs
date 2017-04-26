@@ -20,19 +20,19 @@ public class RepoComponent : MonoBehaviour {
     attributes.Clear();
     if (reference.AttributePrototypes != null) {
       foreach (IAttribute attribute in reference.AttributePrototypes)
-        attributes.Add(attribute.GetLabel());
+        attributes.Add(attribute.GetDebugLabel());
     }
 
     /*
     effects.Clear();
     foreach (Effect effect in reference.effects)
-      effects.Add(effect.GetLabel());
+      effects.Add(effect.GetDebugLabel());
     */
 
     interactions.Clear();
     if (reference.Interactions != null ) {
       foreach (Interaction interaction in reference.Interactions)
-        interactions.Add(interaction.GetLabel());
+        interactions.Add(interaction.GetDebugLabel());
     }
   }
 }

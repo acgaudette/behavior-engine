@@ -3,11 +3,11 @@
 
 namespace BehaviorEngine {
 
-  public partial interface IAttribute {
+  public interface IAttribute : Debug.ILabeled {
     IAttributeInstance NewInstance();
   }
 
-  public partial interface IAttributeInstance {
+  public interface IAttributeInstance : Debug.ILabeled {
     IAttribute Prototype { get; }
   }
 

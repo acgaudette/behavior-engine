@@ -16,15 +16,15 @@ namespace BehaviorEngine.Debug {
     ) => {
       IEntity entity = sender as IEntity;
 
-      string debug = entity.GetLabel() + "\n";
+      string debug = entity.GetDebugLabel() + "\n";
       debug += "REACTION\n";
 
-      debug += "Interaction = " + interaction.GetLabel() + "\n";
-      debug += "Host = " + host.GetLabel()
+      debug += "Interaction = " + interaction.GetDebugLabel() + "\n";
+      debug += "Host = " + host.GetDebugLabel()
         + (host == entity ? " (self)" : "") + "\n";
 
       debug += Utility.CollectionToString(
-        "Effects", effects, e => e.GetVerboseLabel()
+        "Effects", effects, e => e.GetVerboseDebugLabel()
       );
 
       Debugger.Log(debug);
@@ -37,17 +37,17 @@ namespace BehaviorEngine.Debug {
     ) => {
       IEntity entity = sender as IEntity;
 
-      string debug = entity.GetLabel() + "\n";
+      string debug = entity.GetDebugLabel() + "\n";
       debug += "OBSERVATION\n";
 
-      debug += "Interaction = " + interaction.GetLabel() + "\n";
-      debug += "Host = " + host.GetLabel() + "\n";
+      debug += "Interaction = " + interaction.GetDebugLabel() + "\n";
+      debug += "Host = " + host.GetDebugLabel() + "\n";
 
       debug += Utility.CollectionToString(
-        "Targets", targets, t => t.GetLabel()
+        "Targets", targets, t => t.GetDebugLabel()
       );
       debug += Utility.CollectionToString(
-        "Effects", effects, e => e.GetVerboseLabel()
+        "Effects", effects, e => e.GetVerboseDebugLabel()
       );
 
       Debugger.Log(debug);
@@ -59,14 +59,14 @@ namespace BehaviorEngine.Debug {
     ) => {
       IEntity entity = sender as IEntity;
 
-      string debug = entity.GetLabel() + "\n";
+      string debug = entity.GetDebugLabel() + "\n";
       debug += "POLL\n";
 
       debug += "Interaction = "
-        + (choice == null ? "null" : choice.GetLabel()) + "\n";
+        + (choice == null ? "null" : choice.GetDebugLabel()) + "\n";
 
       debug += Utility.CollectionToString(
-        "Targets", targets, t => t.GetLabel()
+        "Targets", targets, t => t.GetDebugLabel()
       );
 
       debug += "Score = " + highscore + "\n";

@@ -7,7 +7,7 @@ namespace BehaviorEngine {
 
   public partial class Effect : Debug.Labeled {
 
-    public partial interface IModifier {
+    public interface IModifier : Debug.ILabeled {
       IAttribute Attribute { get; }
       bool Apply(IEntity e);
     }

@@ -5,33 +5,16 @@ namespace BehaviorEngine {
 
   public partial class Effect : Debug.Labeled {
 
-    public partial interface IModifier {
-
-#if BEHAVIORENGINE_DEBUG
-
-      string GetLabel();
-      string GetVerboseLabel();
-
-#endif
-
-    }
-
-    public override void AssignVerboseLabel(ref string label) {
-
-#if BEHAVIORENGINE_DEBUG
-
-      label = GetLabel() + " (";
+    protected override void AssignVerboseDebugLabel(ref string label) {
+      label = GetDebugLabel() + " (";
 
       foreach (IModifier modifier in modifiers) {
         label += " " + (
-          modifier == null ? "null" : modifier.GetVerboseLabel()
+          modifier == null ? "null" : modifier.GetVerboseDebugLabel()
         );
       }
 
       label += " )";
-
-#endif
-
     }
   }
 }
