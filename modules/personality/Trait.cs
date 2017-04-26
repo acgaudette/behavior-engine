@@ -2,9 +2,11 @@
 // Created by Daniel W. Zhang on 23.04.17
 // General structure for a personality factor
 
+using System;
+
 namespace BehaviorEngine.Personality {
 
-  public enum TraitType {
+  public enum Factor {
     OPENNESS,
     CONSCIENTIOUSNESS,
     EXTRAVERSION,
@@ -14,12 +16,23 @@ namespace BehaviorEngine.Personality {
 
   public class Trait : Float.NormalizedAttribute {
 
-    public TraitType type;
+    // Register all (const) factors in a provided repository
+    public static void RegisterFactors(BrainRepository repo) {
+      foreach (Factor factor in Enum.GetValues(typeof(Factor)))
+        repo.RegisterTrait(new Trait(factor));
+    }
+
+    public Factor type;
 
     public Trait(
-      TraitType type, Initializer defaultInitializer = null
+      Factor type, Initializer defaultInitializer = null
     ) : base(defaultInitializer == null ? () => 0 : defaultInitializer) {
       this.type = type;
+    }
+
+    // Debug
+    protected override void AssignDebugLabel(ref string label) {
+      label = type.ToString();
     }
   }
 }

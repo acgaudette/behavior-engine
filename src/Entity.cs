@@ -47,8 +47,9 @@ namespace BehaviorEngine {
     }
 
     public virtual void Subscribe() {
+      attributes.Clear(); // Replace, not add
+
       // Iterate through prototypes and create instances
-      attributes.Clear();
       foreach (IAttribute prototype in Repository.AttributePrototypes)
         AddAttribute(prototype);
     }
