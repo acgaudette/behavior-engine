@@ -15,5 +15,10 @@ namespace BehaviorEngine.Personality {
       : base(defaultInitializer == null ? () => 0 : defaultInitializer) {
       Name = name;
     }
+
+    // Debug
+    protected override void AssignDebugLabel(ref string label) {
+      label = Name;
+    }
   }
 }

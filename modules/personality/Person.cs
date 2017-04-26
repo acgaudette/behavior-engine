@@ -42,5 +42,10 @@ namespace BehaviorEngine.Personality {
     ) {
       return null; // ! (placeholder)
     }
+
+    // Debug
+    protected override void AssignDebugLabel(ref string label) {
+      label = Name;
+    }
   }
 }
