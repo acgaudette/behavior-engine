@@ -9,6 +9,13 @@ using BehaviorEngine.Float;
 
 public class Mafia : MonoBehaviour {
 
+  // Helper function
+  static List<T> ls<T>(params T[] p) {
+    List<T> list = new List<T>();
+    foreach (T t in p) list.Add(t);
+    return list;
+  }
+
   const string DATAPATH
     = "./Assets/behavior-engine/examples/unity3d/mafia";
   const string FILENAME
@@ -39,16 +46,20 @@ public class Mafia : MonoBehaviour {
 
     /* Attributes */
 
+    Trait.RegisterFactors(repo); // Register all constant factors
+
+    repo.RegisterState(new State("anger"));
+    repo.RegisterState(new State("confusion"));
+
     /* Effects */
 
     repo.effects.Add(
       new InfluencedEffect(
         "example",
-        new List<Trait>() { new Trait(TraitType.CONSCIENTIOUSNESS) },
-        new List<State>() { new State("angry") },
-        new List<FloatModifier>() {
-          new FloatModifier(new State("confused"), .3f)
-        },
+        ls( repo.GetTrait(Factor.CONSCIENTIOUSNESS) ),
+        ls( repo.GetState("anger") ),
+        ls( new FloatModifier(repo.GetState("confusion"), .3f)
+              as Effect.IModifier ),
         null
       )
     );

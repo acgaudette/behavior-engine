@@ -9,7 +9,7 @@ namespace BehaviorEngine.Personality {
 
     public string name;
 
-    public Dictionary<TraitType, Trait> strongTraitInfluences;
+    public Dictionary<Factor, Trait> strongTraitInfluences;
     public Dictionary<string, State> strongStateInfluences;
 
     /* Action link */
@@ -28,7 +28,7 @@ namespace BehaviorEngine.Personality {
       string name,
       IEnumerable<Trait> strongTraitInfluences,
       IEnumerable<State> strongStateInfluences,
-      List<FloatModifier> modifiers,
+      List<IModifier> modifiers,
       ICharacterAction action
     ) : this(name, action) {
       foreach (Trait trait in strongTraitInfluences)
@@ -36,6 +36,8 @@ namespace BehaviorEngine.Personality {
 
       foreach (State state in strongStateInfluences)
         this.strongStateInfluences[state.name] = state;
+
+      this.modifiers = modifiers;
     }
 
     public InfluencedEffect(
@@ -43,8 +45,9 @@ namespace BehaviorEngine.Personality {
     ) : base() {
       this.name = name;
 
-      strongTraitInfluences = new Dictionary<TraitType, Trait>();
+      strongTraitInfluences = new Dictionary<Factor, Trait>();
       strongStateInfluences = new Dictionary<string, State>();
+      modifiers = new List<IModifier>();
 
       this.action = action;
       OnTrigger += TriggerAction; // Perform Action on Effect trigger
