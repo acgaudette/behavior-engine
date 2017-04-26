@@ -11,28 +11,28 @@ public class RepoComponent : MonoBehaviour {
 
   // Display
   public List<string> attributes = new List<string>();
-  //public List<string> effects = new List<string>();
   public List<string> interactions = new List<string>();
 
   void Update() {
     if (reference == null) return;
 
     attributes.Clear();
-    if (reference.AttributePrototypes != null) {
-      foreach (IAttribute attribute in reference.AttributePrototypes)
+    IEnumerable<IAttribute> a = reference.AttributePrototypes;
+    if (a != null) {
+      foreach (IAttribute attribute in a)
         attributes.Add(attribute.GetDebugLabel());
     }
 
-    /*
-    effects.Clear();
-    foreach (Effect effect in reference.effects)
-      effects.Add(effect.GetDebugLabel());
-    */
-
     interactions.Clear();
-    if (reference.Interactions != null ) {
-      foreach (Interaction interaction in reference.Interactions)
+    ICollection<Interaction> i = reference.Interactions;
+    if (i != null) {
+      foreach (Interaction interaction in i)
         interactions.Add(interaction.GetDebugLabel());
     }
+
+    UpdateDisplay();
   }
+
+  // Override in derived classes
+  protected virtual void UpdateDisplay() { }
 }

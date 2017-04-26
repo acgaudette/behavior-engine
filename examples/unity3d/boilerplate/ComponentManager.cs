@@ -103,16 +103,16 @@ public class ComponentManager : MonoBehaviour {
     return component;
   }
 
-  // Generates a IRepository component within the scene
+  // Generates a RepoComponent within the scene
   // Returns a reference to the generated component
-  public RepoComponent Hook(string label, IRepository reference) {
-    foreach (RepoComponent c in repos) {
+  public R Hook<R>(string label, IRepository reference) where R : RepoComponent {
+    foreach (R c in repos) {
       if (c.reference == reference)
         return null;
     }
 
     GameObject o = new GameObject();
-    RepoComponent component = o.AddComponent<RepoComponent>();
+    R component = o.AddComponent<R>();
 
     component.reference = reference;
     o.name = label;

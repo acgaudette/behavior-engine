@@ -71,7 +71,8 @@ public class Forum : MonoBehaviour {
     }
 
     // Unity hooks
-    GetComponent<ComponentManager>().Hook("Universe.root", Universe.root);
-    GetComponent<ComponentManager>().Hook("repo", repo);
+    ComponentManager hook = GetComponent<ComponentManager>();
+    hook.Hook("Universe.root", Universe.root);
+    hook.Hook<SimpleRepoComponent>("simple-repo", repo);
   }
 }

@@ -8,7 +8,6 @@ public class SimpleRepo : IRepository {
 
   public HashSet<Effect> effects;
 
-  // Reference prototypes
   HashSet<IAttribute> attributes;
   HashSet<Interaction> interactions;
 
@@ -29,8 +28,8 @@ public class SimpleRepo : IRepository {
   }
 
   public SimpleRepo() {
-    attributes = new HashSet<IAttribute>();
     effects = new HashSet<Effect>();
+    attributes = new HashSet<IAttribute>();
     interactions = new HashSet<Interaction>();
   }
 }

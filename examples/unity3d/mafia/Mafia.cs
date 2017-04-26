@@ -71,6 +71,6 @@ public class Mafia : MonoBehaviour {
     // Unity hooks
     ComponentManager hook = GetComponent<ComponentManager>();
     hook.Hook("Universe.root", Universe.root);
-    hook.Hook("repo", repo);
+    hook.Hook<BrainRepoComponent>("brain-repo", repo);
   }
 }
