@@ -49,15 +49,18 @@ public class EntityComponent : MonoBehaviour {
     attributes.Clear();
 
     // Display
-    foreach (IAttributeInstance instance in reference.GetAttributes()) {
-      NormalizedAttribute.Instance i = instance as NormalizedAttribute.Instance;
+    foreach (
+      IAttributeInstance instance in reference.GetAttributeInstances()
+    ) {
+      NormalizedAttribute.Instance i
+        = instance as NormalizedAttribute.Instance;
 
       attributes.Add(new NormalizedAttributeRenderer(
         i.GetDebugLabel(), i == null ? 0 : i.State
       ));
     }
 
-    ICollection<IAttributeInstance> current = reference.GetAttributes();
+    ICollection<IAttributeInstance> current = reference.GetAttributeInstances();
 
     if (lastInstances != current || lastCount != current.Count) {
       GenerateInstances();
@@ -69,9 +72,13 @@ public class EntityComponent : MonoBehaviour {
   void GenerateInstances() {
     instances.Clear();
 
-    foreach (IAttributeInstance instance in reference.GetAttributes()) {
-      NormalizedAttribute.Instance i = instance as NormalizedAttribute.Instance;
-      instances.Add(i == null ? null : i); // Synchronize with Attribute list
+    foreach (
+      IAttributeInstance instance in reference.GetAttributeInstances()
+    ) {
+      NormalizedAttribute.Instance i
+        = instance as NormalizedAttribute.Instance;
+      // Synchronize with Attribute list
+      instances.Add(i == null ? null : i);
     }
   }
 }

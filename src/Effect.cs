@@ -23,8 +23,8 @@ namespace BehaviorEngine {
 
       public IAttribute Attribute { get { return attribute; } }
 
-      public bool Apply(IEntity e) {
-        Attribute<T>.Instance instance = e.GetAttribute(attribute)
+      public bool Apply(IEntity target) {
+        Attribute<T>.Instance instance = target[attribute]
           as Attribute<T>.Instance;
 
         // Target Entity does not have the Attribute being affected

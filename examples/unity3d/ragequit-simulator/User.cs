@@ -17,7 +17,7 @@ public partial class User : Entity, IDestroyable {
 
   // Helper function
   public float GetAttributeState(IAttribute attribute) {
-    return (GetAttribute(attribute) as NormalizedAttribute.Instance).State;
+    return (this[attribute] as NormalizedAttribute.Instance).State;
   }
 
   protected override IList<Effect> Reaction(

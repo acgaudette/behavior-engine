@@ -33,17 +33,17 @@ public class UnityEntity : BehaviorEngine.Debug.Labeled, IEntity {
 
   // Wrappers
 
-  public ICollection<Interaction> Interactions {
-    get { return entity.Interactions; }
-    set { entity.Interactions = value; }
+  public IRepository Repository {
+    get { return entity.Repository; }
+    set { entity.Repository = value; }
   }
 
-  public IAttributeInstance GetAttribute(IAttribute prototype) {
-    return entity.GetAttribute(prototype);
+  public IAttributeInstance this[IAttribute prototype] {
+    get { return entity[prototype]; }
   }
 
-  public ICollection<IAttributeInstance> GetAttributes() {
-    return entity.GetAttributes();
+  public ICollection<IAttributeInstance> GetAttributeInstances() {
+    return entity.GetAttributeInstances();
   }
 
   public bool AddAttribute(IAttribute prototype) {
@@ -54,9 +54,7 @@ public class UnityEntity : BehaviorEngine.Debug.Labeled, IEntity {
     return entity.RemoveAttribute(prototype);
   }
 
-  public void Subscribe(IRepository repo) {
-    entity.Subscribe(repo);
-  }
+  public void Subscribe() { entity.Subscribe(); }
 
   public void Poll() { entity.Poll(); }
 

@@ -9,6 +9,6 @@ namespace BehaviorEngine {
   public interface IRepository {
 
     IEnumerable<IAttribute> AttributePrototypes { get; }
-    ICollection<Interaction> Interactions { get; }
+    IEnumerable<Interaction> Interactions { get; }
   }
 }

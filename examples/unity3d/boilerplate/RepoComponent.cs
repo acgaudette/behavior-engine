@@ -24,7 +24,7 @@ public class RepoComponent : MonoBehaviour {
     }
 
     interactions.Clear();
-    ICollection<Interaction> i = reference.Interactions;
+    IEnumerable<Interaction> i = reference.Interactions;
     if (i != null) {
       foreach (Interaction interaction in i)
         interactions.Add(interaction.GetDebugLabel());

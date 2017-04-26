@@ -35,6 +35,9 @@ public class Forum : MonoBehaviour {
       new User("Mike")
     };
 
+    foreach (User user in users)
+      user.Repository = repo;
+
     // Effects
     annoy = new Effect();
     annoy.modifiers.Add(new FloatModifier(anger, .2f));
@@ -66,7 +69,7 @@ public class Forum : MonoBehaviour {
 
     // Attribution
     foreach (User user in users) {
-      user.Subscribe(repo);
+      user.Subscribe();
       Universe.root.entities.Add(user);
     }
 

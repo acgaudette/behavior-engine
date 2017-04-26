@@ -7,15 +7,15 @@ namespace BehaviorEngine {
 
   public interface IEntity : Debug.ILabeled {
 
-    ICollection<Interaction> Interactions { get; set; }
+    IRepository Repository { get; set; }
 
-    IAttributeInstance GetAttribute(IAttribute prototype);
-    ICollection<IAttributeInstance> GetAttributes();
+    IAttributeInstance this[IAttribute prototype] { get; }
+    ICollection<IAttributeInstance> GetAttributeInstances();
 
     bool AddAttribute(IAttribute prototype);
     bool RemoveAttribute(IAttribute prototype);
 
-    void Subscribe(IRepository repo);
+    void Subscribe();
 
     void Poll();
 

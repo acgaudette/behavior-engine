@@ -19,7 +19,7 @@ public class SimpleRepo : IRepository {
     attributes.Add(prototype);
   }
 
-  public ICollection<Interaction> Interactions {
+  public IEnumerable<Interaction> Interactions {
     get { return interactions; }
   }
 

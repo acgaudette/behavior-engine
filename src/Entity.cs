@@ -2,13 +2,14 @@
 // Created by Aaron C Gaudette on 09.04.17
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BehaviorEngine {
 
   public abstract partial class Entity : Debug.Labeled, IEntity {
 
+    public IRepository Repository { get; set; }
     Dictionary<IAttribute, IAttributeInstance> attributes;
-    public ICollection<Interaction> Interactions { get; set; }
 
     public Entity() {
       attributes = new Dictionary<IAttribute, IAttributeInstance>();
@@ -16,19 +17,21 @@ namespace BehaviorEngine {
 
     /* Attributes */
 
-    public IAttributeInstance GetAttribute(IAttribute prototype) {
-      if (!attributes.ContainsKey(prototype))
-        return null;
-      return attributes[prototype];
+    public IAttributeInstance this[IAttribute prototype] {
+      get {
+        if (!attributes.ContainsKey(prototype))
+          return null;
+        return attributes[prototype];
+      }
     }
 
-    public ICollection<IAttributeInstance> GetAttributes() {
+    public ICollection<IAttributeInstance> GetAttributeInstances() {
       // ReadOnlyDictionary not available in .NET 3.5
       return attributes.Values;
     }
 
     public bool AddAttribute(IAttribute prototype) {
-      if (GetAttribute(prototype) != null)
+      if (this[prototype] != null)
         return false;
 
       attributes[prototype] = prototype.NewInstance();
@@ -36,21 +39,18 @@ namespace BehaviorEngine {
     }
 
     public bool RemoveAttribute(IAttribute prototype) {
-      if (GetAttribute(prototype) == null)
+      if (this[prototype] == null)
         return false;
 
       attributes.Remove(prototype);
       return true;
     }
 
-    public void Subscribe(IRepository repo) {
+    public virtual void Subscribe() {
       // Iterate through prototypes and create instances
       attributes.Clear();
-      foreach (IAttribute prototype in repo.AttributePrototypes)
+      foreach (IAttribute prototype in Repository.AttributePrototypes)
         AddAttribute(prototype);
-
-      // Direct reference
-      Interactions = repo.Interactions;
     }
 
     /* Reactions, observations, scoring (called externally) */
@@ -58,13 +58,16 @@ namespace BehaviorEngine {
     // Given the possible Interactions and target Entities,
     // perform the highest-scoring Interaction/target(s) combo
     public void Poll() {
-      if (Interactions == null || Interactions.Count == 0) return;
+      if (
+        // System.Linq is useful for this one case
+        Repository.Interactions == null || !Repository.Interactions.Any()
+      ) return;
 
       Interaction choice = null;
       List<IEntity> targets = new List<IEntity>();
       float highscore = float.MinValue;
 
-      foreach (Interaction i in Interactions) {
+      foreach (Interaction i in Repository.Interactions) {
         float score = 0;
 
         if (i.limiter == 0) {
