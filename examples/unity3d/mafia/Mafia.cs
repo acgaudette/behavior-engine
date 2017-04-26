@@ -20,22 +20,20 @@ public class Mafia : MonoBehaviour {
 
     // Characters
     Character[] characters = {
-      new Character("Julian", repo),
-      new Character("Andy", repo),
-      new Character("Eugene", repo)
+      new Character("Jurgen"),
+      new Character("Francis"),
+      new Character("Eugene")
     };
+
+    foreach (Character character in characters)
+      character.Repository = repo;
 
     // Actions
     foreach (Character character in characters) {
       ConsoleActionReader.LoadFile(
-        DATA_PATH + "/actions.txt",
-        // There should be a global/subscription CU,
-        // not an instance for every Character
-        character.unit
+        DATA_PATH + "/actions.txt", repo.actions
       );
     }
-
-    // Attributes are defined in the Personality module
 
     /* Effects */
 
@@ -60,11 +58,9 @@ public class Mafia : MonoBehaviour {
       )
     );
 
-    // Generate Interactions
-
     // Attribution
     foreach (Character character in characters) {
-      character.Subscribe(repo);
+      character.Subscribe();
       Universe.root.entities.Add(character);
     }
 

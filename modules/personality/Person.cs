@@ -8,13 +8,24 @@ namespace BehaviorEngine.Personality {
       get; private set;
     }
 
-    Brain oracle;
-    BrainRepository repo;
+    public BrainRepository ThisRepository {
+      get { return Repository as BrainRepository; }
+    }
 
-    public Person(string name, BrainRepository repo) : base() {
+    Brain oracle;
+
+    public Person(string name) : base() {
       Name = name;
       oracle = new Brain();
-      this.repo = repo;
+    }
+
+    public bool PerformAction(string key) {
+      if (!ThisRepository.actions.ContainsKey(key))
+        return false;
+
+      ThisRepository.actions[key].Perform();
+
+      return true;
     }
 
     protected override IList<Effect> Reaction(
@@ -22,7 +33,7 @@ namespace BehaviorEngine.Personality {
     ) {
       // Black box
       return oracle.GetEffectsFromInteraction(
-        interaction as InfluencedInteraction, repo
+        interaction as InfluencedInteraction, ThisRepository
       );
     }
 

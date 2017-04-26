@@ -9,11 +9,7 @@ using BehaviorEngine.Personality;
 
 public class Character : Person, IDestroyable {
 
-  public CharacterUnit<ConsoleAction> unit;
-
-  public Character(string name, BrainRepository repo) : base(name, repo) {
-    unit = new CharacterUnit<ConsoleAction>();
-  }
+  public Character(string name) : base(name) { }
 
   protected override float Score(
     Interaction interaction, ICollection<IEntity> targets

@@ -10,9 +10,9 @@ using BehaviorEngine.Personality;
 public class ConsoleActionReader {
 
   public static bool LoadFile(
-    string path, CharacterUnit<ConsoleAction> unit
+    string path, Dictionary<string, ICharacterAction> actions
   ) {
-    if (unit == null)
+    if (actions == null)
       return false;
 
     int count = 0;
@@ -45,7 +45,7 @@ public class ConsoleActionReader {
             }
 
             // Add Action
-            unit.actions[key] = new ConsoleAction(
+            actions[key] = new ConsoleAction(
               buffer.Count == 0 ? new string[] { key } : buffer.ToArray()
             );
             count++;

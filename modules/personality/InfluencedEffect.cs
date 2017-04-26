@@ -10,7 +10,17 @@ namespace BehaviorEngine.Personality {
     public Dictionary<FactorEnum, Factor> strongFactorInfluences;
     public Dictionary<string, Property> strongPropertyInfluences;
 
+    /* Action link */
+
     ICharacterAction action;
+
+    OnTriggerEventHandler TriggerAction = (
+      object sender, IEntity target, bool effective
+    ) => {
+      InfluencedEffect e = sender as InfluencedEffect;
+      if (e.action != null)
+        e.action.Perform();
+    };
 
     public InfluencedEffect(
       string name,
@@ -22,34 +32,25 @@ namespace BehaviorEngine.Personality {
       this.name = name;
 
       this.strongFactorInfluences = strongFactorInfluences;
-
       if (strongFactorInfluences == null) {
         this.strongFactorInfluences = new Dictionary<FactorEnum, Factor>();
       }
 
       this.strongPropertyInfluences = strongPropertyInfluences;
-
       if (strongPropertyInfluences == null) {
         this.strongPropertyInfluences = new Dictionary<string, Property>();
       }
 
-      if(targets == null) {
-        return;
-      }
-
-      foreach(var entry in targets) {
-        var property = entry.Key;
-        var offset = entry.Value;
-        modifiers.Add(new FloatModifier(property, offset));
+      if (targets != null) {
+        foreach(var entry in targets) {
+          var property = entry.Key;
+          var offset = entry.Value;
+          modifiers.Add(new FloatModifier(property, offset));
+        }
       }
 
       this.action = action;
-
-      // Perform Action
-      OnTrigger += (object sender, IEntity target, bool effective) => {
-        if (action !=null)
-          action.Perform();
-      };
+      OnTrigger += TriggerAction; // Perform Action on Effect trigger
     }
   }
 }
