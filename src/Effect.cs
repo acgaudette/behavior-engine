@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine {
 
-  public partial class Effect : Root {
+  public partial class Effect : Debug.Labeled {
 
     public partial interface IModifier {
       IAttribute Attribute { get; }
-      bool Apply(Entity e);
+      bool Apply(IEntity e);
     }
 
-    public abstract class Modifier<T> : Root, IModifier {
+    public abstract class Modifier<T> : Debug.Labeled, IModifier {
       public T offset;
       Attribute<T> attribute;
 
@@ -23,7 +23,7 @@ namespace BehaviorEngine {
 
       public IAttribute Attribute { get { return attribute; } }
 
-      public bool Apply(Entity e) {
+      public bool Apply(IEntity e) {
         Attribute<T>.Instance instance = e.GetAttribute(attribute)
           as Attribute<T>.Instance;
 
@@ -43,7 +43,7 @@ namespace BehaviorEngine {
       modifiers = new List<IModifier>();
     }
 
-    public bool Trigger(Entity target) {
+    public bool Trigger(IEntity target) {
       if (modifiers.Count == 0)
         return false;
 
@@ -52,12 +52,21 @@ namespace BehaviorEngine {
       foreach (IModifier m in modifiers)
         effective &= m.Apply(target);
 
-      OnTrigger(target, effective);
+      // Fire event
+      OnTriggerEventHandler handler = OnTrigger;
+      if (handler != null)
+        handler(this, target, effective);
 
       return effective;
     }
 
-    // Event
-    protected virtual void OnTrigger(Entity target, bool effective) { }
+    /* Event */
+
+    public delegate void OnTriggerEventHandler(
+      object sender,
+      IEntity target, bool effective
+    );
+
+    public event OnTriggerEventHandler OnTrigger;
   }
 }

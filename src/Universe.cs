@@ -10,10 +10,10 @@ namespace BehaviorEngine {
     // Static access to root universe (assign manually)
     public static Universe root = null;
 
-    public HashSet<Entity> entities;
+    public HashSet<IEntity> entities;
 
     public Universe() {
-      entities = new HashSet<Entity>();
+      entities = new HashSet<IEntity>();
     }
   }
 }

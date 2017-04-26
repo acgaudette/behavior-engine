@@ -1,22 +1,21 @@
 // Entity.cs
 // Created by Aaron C Gaudette on 09.04.17
 
-using System;
 using System.Collections.Generic;
 
 namespace BehaviorEngine {
 
-  public abstract partial class Entity : Root {
+  public abstract partial class Entity : Debug.Labeled, IEntity {
 
-    public HashSet<Interaction> interactions;
     Dictionary<IAttribute, IAttributeInstance> attributes;
 
     public Entity() {
-      interactions = new HashSet<Interaction>();
       attributes = new Dictionary<IAttribute, IAttributeInstance>();
     }
 
     /* Interactions and Attributes */
+
+    public ICollection<Interaction> Interactions { get; set; }
 
     public IAttributeInstance GetAttribute(IAttribute prototype) {
       if (!attributes.ContainsKey(prototype))
@@ -25,14 +24,15 @@ namespace BehaviorEngine {
     }
 
     public ICollection<IAttributeInstance> GetAttributes() {
-      return attributes.Values; // ReadOnlyDictionary not available in .NET 3.5
+      // ReadOnlyDictionary not available in .NET 3.5
+      return attributes.Values;
     }
 
     public bool AddAttribute(IAttribute prototype) {
       if (GetAttribute(prototype) != null)
         return false;
 
-      attributes[prototype] = prototype.GetNewInstance();
+      attributes[prototype] = prototype.NewInstance();
       return true;
     }
 
@@ -44,30 +44,18 @@ namespace BehaviorEngine {
       return true;
     }
 
-    // Replace Attributes and Interactions with the ones from a provided Class
-    public void Subscribe(Class family) {
-      attributes.Clear();
-
-      // Somewhat undefined: Attributes can't change, but Interactions can
-
-      foreach (IAttribute attribute in family.attributes)
-        AddAttribute(attribute);
-
-      interactions = family.interactions;
-    }
-
     /* Reactions, observations, scoring (called externally) */
 
     // Given the possible Interactions and target Entities,
     // perform the highest-scoring Interaction/target(s) combo
     public void Poll() {
-      if (interactions.Count == 0) return;
+      if (Interactions == null || Interactions.Count == 0) return;
 
       Interaction choice = null;
-      List<Entity> targets = new List<Entity>();
+      List<IEntity> targets = new List<IEntity>();
       float highscore = float.MinValue;
 
-      foreach (Interaction i in interactions) {
+      foreach (Interaction i in Interactions) {
         float score = 0;
 
         if (i.limiter == 0) {
@@ -83,13 +71,13 @@ namespace BehaviorEngine {
         }
 
         else if (i.limiter == 1) {
-          ICollection<Entity> options = GetTargets(i);
+          ICollection<IEntity> options = Targets(i);
           if (options == null) continue;
 
-          foreach (Entity target in options) {
+          foreach (IEntity target in options) {
             if (target == this) continue; // Skip self
 
-            score = Score(i, new List<Entity>(1){ target });
+            score = Score(i, new List<IEntity>(1){ target });
 
             if (score >= highscore) {
               choice = i;
@@ -105,8 +93,9 @@ namespace BehaviorEngine {
         }
       }
 
-      LogPoll(choice, targets, highscore);
-      OnPoll(choice, targets, highscore);
+      EntityEvents.OnPollEventHandler handler = OnPoll;
+      if (handler != null)
+        handler(this, choice, targets, highscore);
 
       if (choice == null) return;
 
@@ -114,11 +103,12 @@ namespace BehaviorEngine {
     }
 
     // React (as a host or target) to an Interaction
-    internal void React(Interaction interaction, Entity host) {
-      IList<Effect> effects = GetReaction(interaction, host);
+    public void React(Interaction interaction, IEntity host) {
+      IList<Effect> effects = Reaction(interaction, host);
 
-      LogReaction(interaction, host, effects);
-      OnReact(interaction, host, effects);
+      EntityEvents.OnReactEventHandler handler = OnReact;
+      if (handler != null)
+        handler(this, interaction, host, effects);
 
       if (effects == null) return;
 
@@ -127,13 +117,14 @@ namespace BehaviorEngine {
     }
 
     // Observe an Interaction this Entity is not a part of
-    internal void Observe(
-      Interaction interaction, Entity host, ICollection<Entity> targets
+    public void Observe(
+      Interaction interaction, IEntity host, ICollection<IEntity> targets
     ) {
-      IList<Effect> effects = GetObservation(interaction, host, targets);
+      IList<Effect> effects = Observation(interaction, host, targets);
 
-      LogObservation(interaction, host, targets, effects);
-      OnObserve(interaction, host, targets, effects);
+      EntityEvents.OnObserveEventHandler handler = OnObserve;
+      if (handler != null)
+        handler(this, interaction, host, targets, effects);
 
       if (effects == null) return;
 
@@ -144,15 +135,17 @@ namespace BehaviorEngine {
     /* Reactions, observations, scoring (called internally, override these) */
 
     // Determine the targets of a particular Interaction
-    public virtual ICollection<Entity> GetTargets(Interaction interaction) {
+    protected virtual ICollection<IEntity> Targets(
+      Interaction interaction
+    ) {
       // By default, target everything in the root Universe
       return Universe.root == null ? null : Universe.root.entities;
     }
 
     // Return an IList (one or more) of Effects on reaction
     // to an Interaction with a host Entity
-    protected virtual IList<Effect> GetReaction(
-      Interaction interaction, Entity host
+    protected virtual IList<Effect> Reaction(
+      Interaction interaction, IEntity host
     ) {
       // Is this an interaction with the self?
       if (host == this) {
@@ -166,8 +159,8 @@ namespace BehaviorEngine {
 
     // Return an IList (one or more) of Effects on observation
     // of an Interaction with a host Entity and target Entities
-    protected virtual IList<Effect> GetObservation(
-      Interaction interaction, Entity host, ICollection<Entity> targets
+    protected virtual IList<Effect> Observation(
+      Interaction interaction, IEntity host, ICollection<IEntity> targets
     ) {
       return null; // Does nothing by default
     }
@@ -175,22 +168,13 @@ namespace BehaviorEngine {
     // Given an Interaction and its target(s), return a value;
     // higher values are more likely to be performed
     protected abstract float Score(
-      Interaction interaction, ICollection<Entity> targets = null
+      Interaction interaction, ICollection<IEntity> targets = null
     );
 
     /* Events */
 
-    protected virtual void OnReact(
-      Interaction interaction, Entity host, IList<Effect> effects
-    ) { }
-
-    protected virtual void OnObserve(
-      Interaction interaction, Entity host,
-      ICollection<Entity> targets, IList<Effect> effects
-    ) { }
-
-    protected virtual void OnPoll(
-      Interaction choice, ICollection<Entity> targets, float highscore
-    ) { }
+    public event EntityEvents.OnReactEventHandler OnReact;
+    public event EntityEvents.OnObserveEventHandler OnObserve;
+    public event EntityEvents.OnPollEventHandler OnPoll;
   }
 }

@@ -4,7 +4,7 @@
 namespace BehaviorEngine {
 
   public partial interface IAttribute {
-    IAttributeInstance GetNewInstance();
+    IAttributeInstance NewInstance();
   }
 
   public partial interface IAttributeInstance {
@@ -12,7 +12,7 @@ namespace BehaviorEngine {
   }
 
   // Attribute prototype
-  public partial class Attribute<T> : Root, IAttribute {
+  public partial class Attribute<T> : Debug.Labeled, IAttribute {
 
     public delegate T Initializer();
     Initializer defaultInitializer;
@@ -23,14 +23,14 @@ namespace BehaviorEngine {
     }
 
     // Get instance from prototype
-    public virtual IAttributeInstance GetNewInstance(
+    public virtual IAttributeInstance NewInstance(
       Initializer initializeState
     ) {
       return new Attribute<T>.Instance(this, initializeState);
     }
 
-    public IAttributeInstance GetNewInstance() {
-      return GetNewInstance(defaultInitializer);
+    public IAttributeInstance NewInstance() {
+      return NewInstance(defaultInitializer);
     }
 
     // The prototype determines how instance state is transformed
@@ -39,7 +39,7 @@ namespace BehaviorEngine {
     }
 
     // Attribute instance
-    public partial class Instance : Root, IAttributeInstance {
+    public partial class Instance : Debug.Labeled, IAttributeInstance {
       T state;
       Attribute<T> prototype;
 
