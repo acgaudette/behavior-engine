@@ -9,8 +9,8 @@ namespace BehaviorEngine.Personality {
 
     public string name;
 
-    public Dictionary<FactorEnum, Factor> strongFactorInfluences;
-    public Dictionary<string, Property> strongPropertyInfluences;
+    public Dictionary<PropertyType, Property> strongPropertyInfluences;
+    public Dictionary<string, State> strongStateInfluences;
 
     /* Action link */
 
@@ -26,28 +26,28 @@ namespace BehaviorEngine.Personality {
 
     public InfluencedEffect(
       string name,
-      Dictionary<FactorEnum, Factor> strongFactorInfluences,
-      Dictionary<string, Property> strongPropertyInfluences,
-      Dictionary<Property,float> targets,
+      Dictionary<PropertyType, Property> strongPropertyInfluences,
+      Dictionary<string, State> strongStateInfluences,
+      Dictionary<State, float> targets, // Or IAttribute/NormalizedAttribute
       ICharacterAction action
     ) : base() {
       this.name = name;
 
-      this.strongFactorInfluences = strongFactorInfluences;
-      if (strongFactorInfluences == null) {
-        this.strongFactorInfluences = new Dictionary<FactorEnum, Factor>();
-      }
-
       this.strongPropertyInfluences = strongPropertyInfluences;
       if (strongPropertyInfluences == null) {
-        this.strongPropertyInfluences = new Dictionary<string, Property>();
+        this.strongPropertyInfluences = new Dictionary<PropertyType, Property>();
+      }
+
+      this.strongStateInfluences = strongStateInfluences;
+      if (strongStateInfluences == null) {
+        this.strongStateInfluences = new Dictionary<string, State>();
       }
 
       if (targets != null) {
         foreach(var entry in targets) {
-          var property = entry.Key;
+          var state = entry.Key;
           var offset = entry.Value;
-          modifiers.Add(new FloatModifier(property, offset));
+          modifiers.Add(new FloatModifier(state, offset));
         }
       }
 

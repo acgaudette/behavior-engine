@@ -6,23 +6,22 @@ namespace BehaviorEngine.Personality {
 
   public class InfluencedInteraction : Interaction {
 
-    public HashSet<Factor> strongFactorInfluences;
     public HashSet<Property> strongPropertyInfluences;
+    public HashSet<State> strongStateInfluences;
 
     public InfluencedInteraction(
       int limiter,
-      HashSet<Factor> factors,
-      HashSet<Property> properties
+      HashSet<Property> properties,
+      HashSet<State> states
     ) : base(limiter) {
-      strongFactorInfluences = factors;
-
-      if(strongFactorInfluences == null) {
-        strongFactorInfluences = new HashSet<Factor>();
-      }
-
       strongPropertyInfluences = properties;
       if (strongPropertyInfluences == null) {
         strongPropertyInfluences = new HashSet<Property>();
+      }
+
+      strongStateInfluences = states;
+      if (strongStateInfluences == null) {
+        strongStateInfluences = new HashSet<State>();
       }
     }
   }

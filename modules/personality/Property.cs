@@ -1,22 +1,25 @@
 ﻿// Property.cs
 // Created by Daniel W. Zhang on 23.04.17
-
-using BehaviorEngine.Float;
+// General structure for a personality factor
 
 namespace BehaviorEngine.Personality {
 
-  public class Property : NormalizedAttribute {
+  public enum PropertyType {
+    OPENNESS,
+    CONSCIENTIOUSNESS,
+    EXTRAVERSION,
+    AGREEABLENESS,
+    NEUROTICISM
+  }
 
-    public string name;
+  public class Property : Float.NormalizedAttribute {
 
-    public Property(string name, Initializer defaultInitializer = null)
-      : base(defaultInitializer == null ? () => 0 : defaultInitializer) {
-      this.name = name;
-    }
+    public PropertyType type;
 
-    // Debug
-    protected override void AssignDebugLabel(ref string label) {
-      label = name;
+    public Property(
+      PropertyType type, Initializer defaultInitializer = null
+    ) : base(defaultInitializer == null ? () => 0 : defaultInitializer) {
+      this.type = type;
     }
   }
 }
