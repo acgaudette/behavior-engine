@@ -27,7 +27,7 @@ namespace BehaviorEngine.Debug {
         "Effects", effects, e => e.GetVerboseDebugLabel()
       );
 
-      Debugger.Log(debug);
+      Logger.Log(debug);
     };
 
     static EntityEvents.OnObserveEventHandler LogObservation = (
@@ -50,7 +50,7 @@ namespace BehaviorEngine.Debug {
         "Effects", effects, e => e.GetVerboseDebugLabel()
       );
 
-      Debugger.Log(debug);
+      Logger.Log(debug);
     };
 
     static EntityEvents.OnPollEventHandler LogPoll = (
@@ -71,7 +71,7 @@ namespace BehaviorEngine.Debug {
 
       debug += "Score = " + highscore + "\n";
 
-      Debugger.Log(debug);
+      Logger.Log(debug);
     };
 
 #endif

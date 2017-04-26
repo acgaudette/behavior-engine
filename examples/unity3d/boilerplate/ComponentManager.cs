@@ -22,7 +22,7 @@ public class ComponentManager : MonoBehaviour {
   public List<RepoComponent> repos = new List<RepoComponent>();
 
   void Awake() {
-    BehaviorEngine.Debug.Debugger.SetLogger(m => Debug.Log(m));
+    BehaviorEngine.Debug.Logger.SetLogger(m => Debug.Log(m));
   }
 
   void Update() {

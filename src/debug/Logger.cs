@@ -5,23 +5,23 @@ using System.Diagnostics;
 
 namespace BehaviorEngine.Debug {
 
-  public static class Debugger {
+  public static class Logger {
 
-    public delegate void Logger(string message);
+    public delegate void DoLog(string message);
 
 #if BEHAVIORENGINE_DEBUG
 
-    static Logger log = m => System.Console.WriteLine(m);
+    static DoLog log = m => System.Console.WriteLine(m);
 
 #endif
 
     [Conditional("BEHAVIORENGINE_DEBUG")]
-    public static void SetLogger(Logger log) {
+    public static void SetLogger(DoLog log) {
       if (log == null) return;
 
 #if BEHAVIORENGINE_DEBUG
 
-      Debugger.log = log;
+      Logger.log = log;
 
 #endif
 
