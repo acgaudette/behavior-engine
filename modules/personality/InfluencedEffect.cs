@@ -9,7 +9,7 @@ namespace BehaviorEngine.Personality {
 
     public string name;
 
-    public Dictionary<PropertyType, Property> strongPropertyInfluences;
+    public Dictionary<TraitType, Trait> strongTraitInfluences;
     public Dictionary<string, State> strongStateInfluences;
 
     /* Action link */
@@ -26,16 +26,16 @@ namespace BehaviorEngine.Personality {
 
     public InfluencedEffect(
       string name,
-      Dictionary<PropertyType, Property> strongPropertyInfluences,
+      Dictionary<TraitType, Trait> strongTraitInfluences,
       Dictionary<string, State> strongStateInfluences,
       Dictionary<State, float> targets, // Or IAttribute/NormalizedAttribute
       ICharacterAction action
     ) : base() {
       this.name = name;
 
-      this.strongPropertyInfluences = strongPropertyInfluences;
-      if (strongPropertyInfluences == null) {
-        this.strongPropertyInfluences = new Dictionary<PropertyType, Property>();
+      this.strongTraitInfluences = strongTraitInfluences;
+      if (strongTraitInfluences == null) {
+        this.strongTraitInfluences = new Dictionary<TraitType, Trait>();
       }
 
       this.strongStateInfluences = strongStateInfluences;

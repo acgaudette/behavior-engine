@@ -9,10 +9,10 @@ namespace BehaviorEngine.Personality {
     public HashSet<InfluencedEffect> effects;
     public Dictionary<string, ICharacterAction> actions;
 
-    Dictionary<PropertyType, Property> properties;
+    Dictionary<TraitType, Trait> traits;
 
-    public void RegisterProperty(Property p) {
-      properties[p.type] = p;
+    public void RegisterTrait(Trait p) {
+      traits[p.type] = p;
     }
 
     public IEnumerable<IAttribute> AttributePrototypes {
@@ -20,8 +20,8 @@ namespace BehaviorEngine.Personality {
         List<IAttribute> attributes = new List<IAttribute>();
 
         // Not ideal
-        foreach (Property property in properties.Values)
-          attributes.Add(property as IAttribute);
+        foreach (Trait trait in traits.Values)
+          attributes.Add(trait as IAttribute);
 
         return attributes;
       }
@@ -34,7 +34,7 @@ namespace BehaviorEngine.Personality {
     public BrainRepository() {
       effects = new HashSet<InfluencedEffect>();
       actions = new Dictionary<string, ICharacterAction>();
-      properties = new Dictionary<PropertyType, Property>();
+      traits = new Dictionary<TraitType, Trait>();
       Interactions = new HashSet<Interaction>();
     }
   }

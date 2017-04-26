@@ -1,10 +1,10 @@
-﻿// Property.cs
+﻿// Trait.cs
 // Created by Daniel W. Zhang on 23.04.17
 // General structure for a personality factor
 
 namespace BehaviorEngine.Personality {
 
-  public enum PropertyType {
+  public enum TraitType {
     OPENNESS,
     CONSCIENTIOUSNESS,
     EXTRAVERSION,
@@ -12,12 +12,12 @@ namespace BehaviorEngine.Personality {
     NEUROTICISM
   }
 
-  public class Property : Float.NormalizedAttribute {
+  public class Trait : Float.NormalizedAttribute {
 
-    public PropertyType type;
+    public TraitType type;
 
-    public Property(
-      PropertyType type, Initializer defaultInitializer = null
+    public Trait(
+      TraitType type, Initializer defaultInitializer = null
     ) : base(defaultInitializer == null ? () => 0 : defaultInitializer) {
       this.type = type;
     }

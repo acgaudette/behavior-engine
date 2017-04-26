@@ -24,8 +24,8 @@ namespace BehaviorEngine.Personality {
       foreach (InfluencedEffect e in allEffects) {
         // Difference in influence (zero = the same)
         int differential = 0;
-        foreach (var property in i.strongPropertyInfluences) {
-          if (!e.strongPropertyInfluences.ContainsKey(property.type)) {
+        foreach (var trait in i.strongTraitInfluences) {
+          if (!e.strongTraitInfluences.ContainsKey(trait.type)) {
             differential++;
           }
         }
