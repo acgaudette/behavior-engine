@@ -9,8 +9,10 @@ using BehaviorEngine.Float;
 
 public class Mafia : MonoBehaviour {
 
-  const string DATA_PATH
+  const string DATAPATH
     = "./Assets/behavior-engine/examples/unity3d/mafia";
+  const string FILENAME
+    = "actions.txt";
 
   void Awake() {
     // Initialize environment
@@ -24,35 +26,29 @@ public class Mafia : MonoBehaviour {
       new Character("Eugene")
     };
 
+    // Entity repositories
     foreach (Character character in characters)
       character.Repository = repo;
 
     // Actions
     foreach (Character character in characters) {
       ConsoleActionReader.LoadFile(
-        DATA_PATH + "/actions.txt", repo.actions
+        DATAPATH + "/" + FILENAME, repo.actions
       );
     }
 
+    /* Attributes */
+
     /* Effects */
-
-    Dictionary<FactorEnum, Factor> inputFactors = 
-      new Dictionary<FactorEnum, Factor>();
-    inputFactors[FactorEnum.CONSCIENTIOUSNESS] =
-      new Factor(FactorEnum.CONSCIENTIOUSNESS);
-
-    Dictionary<string, Property> inputProperties = 
-      new Dictionary<string, Property>();
-    inputProperties["angry"] = new Property("angry");
-
-    Dictionary<Property, float> inputTargets = 
-      new Dictionary<Property, float>();
-    inputTargets[new Property("confused")] = .3f; // Offset
 
     repo.effects.Add(
       new InfluencedEffect(
         "example",
-        inputFactors, inputProperties, inputTargets,
+        new List<Trait>() { new Trait(TraitType.CONSCIENTIOUSNESS) },
+        new List<State>() { new State("angry") },
+        new List<FloatModifier>() {
+          new FloatModifier(new State("confused"), .3f)
+        },
         null
       )
     );

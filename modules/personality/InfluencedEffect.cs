@@ -26,30 +26,25 @@ namespace BehaviorEngine.Personality {
 
     public InfluencedEffect(
       string name,
-      Dictionary<TraitType, Trait> strongTraitInfluences,
-      Dictionary<string, State> strongStateInfluences,
-      Dictionary<State, float> targets, // Or IAttribute/NormalizedAttribute
+      IEnumerable<Trait> strongTraitInfluences,
+      IEnumerable<State> strongStateInfluences,
+      List<FloatModifier> modifiers,
       ICharacterAction action
+    ) : this(name, action) {
+      foreach (Trait trait in strongTraitInfluences)
+        this.strongTraitInfluences[trait.type] = trait;
+
+      foreach (State state in strongStateInfluences)
+        this.strongStateInfluences[state.name] = state;
+    }
+
+    public InfluencedEffect(
+      string name, ICharacterAction action
     ) : base() {
       this.name = name;
 
-      this.strongTraitInfluences = strongTraitInfluences;
-      if (strongTraitInfluences == null) {
-        this.strongTraitInfluences = new Dictionary<TraitType, Trait>();
-      }
-
-      this.strongStateInfluences = strongStateInfluences;
-      if (strongStateInfluences == null) {
-        this.strongStateInfluences = new Dictionary<string, State>();
-      }
-
-      if (targets != null) {
-        foreach(var entry in targets) {
-          var state = entry.Key;
-          var offset = entry.Value;
-          modifiers.Add(new FloatModifier(state, offset));
-        }
-      }
+      strongTraitInfluences = new Dictionary<TraitType, Trait>();
+      strongStateInfluences = new Dictionary<string, State>();
 
       this.action = action;
       OnTrigger += TriggerAction; // Perform Action on Effect trigger
