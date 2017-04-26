@@ -3,23 +3,35 @@
 
 namespace BehaviorEngine {
 
-  public partial class Effect : Root {
+  public partial class Effect : Debug.Labeled {
 
     public partial interface IModifier {
+
+#if BEHAVIORENGINE_DEBUG
+
       string GetLabel();
       string GetVerboseLabel();
+
+#endif
+
     }
 
-    public override string GetVerboseLabel() {
-      string debug = GetLabel() + " (";
+    public override void AssignVerboseLabel(ref string label) {
+
+#if BEHAVIORENGINE_DEBUG
+
+      label = GetLabel() + " (";
 
       foreach (IModifier modifier in modifiers) {
-        debug += " " + (
+        label += " " + (
           modifier == null ? "null" : modifier.GetVerboseLabel()
         );
       }
 
-      return debug + " )";
+      label += " )";
+
+#endif
+
     }
   }
 }

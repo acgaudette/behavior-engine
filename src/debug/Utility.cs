@@ -1,11 +1,12 @@
 // Utility.cs
 // Created by Aaron C Gaudette on 09.04.17
 
+#if BEHAVIORENGINE_DEBUG
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
-namespace BehaviorEngine {
+namespace BehaviorEngine.Debug {
 
   public class Utility {
 
@@ -27,4 +28,7 @@ namespace BehaviorEngine {
       return prefix;
     }
   }
+
 }
+
+#endif
