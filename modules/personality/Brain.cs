@@ -7,35 +7,14 @@ namespace BehaviorEngine.Personality {
 
     static Random r = new Random();
 
-    // Like Class
-    public static class CentralBrainRepository {
-
-      public static Dictionary<FactorEnum, Factor> factors =
-        new Dictionary<FactorEnum, Factor>();
-
-      public static HashSet<InfluencedEffect> effects =
-        new HashSet<InfluencedEffect>();
-
-      // Refactor
-      public static CharacterUnit<ICharacterAction> characterUnit =
-        new CharacterUnit<ICharacterAction>();
-
-      // Helper method
-      public static void RegisterFactor(Factor f) {
-        factors[f.factorType] = f;
-      }
-    }
-
     // Called from GetReaction()
     public IList<Effect> GetEffectsFromInteraction(
-      InfluencedInteraction i
+      InfluencedInteraction i, BrainRepository repo
     ) {
       // Return value
       List<Effect> effects = new List<Effect>();
 
-      var allEffects = new List<InfluencedEffect>(
-        CentralBrainRepository.effects
-      );
+      var allEffects = new List<InfluencedEffect>(repo.effects);
       // Guarantee that default Effect will be different every time
       Shuffle(allEffects);
 

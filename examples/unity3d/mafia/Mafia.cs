@@ -16,13 +16,13 @@ public class Mafia : MonoBehaviour {
   void Awake() {
     // Initialize environment
     Universe.root = new Universe();
-    Class.root = new Class();
+    BrainRepository repo = new BrainRepository();
 
     // Characters
     Character[] characters = {
-      new Character("Julian"),
-      new Character("Andy"),
-      new Character("Eugene")
+      new Character("Julian", repo),
+      new Character("Andy", repo),
+      new Character("Eugene", repo)
     };
 
     // Actions
@@ -52,7 +52,7 @@ public class Mafia : MonoBehaviour {
       new Dictionary<Property, float>();
     inputTargets[new Property("confused")] = .3f; // Offset
 
-    Brain.CentralBrainRepository.effects.Add(
+    repo.effects.Add(
       new InfluencedEffect(
         "example",
         inputFactors, inputProperties, inputTargets,
@@ -64,13 +64,13 @@ public class Mafia : MonoBehaviour {
 
     // Attribution
     foreach (Character character in characters) {
-      character.Subscribe(Class.root);
+      character.Subscribe(repo);
       Universe.root.entities.Add(character);
     }
 
     // Unity hooks
     ComponentManager hook = GetComponent<ComponentManager>();
     hook.Hook("Universe.root", Universe.root);
-    hook.Hook("Class.root", Class.root);
+    hook.Hook("repo", repo);
   }
 }

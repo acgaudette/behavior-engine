@@ -44,12 +44,12 @@ namespace BehaviorEngine.Personality {
       }
 
       this.action = action;
-    }
 
-    // Perform Action
-    protected override void OnTrigger(Entity target, bool effective) {
-      if (action !=null)
-        action.Perform();
+      // Perform Action
+      OnTrigger += (object sender, IEntity target, bool effective) => {
+        if (action !=null)
+          action.Perform();
+      };
     }
   }
 }

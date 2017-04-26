@@ -8,22 +8,26 @@ namespace BehaviorEngine.Personality {
       get; private set;
     }
 
-    private Brain oracle;
+    Brain oracle;
+    BrainRepository repo;
 
-    public Person(string name) : base() {
+    public Person(string name, BrainRepository repo) : base() {
       Name = name;
       oracle = new Brain();
+      this.repo = repo;
     }
 
-    protected override IList<Effect> GetReaction(
-      Interaction interaction, Entity host
+    protected override IList<Effect> Reaction(
+      Interaction interaction, IEntity host
     ) {
       // Black box
-      return oracle.GetEffectsFromInteraction(interaction as InfluencedInteraction);
+      return oracle.GetEffectsFromInteraction(
+        interaction as InfluencedInteraction, repo
+      );
     }
 
-    protected override IList<Effect> GetObservation(
-      Interaction interaction, Entity host, ICollection<Entity> targets
+    protected override IList<Effect> Observation(
+      Interaction interaction, IEntity host, ICollection<IEntity> targets
     ) {
       return null; // ! (placeholder)
     }
