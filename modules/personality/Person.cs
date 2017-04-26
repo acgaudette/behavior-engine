@@ -8,7 +8,7 @@ namespace BehaviorEngine.Personality {
       get; private set;
     }
 
-    public BrainRepository ThisRepository {
+    public BrainRepository BrainRepo {
       get { return Repository as BrainRepository; }
     }
 
@@ -20,10 +20,10 @@ namespace BehaviorEngine.Personality {
     }
 
     public bool PerformAction(string key) {
-      if (!ThisRepository.actions.ContainsKey(key))
+      if (!BrainRepo.actions.ContainsKey(key))
         return false;
 
-      ThisRepository.actions[key].Perform();
+      BrainRepo.actions[key].Perform();
 
       return true;
     }
@@ -33,7 +33,7 @@ namespace BehaviorEngine.Personality {
     ) {
       // Black box
       return oracle.GetEffectsFromInteraction(
-        interaction as InfluencedInteraction, ThisRepository
+        interaction as InfluencedInteraction, BrainRepo
       );
     }
 
