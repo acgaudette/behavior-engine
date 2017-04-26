@@ -13,9 +13,12 @@ namespace BehaviorEngine.Float {
     }
 
     // Debug
-    public override string GetVerboseLabel() {
-      return (offset > 0 ? "+" : "") + offset + " " + (Attribute == null ?
-        "null" : Attribute.GetLabel());
+    public override void AssignVerboseLabel(ref string label) {
+      string l = "unassigned";
+      (Attribute as Attribute<float>).AssignLabel(ref l);
+
+      label = (offset > 0 ? "+" : "") + offset + " "
+        + (Attribute == null ? "null" : l);
     }
   }
 }

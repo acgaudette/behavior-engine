@@ -10,7 +10,7 @@ namespace BehaviorEngine.Float {
     public NormalizedAttribute(Initializer defaultInitializer)
       : base (defaultInitializer) { }
 
-    public override IAttributeInstance GetNewInstance(
+    public override IAttributeInstance NewInstance(
       Initializer initializeState
     ) {
       return new NormalizedAttribute.Instance(this, initializeState);
