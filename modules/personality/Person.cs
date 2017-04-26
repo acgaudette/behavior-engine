@@ -9,29 +9,16 @@ namespace BehaviorEngine.Personality {
     }
 
     private Brain oracle;
-    private FactorClass fiveFactors;
-    private PersonalityPropertyClass personalityProperties;
 
-    public Person(
-      string name,
-      Dictionary<FactorEnum, Attribute<float>.InitializeState>
-        initFactors,
-      Dictionary<string, BehaviorEngine.Attribute<float>.InitializeState>
-        initProperties
-    ) : base() {
+    public Person(string name) : base() {
       Name = name;
-      fiveFactors = new FactorClass(initFactors);
-      personalityProperties = new PersonalityPropertyClass(initProperties);
-      oracle = new Brain(fiveFactors, personalityProperties);
+      oracle = new Brain();
     }
-
-    private Dictionary<
-      Interaction, List<Dictionary<string, Factor>>
-    > dict;
 
     protected override IList<Effect> GetReaction(
       Interaction interaction, Entity host
     ) {
+      // Black box
       return oracle.GetEffectsFromInteraction(interaction as InfluencedInteraction);
     }
 

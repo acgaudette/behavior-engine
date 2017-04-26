@@ -46,6 +46,7 @@ namespace BehaviorEngine.Personality {
       this.action = action;
     }
 
+    // Perform Action
     protected override void OnTrigger(Entity target, bool effective) {
       if (action !=null)
         action.Perform();

@@ -9,8 +9,8 @@ namespace BehaviorEngine.Personality {
 
     public InfluencedInteraction(
       int limiter,
-      HashSet<Factor> factors = null,
-      HashSet<Property> properties = null
+      HashSet<Factor> factors,
+      HashSet<Property> properties
     ) : base(limiter) {
       strongFactorInfluences = factors;
 

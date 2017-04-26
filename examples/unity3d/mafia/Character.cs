@@ -11,6 +11,18 @@ public class Character : Person, IUnityEntity {
 
   public CharacterUnit<ConsoleAction> unit;
 
+  public Character(string name) : base(name) {
+    unit = new CharacterUnit<ConsoleAction>();
+  }
+
+  protected override float Score(
+    Interaction interaction, ICollection<Entity> targets
+  ) {
+    return Random.Range(0, 1f); // ! (placeholder)
+  }
+
+  /* UnityEntity */
+
   public bool Destroy {
     get { return destroy; }
     set { destroy = value; }
@@ -23,28 +35,10 @@ public class Character : Person, IUnityEntity {
   }
   bool print = true;
 
-  public Character(
-    string name,
-    Dictionary<FactorEnum, Attribute<float>.InitializeState>
-      initFactors,
-    Dictionary<string, BehaviorEngine.Attribute<float>.InitializeState>
-      initProperties
-  ) : base(name, initFactors, initProperties) {
-    unit = new CharacterUnit<ConsoleAction>();
-  }
-
   // Helper function
   public float GetAttributeState(IAttribute attribute) {
     return (GetAttribute(attribute) as NormalizedAttribute.Instance).State;
   }
-
-  protected override float Score(
-    Interaction interaction, ICollection<Entity> targets
-  ) {
-    return Random.Range(0, 1f); // ! (placeholder)
-  }
-
-  /* Debug */
 
   public override void LogReaction(
     Interaction interaction, Entity host, IList<Effect> effects

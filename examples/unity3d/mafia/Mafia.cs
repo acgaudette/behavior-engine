@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorEngine;
 using BehaviorEngine.Personality;
+using BehaviorEngine.Float;
 
 public class Mafia : MonoBehaviour {
 
@@ -19,9 +20,9 @@ public class Mafia : MonoBehaviour {
 
     // Characters
     Character[] characters = {
-      new Character("Julian", null, null),
-      new Character("Andy", null, null),
-      new Character("Eugene", null, null)
+      new Character("Julian"),
+      new Character("Andy"),
+      new Character("Eugene")
     };
 
     // Actions
@@ -41,31 +42,17 @@ public class Mafia : MonoBehaviour {
     Dictionary<FactorEnum, Factor> inputFactors = 
       new Dictionary<FactorEnum, Factor>();
     inputFactors[FactorEnum.CONSCIENTIOUSNESS] =
-      new Factor(
-        // Should probably reference instances in PersonalityPropertyClass instead?
-        // An enum would also be useful here
-        FactorEnum.CONSCIENTIOUSNESS, // Conscientiousness
-        () => .2f // Shouldn't have state
-      );
+      new Factor(FactorEnum.CONSCIENTIOUSNESS);
 
     Dictionary<string, Property> inputProperties = 
       new Dictionary<string, Property>();
-    inputProperties[SharedData.PersonalityPropertyNames[0]] =
-      new Property(
-        SharedData.PersonalityPropertyNames[0], // angry
-        () => .5f
-      );
+    inputProperties["angry"] = new Property("angry");
 
     Dictionary<Property, float> inputTargets = 
       new Dictionary<Property, float>();
-    inputTargets[
-      new Property(
-        SharedData.PersonalityPropertyNames[3], // confused
-        () => .2f
-      )
-    ] = .3f; // Offset
+    inputTargets[new Property("confused")] = .3f; // Offset
 
-    Brain.CentralBrainRepository.registerEffect(
+    Brain.CentralBrainRepository.effects.Add(
       new InfluencedEffect(
         "example",
         inputFactors, inputProperties, inputTargets,

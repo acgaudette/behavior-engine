@@ -5,44 +5,25 @@ namespace BehaviorEngine.Personality {
 
   public class Brain {
 
+    static Random r = new Random();
+
+    // Like Class
     public static class CentralBrainRepository {
 
-      public static Dictionary<FactorEnum, Factor> factorPrototypes =
+      public static Dictionary<FactorEnum, Factor> factors =
         new Dictionary<FactorEnum, Factor>();
 
-      public static HashSet<InfluencedEffect> allEffects =
+      public static HashSet<InfluencedEffect> effects =
         new HashSet<InfluencedEffect>();
 
+      // Refactor
       public static CharacterUnit<ICharacterAction> characterUnit =
         new CharacterUnit<ICharacterAction>();
 
-      public static void registerFactor(Factor f) {
-        factorPrototypes[f.factorType] = f;
+      // Helper method
+      public static void RegisterFactor(Factor f) {
+        factors[f.factorType] = f;
       }
-
-      public static void registerEffect(InfluencedEffect e) {
-        allEffects.Add(e);
-      }
-
-      public static List<InfluencedEffect> getAllEffects() {
-        return new List<InfluencedEffect>(allEffects);
-      }
-    }
-
-    FactorClass fiveFactors; // Never used
-    PersonalityPropertyClass properties; // Never used
-    Random r;
-
-    /** Make sure BrainInteractionFactory is loaded with interactions and
-     * properties before instatiating any instances of this class
-     */
-    public Brain(
-      FactorClass fiveFactors,
-      PersonalityPropertyClass properties
-    ) {
-      this.fiveFactors = fiveFactors;
-      this.properties = properties;
-      r = new Random();
     }
 
     // Called from GetReaction()
@@ -53,7 +34,7 @@ namespace BehaviorEngine.Personality {
       List<Effect> effects = new List<Effect>();
 
       var allEffects = new List<InfluencedEffect>(
-        CentralBrainRepository.getAllEffects()
+        CentralBrainRepository.effects
       );
       // Guarantee that default Effect will be different every time
       Shuffle(allEffects);
