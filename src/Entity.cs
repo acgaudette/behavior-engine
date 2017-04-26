@@ -44,12 +44,12 @@ namespace BehaviorEngine {
     }
 
     public void Subscribe(IRepository repo) {
-      // still undefined !
-
+      // Iterate through prototypes and create instances
       attributes.Clear();
       foreach (IAttribute prototype in repo.AttributePrototypes)
         AddAttribute(prototype);
 
+      // Direct reference
       Interactions = repo.Interactions;
     }
 
