@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿// Person.cs
+
+using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
   public abstract class Person : Entity {
 
-    public string Name {
-      get; private set;
-    }
+    public string name;
 
     public BrainRepository BrainRepo {
       get { return Repository as BrainRepository; }
@@ -15,7 +15,7 @@ namespace BehaviorEngine.Personality {
     Brain oracle;
 
     public Person(string name) : base() {
-      Name = name;
+      this.name = name;
       oracle = new Brain();
     }
 
@@ -45,7 +45,7 @@ namespace BehaviorEngine.Personality {
 
     // Debug
     protected override void AssignDebugLabel(ref string label) {
-      label = Name;
+      label = name;
     }
   }
 }

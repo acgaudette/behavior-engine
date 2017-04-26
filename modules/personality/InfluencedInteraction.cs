@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// InfluencedInteraction.cs
+
+using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
@@ -14,13 +16,12 @@ namespace BehaviorEngine.Personality {
     ) : base(limiter) {
       strongFactorInfluences = factors;
 
-      if(factors == null) {
-        factors = new HashSet<Factor>();
+      if(strongFactorInfluences == null) {
+        strongFactorInfluences = new HashSet<Factor>();
       }
 
       strongPropertyInfluences = properties;
-
-      if (properties == null) {
+      if (strongPropertyInfluences == null) {
         strongPropertyInfluences = new HashSet<Property>();
       }
     }

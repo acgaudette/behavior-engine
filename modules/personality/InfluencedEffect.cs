@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// InfluencedEffect.cs
+
+using System.Collections.Generic;
 using BehaviorEngine.Float;
 
 namespace BehaviorEngine.Personality {
@@ -51,6 +53,11 @@ namespace BehaviorEngine.Personality {
 
       this.action = action;
       OnTrigger += TriggerAction; // Perform Action on Effect trigger
+    }
+
+    // Debug
+    protected override void AssignDebugLabel(ref string label) {
+      label = name;
     }
   }
 }

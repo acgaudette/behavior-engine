@@ -1,11 +1,13 @@
-﻿using System;
+﻿// Brain.cs
+
+using System;
 using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
   public class Brain {
 
-    static Random r = new Random();
+    static Random random = new Random();
 
     // Called from GetReaction()
     public IList<Effect> GetEffectsFromInteraction(
@@ -29,7 +31,7 @@ namespace BehaviorEngine.Personality {
         }
 
         foreach (var prop in i.strongPropertyInfluences) {
-          if (!e.strongPropertyInfluences.ContainsKey(prop.Name)) {
+          if (!e.strongPropertyInfluences.ContainsKey(prop.name)) {
             differential++;
           }
         }
@@ -37,9 +39,9 @@ namespace BehaviorEngine.Personality {
         if (differential == 0) {
           effects.Add(e);
         } else {
-          double top = r.NextDouble() * differential;
+          double top = random.NextDouble() * differential;
           double currentCount = effects.Count;
-          double s = r.NextDouble() * differential;
+          double s = random.NextDouble() * differential;
           double toTheEnd = (total - position) / (total * differential);
 
           // s / top is always guaranteed to be positive
@@ -54,10 +56,10 @@ namespace BehaviorEngine.Personality {
       return effects;
     }
 
-    private void Shuffle(IList<InfluencedEffect> list) {
+    void Shuffle(IList<InfluencedEffect> list) {
       int n = list.Count;
       while (n > 1) {
-        int k = (r.Next(0, n) % n);
+        int k = (random.Next(0, n) % n);
         n--;
         var value = list[k];
         list[k] = list[n];

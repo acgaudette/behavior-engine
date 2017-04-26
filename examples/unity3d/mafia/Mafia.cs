@@ -2,7 +2,6 @@
 // Created by Aaron C Gaudette on 24.04.17
 
 using System.Collections.Generic;
-
 using UnityEngine;
 using BehaviorEngine;
 using BehaviorEngine.Personality;

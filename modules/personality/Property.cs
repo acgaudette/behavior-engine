@@ -7,18 +7,16 @@ namespace BehaviorEngine.Personality {
 
   public class Property : NormalizedAttribute {
 
-    public string Name {
-      get; private set;
-    }
+    public string name;
 
     public Property(string name, Initializer defaultInitializer = null)
       : base(defaultInitializer == null ? () => 0 : defaultInitializer) {
-      Name = name;
+      this.name = name;
     }
 
     // Debug
     protected override void AssignDebugLabel(ref string label) {
-      label = Name;
+      label = name;
     }
   }
 }

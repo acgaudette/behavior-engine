@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// BrainRepository.cs
+
+using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
