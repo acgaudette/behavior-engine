@@ -3,14 +3,18 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using BehaviorEngine;
 
 using System;
 using System.Reflection;
-using UnityEditor;
 
+[ExecuteInEditMode]
 public class ComponentManager : MonoBehaviour {
 
+  const string DEBUG_FLAG = "BEHAVIORENGINE_DEBUG";
+
+  public bool compileWithDebugLabeling = true;
   public float defaultPollRate = 8; // Rate to update all universes/entities
 
   // Editor mirrors to Unity components (for display purposes)
@@ -22,6 +26,46 @@ public class ComponentManager : MonoBehaviour {
   }
 
   void Update() {
+    // Recompile with debug flag
+    BuildTargetGroup group = EditorUserBuildSettings.selectedBuildTargetGroup;
+    string symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(group);
+    bool debug = symbols.Contains(DEBUG_FLAG);
+
+    if (compileWithDebugLabeling != debug) {
+      if (compileWithDebugLabeling) {
+        string to = symbols == "" ? DEBUG_FLAG : symbols + ";" + DEBUG_FLAG;
+
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(
+          group, to
+        );
+
+        Debug.Log(
+          "ComponentManager: Set scripting define symbols to \"" + to + "\""
+        );
+      } else {
+        int index = symbols.IndexOf(";" + DEBUG_FLAG);
+        int count = DEBUG_FLAG.Length + 1;
+        if (index < 0) {
+          index = symbols.IndexOf(DEBUG_FLAG);
+          count--;
+        }
+
+        if (index >= 0) {
+          string to = symbols.Remove(index, count);
+
+          PlayerSettings.SetScriptingDefineSymbolsForGroup(
+            group, to
+          );
+
+          Debug.Log(
+            "ComponentManager: Set scripting define symbols to \"" + to + "\""
+          );
+        }
+      }
+    }
+
+    if (!Application.isPlaying) return;
+
     for (int i = universes.Count - 1; i > 0; --i) {
       if (universes[i].reference == null) {
         Destroy(universes[i]);
