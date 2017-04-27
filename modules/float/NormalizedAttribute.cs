@@ -7,8 +7,15 @@ namespace BehaviorEngine.Float {
 
   public class NormalizedAttribute : Attribute<float> {
 
-    public NormalizedAttribute(Initializer defaultInitializer)
-      : base (defaultInitializer) { }
+    public delegate float Transform(float x);
+    public Transform transform;
+
+    public NormalizedAttribute(
+      Initializer defaultInitializer, Transform transform = null
+    ) : base (defaultInitializer) {
+      this.transform = transform == null ?
+        Transformations.Linear() : transform;
+    }
 
     public override IAttributeInstance NewInstance(
       Initializer initializeState
@@ -17,7 +24,7 @@ namespace BehaviorEngine.Float {
     }
 
     protected override float TransformState(float raw) {
-      return Math.Min(1, Math.Max(0, raw));
+      return transform(Math.Min(1, Math.Max(0, raw)));
     }
   }
 }

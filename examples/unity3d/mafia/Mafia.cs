@@ -44,7 +44,7 @@ public class Mafia : MonoBehaviour {
       new Character("Eugene")
     };
 
-    // Entity repositories
+    // Link each character to the central repository
     foreach (Character character in characters)
       character.Repository = repo;
 
@@ -56,14 +56,23 @@ public class Mafia : MonoBehaviour {
 
     List<string> actionIDs = new List<string>(repo.actions.Keys);
 
-    /* Attributes */
+    /* Attributes (Traits, States) */
 
-    // Register all constant factors (Traits)
     Trait.RegisterFactors(repo, Distributions.Normal());
 
-    // States
-    repo.RegisterState(new State("anger", Distributions.Uniform()));
-    repo.RegisterState(new State("confusion", Distributions.Uniform()));
+    repo.RegisterState(
+      new State(
+        "anger",
+        Distributions.Uniform(), Transformations.Linear()
+      )
+    );
+
+    repo.RegisterState(
+      new State(
+        "confusion",
+        Distributions.Uniform(), Transformations.Linear()
+      )
+    );
 
     /* Effects */
 

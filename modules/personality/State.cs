@@ -9,8 +9,9 @@ namespace BehaviorEngine.Personality {
 
     public string name;
 
-    public State(string name, Initializer defaultInitializer)
-      : base(defaultInitializer) {
+    public State(
+      string name, Initializer defaultInitializer, Transform transform
+    ) : base(defaultInitializer, transform) {
       this.name = name;
     }
 
