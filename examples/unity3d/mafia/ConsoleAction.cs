@@ -4,11 +4,13 @@
 using UnityEngine;
 using BehaviorEngine.Personality;
 
-public struct ConsoleAction : ICharacterAction {
+public class ConsoleAction : ICharacterAction {
 
+  public string ID { get; set; }
   string[] messages;
 
-  public ConsoleAction(string[] messages) {
+  public ConsoleAction(string id, string[] messages) {
+    ID = id;
     this.messages = messages;
   }
 

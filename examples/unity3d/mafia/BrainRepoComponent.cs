@@ -16,7 +16,7 @@ public class BrainRepoComponent : RepoComponent {
       effects.Add(effect.GetDebugLabel());
 
     actions.Clear();
-    foreach (string key in (reference as BrainRepository).actions.Keys)
-      actions.Add(key);
+    foreach (string id in (reference as BrainRepository).GetActionIDs())
+      actions.Add(id);
   }
 }

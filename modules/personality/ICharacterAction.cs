@@ -6,6 +6,7 @@ using System.Collections.Generic;
 namespace BehaviorEngine.Personality {
 
   public interface ICharacterAction {
+    string ID { get; set; }
     void Perform();
   }
 }

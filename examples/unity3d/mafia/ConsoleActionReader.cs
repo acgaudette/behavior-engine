@@ -9,10 +9,8 @@ using BehaviorEngine.Personality;
 
 public class ConsoleActionReader {
 
-  public static bool LoadFile(
-    string path, Dictionary<string, ICharacterAction> actions
-  ) {
-    if (actions == null)
+  public static bool LoadFile(string path, BrainRepository repo) {
+    if (repo == null)
       return false;
 
     int count = 0;
@@ -45,8 +43,10 @@ public class ConsoleActionReader {
             }
 
             // Add Action
-            actions[key] = new ConsoleAction(
-              buffer.Count == 0 ? new string[] { key } : buffer.ToArray()
+            repo.RegisterAction(
+              new ConsoleAction(
+                key, buffer.Count == 0 ? new string[] { key } : buffer.ToArray()
+              )
             );
             count++;
 

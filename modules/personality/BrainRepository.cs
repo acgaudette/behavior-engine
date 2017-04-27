@@ -47,7 +47,22 @@ namespace BehaviorEngine.Personality {
       get; set;
     }
 
-    public Dictionary<string, ICharacterAction> actions;
+    /* Actions */
+
+    Dictionary<string, ICharacterAction> actions;
+
+    public ICharacterAction GetAction(string id) {
+      return actions.ContainsKey(id) ? actions[id] : null;
+    }
+
+    public void RegisterAction(ICharacterAction a) {
+      actions[a.ID] = a;
+    }
+
+    public ICollection<string> GetActionIDs() {
+      return actions.Keys;
+    }
+
     public ICollection<InfluencedEffect> Effects { get; set; }
 
     public BrainRepository() {

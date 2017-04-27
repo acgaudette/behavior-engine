@@ -51,10 +51,8 @@ public class Mafia : MonoBehaviour {
     /* Actions */
 
     ConsoleActionReader.LoadFile(
-      DATAPATH + "/" + FILENAME, repo.actions
+      DATAPATH + "/" + FILENAME, repo
     );
-
-    List<string> actionIDs = new List<string>(repo.actions.Keys);
 
     /* Attributes (Traits, States) */
 
@@ -81,13 +79,9 @@ public class Mafia : MonoBehaviour {
     repo.Effects.Add(
       new InfluencedEffect(
         "example",
-
         LS( repo.GetTrait(Factor.CONSCIENTIOUSNESS) ),
         LS( repo.GetState("anger") ),
-        LS( repo.MOD("confusion", .3f) ),
-
-        // Random Action
-        repo.actions[actionIDs[Random.Range(0, actionIDs.Count)]]
+        LS( repo.MOD("confusion", .3f) )
       )
     );
 
