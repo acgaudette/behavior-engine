@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
-  public abstract class Person : Entity {
+  public class Person : Entity {
 
     public string name;
 
@@ -28,19 +28,42 @@ namespace BehaviorEngine.Personality {
       return true;
     }
 
+    protected override void PrePoll() {
+      // State evaluation
+      oracle.EvaluateState(GetAttributeInstances());
+
+      // Goals etc. go here
+    }
+
     protected override IList<Effect> Reaction(
       Interaction interaction, IEntity host
     ) {
       // Black box
-      return oracle.GetEffectsFromInteraction(
-        interaction as InfluencedInteraction, BrainRepo
+      return oracle.ReactionEffects(
+        interaction as InfluencedInteraction,
+        host as Person, BrainRepo
       );
     }
 
     protected override IList<Effect> Observation(
       Interaction interaction, IEntity host, ICollection<IEntity> targets
     ) {
-      return null; // ! (placeholder)
+      // Black box
+      return oracle.ObservationEffects(
+        interaction as InfluencedInteraction,
+        host as Person, targets, BrainRepo
+      );
+    }
+
+    protected override float Score(
+      Interaction interaction, ICollection<IEntity> targets
+    ) {
+      // Black box
+      return oracle.ComboScore(
+        // Pass in evaluation from PrePoll() here
+        interaction as InfluencedInteraction,
+        targets, BrainRepo
+      );
     }
 
     // Debug

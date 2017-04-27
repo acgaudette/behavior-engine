@@ -9,9 +9,23 @@ namespace BehaviorEngine.Personality {
 
     static Random random = new Random();
 
-    // Called from GetReaction()
-    public IList<Effect> GetEffectsFromInteraction(
-      InfluencedInteraction i, BrainRepository repo
+    public void EvaluateState(
+      ICollection<IAttributeInstance> instances
+    ) {
+
+      foreach (IAttributeInstance instance in instances) {
+        if (instance is State) {
+          // Do something
+        }
+      }
+
+      return; // Placeholder--return something useful!
+    }
+
+    public IList<Effect> ReactionEffects(
+      InfluencedInteraction i,
+      Person host, // Unused
+      BrainRepository repo
     ) {
       // Return value
       List<Effect> effects = new List<Effect>();
@@ -54,6 +68,22 @@ namespace BehaviorEngine.Personality {
       }
 
       return effects;
+    }
+
+    public IList<Effect> ObservationEffects(
+      InfluencedInteraction interaction, Person host,
+      ICollection<IEntity> targets,
+      BrainRepository repo
+    ) {
+      return null; // Placeholder
+    }
+
+    public float ComboScore(
+      InfluencedInteraction interaction,
+      ICollection<IEntity> targets,
+      BrainRepository repo
+    ) {
+      return 0; // Placeholder
     }
 
     void Shuffle(IList<InfluencedEffect> list) {
