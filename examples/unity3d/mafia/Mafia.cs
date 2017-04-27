@@ -58,8 +58,7 @@ public class Mafia : MonoBehaviour {
         "example",
         ls( repo.GetTrait(Factor.CONSCIENTIOUSNESS) ),
         ls( repo.GetState("anger") ),
-        ls( new FloatModifier(repo.GetState("confusion"), .3f)
-              as Effect.IModifier ),
+        ls( new FloatModifier(repo.GetState("confusion"), .3f) as IModifier ),
         null
       )
     );

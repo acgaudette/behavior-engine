@@ -16,7 +16,7 @@ namespace BehaviorEngine.Personality {
 
     ICharacterAction action;
 
-    OnTriggerEventHandler TriggerAction = (
+    EffectEvents.OnTriggerEventHandler TriggerAction = (
       object sender, IEntity target, bool effective
     ) => {
       InfluencedEffect e = sender as InfluencedEffect;
@@ -37,7 +37,7 @@ namespace BehaviorEngine.Personality {
       foreach (State state in strongStateInfluences)
         this.strongStateInfluences[state.name] = state;
 
-      this.modifiers = modifiers;
+      Modifiers = modifiers;
     }
 
     public InfluencedEffect(
@@ -47,10 +47,10 @@ namespace BehaviorEngine.Personality {
 
       strongTraitInfluences = new Dictionary<Factor, Trait>();
       strongStateInfluences = new Dictionary<string, State>();
-      modifiers = new List<IModifier>();
 
       this.action = action;
-      OnTrigger += TriggerAction; // Perform Action on Effect trigger
+      // Perform Action on Effect trigger
+      OnTrigger += TriggerAction;
     }
 
     // Debug

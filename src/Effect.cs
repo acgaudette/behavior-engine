@@ -5,12 +5,13 @@ using System.Collections.Generic;
 
 namespace BehaviorEngine {
 
-  public partial class Effect : Debug.Labeled {
+  public interface IModifier : Debug.ILabeled {
 
-    public interface IModifier : Debug.ILabeled {
-      IAttribute Attribute { get; }
-      bool Apply(IEntity e);
-    }
+    IAttribute Attribute { get; }
+    bool Apply(IEntity e);
+  }
+
+  public partial class Effect : Debug.Labeled {
 
     public abstract class Modifier<T> : Debug.Labeled, IModifier {
       public T offset;
@@ -37,36 +38,38 @@ namespace BehaviorEngine {
       protected abstract void Modify(Attribute<T>.Instance instance);
     }
 
-    public List<IModifier> modifiers;
+    public ICollection<IModifier> Modifiers { get; set; }
 
     public Effect() {
-      modifiers = new List<IModifier>();
+      Modifiers = new List<IModifier>();
     }
 
     public bool Trigger(IEntity target) {
-      if (modifiers.Count == 0)
+      if (Modifiers.Count == 0)
         return false;
 
       bool effective = true;
 
-      foreach (IModifier m in modifiers)
+      foreach (IModifier m in Modifiers)
         effective &= m.Apply(target);
 
       // Fire event
-      OnTriggerEventHandler handler = OnTrigger;
+      EffectEvents.OnTriggerEventHandler handler = OnTrigger;
       if (handler != null)
         handler(this, target, effective);
 
       return effective;
     }
 
-    /* Event */
+    // Event
+    public event EffectEvents.OnTriggerEventHandler OnTrigger;
+  }
+
+  public static class EffectEvents {
 
     public delegate void OnTriggerEventHandler(
       object sender,
       IEntity target, bool effective
     );
-
-    public event OnTriggerEventHandler OnTrigger;
   }
 }

@@ -40,17 +40,17 @@ public class Forum : MonoBehaviour {
 
     // Effects
     annoy = new Effect();
-    annoy.modifiers.Add(new FloatModifier(anger, .2f));
+    annoy.Modifiers.Add(new FloatModifier(anger, .2f));
     repo.effects.Add(annoy);
     annoy.SetDebugLabel("Annoy");
 
     incite = new Effect();
-    incite.modifiers.Add(new FloatModifier(anger, .4f));
+    incite.Modifiers.Add(new FloatModifier(anger, .4f));
     repo.effects.Add(incite);
     incite.SetDebugLabel("Anger");
 
     calm = new Effect();
-    calm.modifiers.Add(new FloatModifier(anger, -.1f));
+    calm.Modifiers.Add(new FloatModifier(anger, -.1f));
     repo.effects.Add(calm);
     calm.SetDebugLabel("Calm Down");
 

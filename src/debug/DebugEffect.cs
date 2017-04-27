@@ -8,7 +8,7 @@ namespace BehaviorEngine {
     protected override void AssignVerboseDebugLabel(ref string label) {
       label = GetDebugLabel() + " (";
 
-      foreach (IModifier modifier in modifiers) {
+      foreach (IModifier modifier in Modifiers) {
         label += " " + (
           modifier == null ? "null" : modifier.GetVerboseDebugLabel()
         );
