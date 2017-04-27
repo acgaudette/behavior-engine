@@ -20,11 +20,22 @@ namespace BehaviorEngine.Float {
     public override IAttributeInstance NewInstance(
       Initializer initializeState
     ) {
-      return new NormalizedAttribute.Instance(this, initializeState);
+      return new NormalizedAttribute.TransformedInstance(this, initializeState);
     }
 
     protected override float TransformState(float raw) {
-      return transform(Math.Min(1, Math.Max(0, raw)));
+      return Math.Min(1, Math.Max(0, raw));
+    }
+
+    public class TransformedInstance : Instance {
+
+      internal TransformedInstance(
+        NormalizedAttribute prototype, Initializer initializeState
+      ) : base(prototype, initializeState) { }
+
+      public float Transformed {
+        get { return (Prototype as NormalizedAttribute).transform(State); }
+      }
     }
   }
 }

@@ -63,14 +63,16 @@ public class Mafia : MonoBehaviour {
     repo.RegisterState(
       new State(
         "anger",
-        Distributions.Uniform(), Transformations.Linear()
+        Distributions.Uniform(),
+        Transformations.EaseSquared()
       )
     );
 
     repo.RegisterState(
       new State(
         "confusion",
-        Distributions.Uniform(), Transformations.Linear()
+        Distributions.Uniform(),
+        Transformations.InvertedSquared()
       )
     );
 
