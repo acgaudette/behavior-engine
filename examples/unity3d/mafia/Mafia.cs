@@ -48,12 +48,13 @@ public class Mafia : MonoBehaviour {
     foreach (Character character in characters)
       character.Repository = repo;
 
-    // Actions
-    foreach (Character character in characters) {
-      ConsoleActionReader.LoadFile(
-        DATAPATH + "/" + FILENAME, repo.actions
-      );
-    }
+    /* Actions */
+
+    ConsoleActionReader.LoadFile(
+      DATAPATH + "/" + FILENAME, repo.actions
+    );
+
+    List<string> actionIDs = new List<string>(repo.actions.Keys);
 
     /* Attributes */
 
@@ -69,10 +70,13 @@ public class Mafia : MonoBehaviour {
     repo.Effects.Add(
       new InfluencedEffect(
         "example",
+
         LS( repo.GetTrait(Factor.CONSCIENTIOUSNESS) ),
         LS( repo.GetState("anger") ),
         LS( repo.MOD("confusion", .3f) ),
-        null
+
+        // Random Action
+        repo.actions[actionIDs[Random.Range(0, actionIDs.Count)]]
       )
     );
 
