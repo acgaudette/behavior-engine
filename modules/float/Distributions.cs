@@ -17,12 +17,12 @@ namespace BehaviorEngine.Float {
     }
 
     public static Distribution Normal(float deviation = .5f / 3) {
-      // Box-Muller
-      double u = random.NextDouble(), v = random.NextDouble();
-      return () => (float)(
-        deviation * Math.Sqrt(-2 * Math.Log(u))
-          * Math.Cos(2 * Math.PI * v) + .5f
-      );
+      return () => {
+        // Box-Muller
+        double u = random.NextDouble(), v = random.NextDouble();
+        return (float)(deviation * Math.Sqrt(-2 * Math.Log(u))
+          * Math.Cos(2 * Math.PI * v) + .5f);
+      };
     }
   }
 }

@@ -61,7 +61,7 @@ public class Mafia : MonoBehaviour {
     Trait.RegisterFactors(repo, Distributions.Normal());
 
     // States
-    repo.RegisterState(new State("anger"), Distributions.Uniform());
+    repo.RegisterState(new State("anger", Distributions.Uniform()));
     repo.RegisterState(new State("confusion", Distributions.Uniform()));
 
     /* Effects */
