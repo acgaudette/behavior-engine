@@ -16,7 +16,7 @@ namespace BehaviorEngine.Personality {
       IEnumerable<Trait> strongTraitInfluences,
       IEnumerable<State> strongStateInfluences,
       ICharacterAction action
-    ) : base(limiter) {
+    ) : this(limiter) {
       foreach (Trait trait in strongTraitInfluences)
         this.strongTraitInfluences[trait.type] = trait;
 

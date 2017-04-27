@@ -44,7 +44,12 @@ namespace BehaviorEngine.Personality {
     }
 
     public IEnumerable<Interaction> Interactions {
-      get; set;
+      get { return interactions; }
+    }
+    HashSet<Interaction> interactions;
+
+    public void RegisterInteraction(InfluencedInteraction i) {
+      interactions.Add(i);
     }
 
     /* Actions */
@@ -68,12 +73,11 @@ namespace BehaviorEngine.Personality {
     public BrainRepository() {
       Effects = new HashSet<InfluencedEffect>();
 
-      actions = new Dictionary<string, ICharacterAction>();
-
       traits = new Dictionary<Factor, Trait>();
       states = new Dictionary<string, State>();
 
-      Interactions = new HashSet<Interaction>();
+      interactions = new HashSet<Interaction>();
+      actions = new Dictionary<string, ICharacterAction>();
     }
   }
 }
