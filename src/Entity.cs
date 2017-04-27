@@ -59,6 +59,8 @@ namespace BehaviorEngine {
     // Given the possible Interactions and target Entities,
     // perform the highest-scoring Interaction/target(s) combo
     public void Poll() {
+      PrePoll();
+
       if (
         // System.Linq is useful for this one case
         Repository.Interactions == null || !Repository.Interactions.Any()
@@ -146,6 +148,8 @@ namespace BehaviorEngine {
     }
 
     /* Reactions, observations, scoring (called internally, override these) */
+
+    protected virtual void PrePoll() { }
 
     // Determine the targets of a particular Interaction
     protected virtual ICollection<IEntity> Targets(
