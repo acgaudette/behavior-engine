@@ -53,8 +53,12 @@ namespace BehaviorEngine {
 
       // Only instances have state
       public T State {
-        get { return state; }
+        get { return ReadState(state); }
         set { state = prototype.TransformState(value); }
+      }
+
+      protected virtual T ReadState(T state) {
+        return state;
       }
     }
   }
