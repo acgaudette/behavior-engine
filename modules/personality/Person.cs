@@ -19,12 +19,9 @@ namespace BehaviorEngine.Personality {
       object sender,
       Interaction choice, ICollection<IEntity> targets, float highscore
     ) => {
-      Person person = sender as Person;
-      InfluencedInteraction i = choice as InfluencedInteraction;
-      ICharacterAction action = person.BrainRepo.GetAction(i.actionID);
-
-      if (action == null) return;
-      action.Perform();
+      (sender as Person).PerformAction(
+        (choice as InfluencedInteraction).actionID, targets
+      );
     };
 
     public Person(string name) : base() {
@@ -35,13 +32,19 @@ namespace BehaviorEngine.Personality {
       OnPoll += TriggerAction;
     }
 
-    public bool PerformAction(string id) {
+    public bool PerformAction(string id, ICollection<IEntity> targets) {
       ICharacterAction action = BrainRepo.GetAction(id);
       if (action == null)
         return false;
 
-      action.Perform();
+      action.Perform(GetActionInfo(targets));
       return true;
+    }
+
+    protected virtual CharacterActionInfo GetActionInfo(
+      ICollection<IEntity> targets
+    ) {
+      return new CharacterActionInfo(this, targets);
     }
 
     protected override void PrePoll() {

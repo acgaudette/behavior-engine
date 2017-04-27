@@ -14,13 +14,15 @@ public class ConsoleAction : ICharacterAction {
     this.messages = messages;
   }
 
-  public void Perform() {
-    int r = Random.Range(0, messages.Length);
-    Debug.Log(messages[r]);
+  public virtual void Perform(CharacterActionInfo info) {
+    int i = Random.Range(0, messages.Length);
+
+    // Render
+    Debug.Log(info.person.name + " " + messages[i] + "\n");
   }
 
   public override string ToString() {
-    string s = "";
+    string s = ID + ": ";
     foreach (string message in messages)
       s += "\"" + message + "\" ";
     return s;
