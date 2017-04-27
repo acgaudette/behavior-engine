@@ -54,6 +54,8 @@ public class Mafia : MonoBehaviour {
       DATAPATH + "/" + FILENAME, repo
     );
 
+    List<string> actionIDs = new List<string>(repo.GetActionIDs());
+
     /* Attributes (Traits, States) */
 
     Trait.RegisterFactors(repo, Distributions.Normal());
@@ -74,14 +76,41 @@ public class Mafia : MonoBehaviour {
       )
     );
 
+    repo.RegisterState(
+      new State(
+        "energy", () => 1,
+        Transformations.Linear()
+      )
+    );
+
     /* Effects */
 
     repo.Effects.Add(
       new InfluencedEffect(
-        "example",
+        "effect-example",
         LS( repo.GetTrait(Factor.CONSCIENTIOUSNESS) ),
         LS( repo.GetState("anger") ),
         LS( repo.MOD("confusion", .3f) )
+      )
+    );
+
+    /* Interactions */
+
+    repo.RegisterInteraction(
+      new InfluencedInteraction(
+        0,
+        LS( repo.GetTrait(Factor.AGREEABLENESS) ),
+        LS( repo.GetState("confusion") ),
+        repo.GetAction(actionIDs[Random.Range(0, actionIDs.Count)])
+      )
+    );
+
+    repo.RegisterInteraction(
+      new InfluencedInteraction(
+        1,
+        LS( repo.GetTrait(Factor.NEUROTICISM) ),
+        LS( repo.GetState("energy") ),
+        repo.GetAction(actionIDs[Random.Range(0, actionIDs.Count)])
       )
     );
 
