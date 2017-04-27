@@ -15,6 +15,12 @@ namespace BehaviorEngine.Personality {
       this.name = name;
     }
 
+    public override IAttributeInstance NewInstance(
+      Initializer initializeState
+    ) {
+      return new State.TransformedInstance(this, initializeState);
+    }
+
     // Debug
     protected override void AssignDebugLabel(ref string label) {
       label = name;

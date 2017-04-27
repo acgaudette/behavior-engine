@@ -32,6 +32,12 @@ namespace BehaviorEngine.Personality {
       this.type = type;
     }
 
+    public override IAttributeInstance NewInstance(
+      Initializer initializeState
+    ) {
+      return new Trait.TransformedInstance(this, initializeState);
+    }
+
     // Debug
     protected override void AssignDebugLabel(ref string label) {
       label = type.ToString();

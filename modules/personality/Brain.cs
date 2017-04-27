@@ -14,9 +14,10 @@ namespace BehaviorEngine.Personality {
     ) {
 
       foreach (IAttributeInstance instance in instances) {
-        if (instance is State) {
-          // Do something
-        }
+        var i = instance as State.TransformedInstance;
+        if (i == null) continue;
+
+        // Do something with i.Transformed
       }
 
       return; // Placeholder--return something useful!
