@@ -39,14 +39,14 @@ namespace BehaviorEngine.Personality {
       foreach (InfluencedEffect e in allEffects) {
         // Difference in influence (zero = the same)
         int differential = 0;
-        foreach (var trait in i.strongTraitInfluences) {
-          if (!e.strongTraitInfluences.ContainsKey(trait.type)) {
+        foreach (Factor factor in i.strongTraitInfluences.Keys) {
+          if (!e.strongTraitInfluences.ContainsKey(factor)) {
             differential++;
           }
         }
 
-        foreach (var state in i.strongStateInfluences) {
-          if (!e.strongStateInfluences.ContainsKey(state.name)) {
+        foreach (string name in i.strongStateInfluences.Keys) {
+          if (!e.strongStateInfluences.ContainsKey(name)) {
             differential++;
           }
         }

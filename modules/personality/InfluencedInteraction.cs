@@ -6,23 +6,29 @@ namespace BehaviorEngine.Personality {
 
   public class InfluencedInteraction : Interaction {
 
-    public HashSet<Trait> strongTraitInfluences;
-    public HashSet<State> strongStateInfluences;
+    public Dictionary<Factor, Trait> strongTraitInfluences;
+    public Dictionary<string, State> strongStateInfluences;
+
+    public string actionID;
 
     public InfluencedInteraction(
       int limiter,
-      HashSet<Trait> traits,
-      HashSet<State> states
+      IEnumerable<Trait> strongTraitInfluences,
+      IEnumerable<State> strongStateInfluences,
+      ICharacterAction action
     ) : base(limiter) {
-      strongTraitInfluences = traits;
-      if (strongTraitInfluences == null) {
-        strongTraitInfluences = new HashSet<Trait>();
-      }
+      foreach (Trait trait in strongTraitInfluences)
+        this.strongTraitInfluences[trait.type] = trait;
 
-      strongStateInfluences = states;
-      if (strongStateInfluences == null) {
-        strongStateInfluences = new HashSet<State>();
-      }
+      foreach (State state in strongStateInfluences)
+        this.strongStateInfluences[state.name] = state;
+
+      actionID = action.ID;
+    }
+
+    public InfluencedInteraction(int limiter) : base(limiter) {
+      strongTraitInfluences = new Dictionary<Factor, Trait>();
+      strongStateInfluences = new Dictionary<string, State>();
     }
   }
 }

@@ -14,17 +14,33 @@ namespace BehaviorEngine.Personality {
 
     Brain oracle;
 
+    // Action link
+    EntityEvents.OnPollEventHandler TriggerAction = (
+      object sender,
+      Interaction choice, ICollection<IEntity> targets, float highscore
+    ) => {
+      Person person = sender as Person;
+      InfluencedInteraction i = choice as InfluencedInteraction;
+      ICharacterAction action = person.BrainRepo.GetAction(i.actionID);
+
+      if (action == null) return;
+      action.Perform();
+    };
+
     public Person(string name) : base() {
       this.name = name;
       oracle = new Brain();
+
+      // Perform Action on Interaction trigger
+      OnPoll += TriggerAction;
     }
 
-    public bool PerformAction(string key) {
-      if (!BrainRepo.actions.ContainsKey(key))
+    public bool PerformAction(string id) {
+      ICharacterAction action = BrainRepo.GetAction(id);
+      if (action == null)
         return false;
 
-      BrainRepo.actions[key].Perform();
-
+      action.Perform();
       return true;
     }
 

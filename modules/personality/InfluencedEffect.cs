@@ -12,25 +12,12 @@ namespace BehaviorEngine.Personality {
     public Dictionary<Factor, Trait> strongTraitInfluences;
     public Dictionary<string, State> strongStateInfluences;
 
-    /* Action link */
-
-    ICharacterAction action;
-
-    EffectEvents.OnTriggerEventHandler TriggerAction = (
-      object sender, IEntity target, bool effective
-    ) => {
-      InfluencedEffect e = sender as InfluencedEffect;
-      if (e.action != null)
-        e.action.Perform();
-    };
-
     public InfluencedEffect(
       string name,
       IEnumerable<Trait> strongTraitInfluences,
       IEnumerable<State> strongStateInfluences,
-      List<IModifier> modifiers,
-      ICharacterAction action
-    ) : this(name, action) {
+      List<IModifier> modifiers
+    ) : this(name) {
       foreach (Trait trait in strongTraitInfluences)
         this.strongTraitInfluences[trait.type] = trait;
 
@@ -40,17 +27,11 @@ namespace BehaviorEngine.Personality {
       Modifiers = modifiers;
     }
 
-    public InfluencedEffect(
-      string name, ICharacterAction action
-    ) : base() {
+    public InfluencedEffect(string name) : base() {
       this.name = name;
 
       strongTraitInfluences = new Dictionary<Factor, Trait>();
       strongStateInfluences = new Dictionary<string, State>();
-
-      this.action = action;
-      // Perform Action on Effect trigger
-      OnTrigger += TriggerAction;
     }
 
     // Debug
