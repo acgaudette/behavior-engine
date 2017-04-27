@@ -16,7 +16,7 @@ namespace BehaviorEngine.Personality {
       // Return value
       List<Effect> effects = new List<Effect>();
 
-      var allEffects = new List<InfluencedEffect>(repo.effects);
+      var allEffects = new List<InfluencedEffect>(repo.Effects);
       // Guarantee that default Effect will be different every time
       Shuffle(allEffects);
 

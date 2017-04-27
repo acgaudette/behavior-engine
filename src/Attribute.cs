@@ -15,7 +15,7 @@ namespace BehaviorEngine {
   public partial class Attribute<T> : Debug.Labeled, IAttribute {
 
     public delegate T Initializer();
-    Initializer defaultInitializer;
+    public Initializer defaultInitializer;
 
     // Construct with default initializer
     public Attribute(Initializer defaultInitializer) {

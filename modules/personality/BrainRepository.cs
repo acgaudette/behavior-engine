@@ -6,9 +6,6 @@ namespace BehaviorEngine.Personality {
 
   public class BrainRepository : IRepository {
 
-    public HashSet<InfluencedEffect> effects;
-    public Dictionary<string, ICharacterAction> actions;
-
     /* Traits */
 
     Dictionary<Factor, Trait> traits;
@@ -50,11 +47,17 @@ namespace BehaviorEngine.Personality {
       get; set;
     }
 
+    public Dictionary<string, ICharacterAction> actions;
+    public ICollection<InfluencedEffect> Effects { get; set; }
+
     public BrainRepository() {
-      effects = new HashSet<InfluencedEffect>();
+      Effects = new HashSet<InfluencedEffect>();
+
       actions = new Dictionary<string, ICharacterAction>();
+
       traits = new Dictionary<Factor, Trait>();
       states = new Dictionary<string, State>();
+
       Interactions = new HashSet<Interaction>();
     }
   }

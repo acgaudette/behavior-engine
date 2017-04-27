@@ -7,10 +7,21 @@ using BehaviorEngine;
 using BehaviorEngine.Personality;
 using BehaviorEngine.Float;
 
+public static class MafiaExtensions {
+
+   // Macro
+   public static IModifier MOD(
+    this BrainRepository repo, string stateName, float offset
+  ) {
+    return new FloatModifier(repo.GetState(stateName), offset)
+      as IModifier;
+  }
+}
+
 public class Mafia : MonoBehaviour {
 
-  // Helper function
-  static List<T> ls<T>(params T[] p) {
+  // Macro
+  static List<T> LS<T>(params T[] p) {
     List<T> list = new List<T>();
     foreach (T t in p) list.Add(t);
     return list;
@@ -46,19 +57,21 @@ public class Mafia : MonoBehaviour {
 
     /* Attributes */
 
-    Trait.RegisterFactors(repo); // Register all constant factors
+    // Register all constant factors (Traits)
+    Trait.RegisterFactors(repo, Distributions.Normal());
 
-    repo.RegisterState(new State("anger"));
-    repo.RegisterState(new State("confusion"));
+    // States
+    repo.RegisterState(new State("anger"), Distributions.Uniform());
+    repo.RegisterState(new State("confusion", Distributions.Uniform()));
 
     /* Effects */
 
-    repo.effects.Add(
+    repo.Effects.Add(
       new InfluencedEffect(
         "example",
-        ls( repo.GetTrait(Factor.CONSCIENTIOUSNESS) ),
-        ls( repo.GetState("anger") ),
-        ls( new FloatModifier(repo.GetState("confusion"), .3f) as IModifier ),
+        LS( repo.GetTrait(Factor.CONSCIENTIOUSNESS) ),
+        LS( repo.GetState("anger") ),
+        LS( repo.MOD("confusion", .3f) ),
         null
       )
     );

@@ -12,7 +12,7 @@ public class BrainRepoComponent : RepoComponent {
 
   protected override void UpdateDisplay() {
     effects.Clear();
-    foreach (Effect effect in (reference as BrainRepository).effects)
+    foreach (Effect effect in (reference as BrainRepository).Effects)
       effects.Add(effect.GetDebugLabel());
 
     actions.Clear();

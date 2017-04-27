@@ -17,9 +17,11 @@ namespace BehaviorEngine.Personality {
   public class Trait : Float.NormalizedAttribute {
 
     // Register all (const) factors in a provided repository
-    public static void RegisterFactors(BrainRepository repo) {
+    public static void RegisterFactors(
+      BrainRepository repo, Initializer initializer = null
+    ) {
       foreach (Factor factor in Enum.GetValues(typeof(Factor)))
-        repo.RegisterTrait(new Trait(factor));
+        repo.RegisterTrait(new Trait(factor, initializer));
     }
 
     public Factor type;
