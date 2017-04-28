@@ -35,7 +35,7 @@ namespace BehaviorEngine.Personality {
 
     public IList<Effect> ReactionEffects(
       InfluencedInteraction i,
-      Person host, // Unused
+      Character host, // Unused
       BrainRepository repo
     ) {
       // Return value
@@ -82,7 +82,7 @@ namespace BehaviorEngine.Personality {
     }
 
     public IList<Effect> ObservationEffects(
-      InfluencedInteraction interaction, Person host,
+      InfluencedInteraction interaction, Character host,
       ICollection<IEntity> targets,
       BrainRepository repo
     ) {

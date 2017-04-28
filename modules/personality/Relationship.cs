@@ -2,11 +2,11 @@
 
   public class Relationship {
 
-    public Person target;
+    public Character target;
     public float agreeability;
     public float trustworthiness;
 
-    public Relationship(Person p, float agree, float trust) {
+    public Relationship(Character p, float agree, float trust) {
       target = p;
       agreeability = agree;
       trustworthiness = trust;

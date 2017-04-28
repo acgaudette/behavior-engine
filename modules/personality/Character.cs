@@ -1,4 +1,4 @@
-﻿// Person.cs
+﻿// Character.cs
 
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ using CharacterState = System.Collections.Generic.IEnumerable<
 
 namespace BehaviorEngine.Personality {
 
-  public class Person : Entity {
+  public class Character : Entity {
 
     public string name;
 
@@ -24,12 +24,12 @@ namespace BehaviorEngine.Personality {
       object sender,
       Interaction choice, ICollection<IEntity> targets, float highscore
     ) => {
-      (sender as Person).PerformAction(
+      (sender as Character).PerformAction(
         (choice as InfluencedInteraction).actionID, targets
       );
     };
 
-    public Person(string name) : base() {
+    public Character(string name) : base() {
       this.name = name;
       oracle = new Brain();
 
@@ -65,7 +65,7 @@ namespace BehaviorEngine.Personality {
       // Black box
       return oracle.ReactionEffects(
         interaction as InfluencedInteraction,
-        host as Person, BrainRepo
+        host as Character, BrainRepo
       );
     }
 
@@ -75,7 +75,7 @@ namespace BehaviorEngine.Personality {
       // Black box
       return oracle.ObservationEffects(
         interaction as InfluencedInteraction,
-        host as Person, targets, BrainRepo
+        host as Character, targets, BrainRepo
       );
     }
 

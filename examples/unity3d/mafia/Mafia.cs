@@ -38,10 +38,10 @@ public class Mafia : MonoBehaviour {
     BrainRepository repo = new BrainRepository();
 
     // Characters
-    Character[] characters = {
-      new Character("Jurgen"),
-      new Character("Francis"),
-      new Character("Eugene")
+    MafiaCharacter[] characters = {
+      new MafiaCharacter("Jurgen"),
+      new MafiaCharacter("Francis"),
+      new MafiaCharacter("Eugene")
     };
 
     // Link each character to the central repository

@@ -12,13 +12,13 @@ namespace BehaviorEngine.Personality {
 
   public struct CharacterActionInfo {
 
-    public Person person;
+    public Character character;
     public ICollection<IEntity> targets;
 
     public CharacterActionInfo(
-      Person person, ICollection<IEntity> targets
+      Character character, ICollection<IEntity> targets
     ) {
-      this.person = person;
+      this.character = character;
       this.targets = targets;
     }
   }
