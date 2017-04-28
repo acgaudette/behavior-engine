@@ -2,6 +2,10 @@
 
 using System.Collections.Generic;
 
+using CharacterState = System.Collections.Generic.IEnumerable<
+  BehaviorEngine.Personality.State
+>;
+
 namespace BehaviorEngine.Personality {
 
   public class Person : Entity {
@@ -13,6 +17,7 @@ namespace BehaviorEngine.Personality {
     }
 
     Brain oracle;
+    CharacterState state;
 
     // Action link
     EntityEvents.OnPollEventHandler TriggerAction = (
@@ -49,7 +54,7 @@ namespace BehaviorEngine.Personality {
 
     protected override void PrePoll() {
       // State evaluation
-      oracle.EvaluateState(GetAttributeInstances());
+      state = oracle.EvaluateState(GetAttributeInstances());
 
       // Goals etc. go here
     }
@@ -79,7 +84,7 @@ namespace BehaviorEngine.Personality {
     ) {
       // Black box
       return oracle.ComboScore(
-        // Pass in evaluation from PrePoll() here
+        state,
         interaction as InfluencedInteraction,
         targets, BrainRepo
       );

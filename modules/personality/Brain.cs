@@ -9,18 +9,28 @@ namespace BehaviorEngine.Personality {
 
     static Random random = new Random();
 
-    public void EvaluateState(
+    public IEnumerable<State> EvaluateState(
       ICollection<IAttributeInstance> instances
     ) {
 
-      foreach (IAttributeInstance instance in instances) {
-        var i = instance as State.TransformedInstance;
-        if (i == null) continue;
+      var top = new LinkedList<State>(); // Dequeue
+      float highscore = 0;
 
-        // Do something with i.Transformed
+      foreach (IAttributeInstance instance in instances) {
+        if (!(instance.Prototype is State)) continue;
+        var i = instance as State.TransformedInstance;
+
+        float s = i.TransformedState;
+        if (s >= highscore) {
+          top.AddLast(i.Prototype as State);
+          highscore = s;
+        }
       }
 
-      return; // Placeholder--return something useful!
+      while (top.Count > 2) // Top 2
+        top.RemoveFirst();
+
+      return top;
     }
 
     public IList<Effect> ReactionEffects(
@@ -80,11 +90,12 @@ namespace BehaviorEngine.Personality {
     }
 
     public float ComboScore(
+      IEnumerable<State> state,
       InfluencedInteraction interaction,
       ICollection<IEntity> targets,
       BrainRepository repo
     ) {
-      return 0; // Placeholder
+      return Float.Distributions.Uniform()(); // Placeholder
     }
 
     void Shuffle(IList<InfluencedEffect> list) {
