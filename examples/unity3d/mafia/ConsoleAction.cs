@@ -18,7 +18,7 @@ public class ConsoleAction : ICharacterAction {
     int i = Random.Range(0, messages.Length);
 
     // Render
-    Debug.Log(info.person.name + " " + messages[i] + "\n");
+    Debug.Log(info.character.name + " " + messages[i] + "\n");
   }
 
   public override string ToString() {
