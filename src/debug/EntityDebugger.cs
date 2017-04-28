@@ -8,7 +8,7 @@ namespace BehaviorEngine.Debug {
 
   public static class EntityDebugger {
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
     static EntityEvents.OnReactEventHandler LogReaction = (
       object sender,
@@ -76,10 +76,10 @@ namespace BehaviorEngine.Debug {
 
 #endif
 
-    [Conditional("BEHAVIORENGINE_DEBUG")]
+    [Conditional("BVE_DEBUG")]
     public static void Attach(IEntity entity) {
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
       entity.OnReact += LogReaction;
       entity.OnObserve += LogObservation;
@@ -89,10 +89,10 @@ namespace BehaviorEngine.Debug {
 
     }
 
-    [Conditional("BEHAVIORENGINE_DEBUG")]
+    [Conditional("BVE_DEBUG")]
     public static void Detach(IEntity entity) {
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
       entity.OnReact -= LogReaction;
       entity.OnObserve -= LogObservation;

@@ -9,17 +9,17 @@ namespace BehaviorEngine.Debug {
 
     public delegate void DoLog(string message);
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
     static DoLog log = m => System.Console.WriteLine(m);
 
 #endif
 
-    [Conditional("BEHAVIORENGINE_DEBUG")]
+    [Conditional("BVE_DEBUG")]
     public static void SetLogger(DoLog log) {
       if (log == null) return;
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
       Logger.log = log;
 
@@ -27,10 +27,10 @@ namespace BehaviorEngine.Debug {
 
     }
 
-    [Conditional("BEHAVIORENGINE_DEBUG")]
+    [Conditional("BVE_DEBUG")]
     public static void Log(object message) {
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
       log(message.ToString());
 

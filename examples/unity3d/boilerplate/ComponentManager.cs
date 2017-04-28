@@ -12,7 +12,7 @@ using System.Reflection;
 [ExecuteInEditMode]
 public class ComponentManager : MonoBehaviour {
 
-  const string DEBUG_FLAG = "BEHAVIORENGINE_DEBUG";
+  const string DEBUG_FLAG = "BVE_DEBUG";
 
   public bool compileWithDebugLabeling = true;
   public float defaultPollRate = 8; // Rate to update all universes/entities

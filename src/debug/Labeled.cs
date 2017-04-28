@@ -12,7 +12,7 @@ namespace BehaviorEngine.Debug {
 
   public abstract class Labeled : ILabeled {
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
     string label = "unlabeled";
 
@@ -30,10 +30,10 @@ namespace BehaviorEngine.Debug {
       return label;
     }
 
-    [Conditional("BEHAVIORENGINE_DEBUG")]
+    [Conditional("BVE_DEBUG")]
     protected virtual void AssignDebugLabel(ref string label) {
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
       label = this.label;
 
@@ -41,15 +41,15 @@ namespace BehaviorEngine.Debug {
 
     }
 
-    [Conditional("BEHAVIORENGINE_DEBUG")]
+    [Conditional("BVE_DEBUG")]
     protected virtual void AssignVerboseDebugLabel(ref string label) {
       AssignDebugLabel(ref label);
     }
 
-    [Conditional("BEHAVIORENGINE_DEBUG")]
+    [Conditional("BVE_DEBUG")]
     public void SetDebugLabel(string label) {
 
-#if BEHAVIORENGINE_DEBUG
+#if BVE_DEBUG
 
       this.label = label;
 
