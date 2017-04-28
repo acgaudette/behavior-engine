@@ -28,11 +28,11 @@ namespace BehaviorEngine.Debug {
     }
 
     [Conditional("BEHAVIORENGINE_DEBUG")]
-    public static void Log(string message) {
+    public static void Log(object message) {
 
 #if BEHAVIORENGINE_DEBUG
 
-      log(message);
+      log(message.ToString());
 
 #endif
 
