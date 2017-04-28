@@ -33,7 +33,7 @@ namespace BehaviorEngine.Float {
         NormalizedAttribute prototype, Initializer initializeState
       ) : base(prototype, initializeState) { }
 
-      public float Transformed {
+      public float TransformedState {
         get { return (Prototype as NormalizedAttribute).transform(State); }
       }
     }

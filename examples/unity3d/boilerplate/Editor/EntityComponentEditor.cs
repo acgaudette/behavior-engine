@@ -57,7 +57,7 @@ public class EntityComponentEditor : Editor {
             NormalizedAttribute.TransformedInstance instance
               = component.instances[i]
               as NormalizedAttribute.TransformedInstance;
-            EditorGUILayout.Slider(instance.Transformed, 0, 1);
+            EditorGUILayout.Slider(instance.TransformedState, 0, 1);
 
           EditorGUI.EndDisabledGroup();
           EditorGUILayout.EndHorizontal();
