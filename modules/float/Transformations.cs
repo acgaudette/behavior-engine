@@ -39,5 +39,25 @@ namespace BehaviorEngine.Float {
         Math.Pow(x, p) / (Math.Pow(x, p) + Math.Pow(1 - x, p))
       );
     }
+
+    public static Transformation EaseSquaredAtValue(
+      float t
+    ) {
+      return x => {
+        float v = x < t ? x / t : (1 - x) / (1 - t);
+        return v * v / (v * v + (1 - v) * (1 - v));
+      };
+    }
+
+    public static Transformation EaseAtValue(
+      float t, float p
+    ) {
+      return x => {
+        float v = x < t ? x / t : (1 - x) / (1 - t);
+        return (float)(
+          Math.Pow(v, p) / (Math.Pow(v, p) + Math.Pow(1 - v, p))
+        );
+      };
+    }
   }
 }
