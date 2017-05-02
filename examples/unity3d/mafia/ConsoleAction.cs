@@ -2,6 +2,7 @@
 // Created by Aaron C Gaudette on 24.04.17
 
 using UnityEngine;
+using BehaviorEngine;
 using BehaviorEngine.Personality;
 
 public class ConsoleAction : ICharacterAction {
@@ -17,8 +18,18 @@ public class ConsoleAction : ICharacterAction {
   public virtual void Perform(CharacterActionInfo info) {
     int i = Random.Range(0, messages.Length);
 
+    Character target = null;
+    foreach (IEntity e in info.targets) {
+      target = e as Character;
+      break;
+    }
+
     // Render
-    Debug.Log(info.character.name + " " + messages[i] + "\n");
+    Debug.Log(
+      info.character.name + " " + messages[i]
+      + (target == null ? "" : " " + target.name)
+      + "\n"
+    );
   }
 
   public override string ToString() {
