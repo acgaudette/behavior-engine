@@ -9,6 +9,7 @@ public class MafiaUniverseComponent : UniverseComponent {
   public enum Stage { KILL, FALLOUT, LYNCH, END };
   public Stage stage = Stage.KILL;
   [HideInInspector] public MafiaCharacter killer;
+  public float sleepTime = 1.5f;
 
   public ulong falloutTicks = 4;
 
@@ -16,6 +17,7 @@ public class MafiaUniverseComponent : UniverseComponent {
   ulong lastTick = 0;
   float lastTime = 0;
   int step = 0;
+  int day = 0;
 
   protected override void Start() {
     base.Start();
@@ -37,6 +39,7 @@ public class MafiaUniverseComponent : UniverseComponent {
         break;
 
       case Stage.KILL:
+        day++;
         victim = SelectRandom(killer);
         break;
 
@@ -61,8 +64,12 @@ public class MafiaUniverseComponent : UniverseComponent {
   bool UpdateFalloutStage() {
     Step(0, "<b>The group gathers together...\n</b>");
 
-    base.Update();
-    return tick >= lastTick + falloutTicks;
+    if (tick >= lastTick + falloutTicks) {
+      if (tick == lastTick + falloutTicks)
+        return trigger.Ready; // Trigger last step before next stage
+    } else base.Update();
+
+    return false;
   } 
 
   bool UpdateLynchStage() {
@@ -76,22 +83,23 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   void UpdateEndStage() {
     if ((killer as IDestroyable).Destroy) {
+      bool single = reference.entities.Count == 1;
       string s = "<b>The killer, " + killer.name + ", is dead--only ";
 
       int i = 0;
       foreach (IEntity e in reference.entities) {
-        if (reference.entities.Count > 1 && i == reference.entities.Count - 1)
+        if (!single && i == reference.entities.Count - 1)
           s += " and ";
 
         s += (e as MafiaCharacter).name;
 
-        if (reference.entities.Count > 1 && i < reference.entities.Count - 2)
+        if (!single && i < reference.entities.Count - 2)
           s += ", ";
 
         i++;
       }
 
-      s += " remains.\n</b>";
+      s += " " + (single ? "remains" : "remain") + ".\n</b>";
 
       Step(0, s);
     }
@@ -106,16 +114,23 @@ public class MafiaUniverseComponent : UniverseComponent {
   }
 
   bool RenderKill(MafiaCharacter victim) {
-    Step(0, "<b>The KILLER goes on the hunt...\n</b>");
+    Step(0,
+      "<b><color=white><size=18>Day "
+      + day + "</size></color></b>\n"
+    );
 
     if (Sleep(1)) return false;
 
-    Step(1,
+    Step(1, "<b>The KILLER goes on the hunt...\n</b>");
+
+    if (Sleep(2)) return false;
+
+    Step(2,
       "<b><color=red>" + victim.name
       + " is murdered!\n</color></b>"
     );
 
-    return step == 2;
+    return step == 3;
   }
 
   bool RenderLynch(MafiaCharacter victim) {
@@ -139,9 +154,9 @@ public class MafiaUniverseComponent : UniverseComponent {
     string color = match ? "cyan" : "#fc4e4e";
 
     Step(3,
-      "<b><color=" + color + ">" + victim.name
-      + (match ? " IS" : " IS NOT")
-      + " the killer!\n</color></b>"
+      "<color=" + color + ">" + victim.name + " <b>"
+      + (match ? "IS" : "IS NOT")
+      + "</b> the killer!\n</color>"
     );
 
     return step == 4;
@@ -187,7 +202,9 @@ public class MafiaUniverseComponent : UniverseComponent {
     }
   }
 
-  bool Sleep(int s, float t = 1) {
+  bool Sleep(int s, float t = -1) {
+    t = t < 0 ? sleepTime : t;
+
     if (step != s)
       return false;
 

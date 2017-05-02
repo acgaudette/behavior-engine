@@ -14,7 +14,7 @@ public class UniverseComponent : MonoBehaviour {
 
   public List<EntityComponent> entities = new List<EntityComponent>();
 
-  Trigger trigger;
+  protected Trigger trigger;
   ICollection<IEntity> lastEntities;
   int lastCount = 0;
 
