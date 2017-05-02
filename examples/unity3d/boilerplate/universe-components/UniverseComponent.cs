@@ -35,15 +35,15 @@ public class UniverseComponent : MonoBehaviour {
   protected virtual void PollAll() {
     foreach (IEntity target in lastEntities) target.Poll();
 
+    tick++;
+  }
+
+  protected virtual void ReplaceEntities() {
     // Remove Entities marked as destroyed from the Universe
     reference.entities.RemoveWhere(
       e => e is IDestroyable && (e as IDestroyable).Destroy
     );
 
-    tick++;
-  }
-
-  protected virtual void ReplaceEntities() {
     ICollection<IEntity> current = reference.entities;
 
     if (lastEntities != current || lastCount != current.Count) {
