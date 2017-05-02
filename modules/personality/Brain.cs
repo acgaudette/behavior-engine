@@ -82,6 +82,8 @@ namespace BehaviorEngine.Personality {
         count++;
       }
       score /= count;
+      //BehaviorEngine.Debug.Logger.Log("Calculated score");
+      score *= StabilityScore(state, host, interaction, targets, repo);
       return score;
     }
 
@@ -129,7 +131,7 @@ namespace BehaviorEngine.Personality {
       ownScore = func(modifyVal);
 
       if(targets == null) {
-        BehaviorEngine.Debug.Logger.Log("Score: " + ownScore);
+        //BehaviorEngine.Debug.Logger.Log("Score: " + ownScore);
         return ownScore;
       }
 
@@ -154,7 +156,7 @@ namespace BehaviorEngine.Personality {
       }
       otherScore /= targets.Count;
       float score = (ownScore + otherScore) / 2;
-      BehaviorEngine.Debug.Logger.Log("Score: " + score);
+      //BehaviorEngine.Debug.Logger.Log("Score: " + score);
       return score;
     }
 
@@ -164,6 +166,8 @@ namespace BehaviorEngine.Personality {
     ) {
       // Return value
       List<Effect> effects = new List<Effect>();
+      List<InfluencedEffect> unused = new List<InfluencedEffect>();
+      List<int> differentials = new List<int>();
 
       var allEffects = new List<InfluencedEffect>(repo.Effects);
       // Guarantee that default Effect will be different every time
@@ -188,16 +192,25 @@ namespace BehaviorEngine.Personality {
         if (differential == 0) {
           effects.Add(e);
         } else {
-          double toTheEnd = (total - position) / (total * differential);
-          double selectChance = random.NextDouble() / random.NextDouble();
-
-          // the values are always guaranteed to be non-negative
-          if (selectChance > Math.Min(toTheEnd, effects.Count)) {
-            effects.Add(e);
-          }
+          unused.Add(e);
+          differentials.Add(differential);
         }
 
         position++;
+      }
+
+      while(effects.Count == 0) {
+        Shuffle(unused);
+        int index = 0;
+        double chanceTotal = (differentials[index] * total);
+        double toTheEnd = ((double)(total - position)) / chanceTotal;
+        double selectChance = random.NextDouble();
+
+        // the values are always guaranteed to be non-negative
+        if (selectChance > Math.Min(toTheEnd, effects.Count)) {
+          effects.Add(unused[index]);
+        }
+        index++;
       }
 
       return effects;
