@@ -41,7 +41,12 @@ public class Mafia : MonoBehaviour {
     MafiaCharacter[] characters = {
       new MafiaCharacter("Jurgen"),
       new MafiaCharacter("Francis"),
-      new MafiaCharacter("Eugene")
+      new MafiaCharacter("Eugene"),
+      new MafiaCharacter("Peter"),
+      new MafiaCharacter("Yasmin"),
+      new MafiaCharacter("Leonie"),
+      new MafiaCharacter("Micaela"),
+      new MafiaCharacter("Nora"),
     };
 
     // Link each character to the central repository
@@ -54,7 +59,7 @@ public class Mafia : MonoBehaviour {
       DATAPATH + "/" + FILENAME, repo
     );
 
-    List<string> actionIDs = new List<string>(repo.GetActionIDs());
+    //List<string> actionIDs = new List<string>(repo.GetActionIDs());
 
     /* Attributes (Traits, States) */
 
@@ -120,7 +125,7 @@ public class Mafia : MonoBehaviour {
     /* Interactions */
 
     // Accuse
-    repo.RegisterInteraction(
+    var accuse = 
       new InfluencedInteraction(
         1,
         LS(
@@ -132,11 +137,11 @@ public class Mafia : MonoBehaviour {
           repo.GetState("stress")
         ),
         repo.GetAction("accuse")
-      )
-    );
+      );
+    accuse.SetDebugLabel("accuse");
 
     // Investigate
-    repo.RegisterInteraction(
+    var investigate =
       new InfluencedInteraction(
         1,
         LS(
@@ -147,11 +152,11 @@ public class Mafia : MonoBehaviour {
           repo.GetState("energy")
         ),
         repo.GetAction("investigate")
-      )
-    );
+      );
+    investigate.SetDebugLabel("investigate");
 
     // Despair
-    repo.RegisterInteraction(
+    InfluencedInteraction despair =
       new InfluencedInteraction(
         0,
         LS(
@@ -161,11 +166,11 @@ public class Mafia : MonoBehaviour {
           repo.GetState("stress")
         ),
         repo.GetAction("despair")
-      )
-    );
+      );
+    despair.SetDebugLabel("despair");
 
     // Hallucinate
-    repo.RegisterInteraction(
+    var hallucinate =
       new InfluencedInteraction(
         0,
         LS(
@@ -178,11 +183,11 @@ public class Mafia : MonoBehaviour {
           repo.GetState("stress")
         ),
         repo.GetAction("hallucinate")
-      )
-    );
+      );
+    hallucinate.SetDebugLabel("hallucinate");
 
     // Sleep
-    repo.RegisterInteraction(
+    var sleep =
       new InfluencedInteraction(
         0,
         LS(
@@ -192,11 +197,11 @@ public class Mafia : MonoBehaviour {
           repo.GetState("energy")
         ),
         repo.GetAction("sleep")
-      )
-    );
+      );
+    sleep.SetDebugLabel("sleep");
 
     // Attack
-    repo.RegisterInteraction(
+    var attack =
       new InfluencedInteraction(
         1,
         LS(
@@ -207,8 +212,15 @@ public class Mafia : MonoBehaviour {
           repo.GetState("energy")
         ),
         repo.GetAction("attack")
-      )
-    );
+      );
+    attack.SetDebugLabel("attack");
+
+    repo.RegisterInteraction(accuse);
+    repo.RegisterInteraction(investigate);
+    repo.RegisterInteraction(despair);
+    repo.RegisterInteraction(hallucinate);
+    repo.RegisterInteraction(sleep);
+    repo.RegisterInteraction(attack);
 
     // Attribution
     foreach (Character character in characters) {
