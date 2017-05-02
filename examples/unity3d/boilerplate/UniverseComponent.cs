@@ -7,48 +7,36 @@ using BehaviorEngine;
 
 public class UniverseComponent : MonoBehaviour {
 
-  public float pollRate;
-  [SerializeField] ulong tick = 0;
-
   [HideInInspector] public ComponentManager manager;
   public Universe reference;
   public List<EntityComponent> entities = new List<EntityComponent>();
 
-  float lastPoll = 0;
   ICollection<IEntity> lastEntities;
   int lastCount = 0;
 
-  void Start() {
-    lastPoll = -pollRate; // Start immediately 
-  }
-
-  void Update() {
+  protected virtual void Update() {
     if (reference == null) return;
 
-    // Display
-    if (Time.time - lastPoll > pollRate) {
-      //if (reference == Universe.root) manager.ClearConsole();
+    ReplaceEntities();
+    PollAll();
+  }
 
-      ICollection<IEntity> current = reference.entities;
+  protected virtual void PollAll() {
+    foreach (IEntity target in lastEntities) target.Poll();
 
-      if (lastEntities != current || lastCount != current.Count) {
-        manager.GenerateEntities(this, current);
-        lastEntities = current;
-        lastCount = current.Count;
-      }
+    // Remove Entities marked as destroyed from the Universe
+    reference.entities.RemoveWhere(
+      e => e is IDestroyable && (e as IDestroyable).Destroy
+    );
+  }
 
-      // Poll
-      foreach (IEntity target in current) {
-        target.Poll();
-      }
+  protected virtual void ReplaceEntities() {
+    ICollection<IEntity> current = reference.entities;
 
-      // Remove Entities marked as destroyed from the Universe
-      reference.entities.RemoveWhere(
-        e => e is IDestroyable && (e as IDestroyable).Destroy
-      );
-
-      lastPoll = Time.time;
-      tick++;
+    if (lastEntities != current || lastCount != current.Count) {
+      manager.GenerateEntities(this, current);
+      lastEntities = current;
+      lastCount = current.Count;
     }
   }
 }

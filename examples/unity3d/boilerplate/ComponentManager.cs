@@ -15,7 +15,7 @@ public class ComponentManager : MonoBehaviour {
   const string DEBUG_FLAG = "BVE_DEBUG";
 
   public bool compileWithDebugLabeling = true;
-  public float defaultPollRate = 8; // Rate to update all universes/entities
+  public UniverseComponent defaultUniverse;
 
   // Editor mirrors to Unity components (for display purposes)
   public List<UniverseComponent> universes = new List<UniverseComponent>();
@@ -89,15 +89,13 @@ public class ComponentManager : MonoBehaviour {
         return null;
     }
 
-    GameObject o = new GameObject();
-    UniverseComponent component = o.AddComponent<UniverseComponent>();
+    UniverseComponent component = Instantiate(
+      defaultUniverse, Vector3.zero, Quaternion.identity, transform
+    );
 
-    component.pollRate = defaultPollRate;
+    component.gameObject.name = label;
     component.manager = this;
     component.reference = reference;
-
-    o.name = label;
-    o.transform.parent = transform;
 
     universes.Add(component);
     return component;
