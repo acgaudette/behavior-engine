@@ -5,21 +5,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorEngine;
 
+[RequireComponent(typeof(Trigger))]
 public class UniverseComponent : MonoBehaviour {
 
   [HideInInspector] public ComponentManager manager;
-  [SerializeField] ulong tick = 0;
   public Universe reference;
+  public ulong tick = 0;
+
   public List<EntityComponent> entities = new List<EntityComponent>();
 
+  Trigger trigger;
   ICollection<IEntity> lastEntities;
   int lastCount = 0;
+
+  protected virtual void Start() {
+    trigger = GetComponent<Trigger>();
+    trigger.Initialize();
+  }
 
   protected virtual void Update() {
     if (reference == null) return;
 
-    ReplaceEntities();
-    PollAll();
+    if (trigger.Ready) {
+      ReplaceEntities();
+      PollAll();
+    }
   }
 
   protected virtual void PollAll() {
