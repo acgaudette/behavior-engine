@@ -38,7 +38,7 @@ namespace BehaviorEngine.Personality {
       Character host, // Unused
       BrainRepository repo
     ) {
-      var effects = getStronglyInfluencedEffects(i);
+      var effects = getStronglyInfluencedEffects(repo, i);
       //TODO: Change selection via host/other methods
       return effects;
     }
@@ -48,8 +48,8 @@ namespace BehaviorEngine.Personality {
       ICollection<IEntity> targets,
       BrainRepository repo
     ) {
-      var effects = getStronglyInfluencedEffects();
-      //
+      var effects = getStronglyInfluencedEffects(repo, interaction);
+      //TODO: Change selection via host/other methods
       return effects;
     }
 
@@ -59,10 +59,17 @@ namespace BehaviorEngine.Personality {
       ICollection<IEntity> targets,
       BrainRepository repo
     ) {
+      var effects = getStronglyInfluencedEffects(repo, interaction);
+      foreach(IEntity target in targets) {
+        //TODO: Change selection via host/other methods
+      }
       return Float.Distributions.Uniform()(); // Placeholder
     }
 
-    private void getStronglyInfluencedEffects(InfluencedInteraction i) {
+    private IList<Effect> getStronglyInfluencedEffects(
+      BrainRepository repo,
+      InfluencedInteraction i
+    ) {
       // Return value
       List<Effect> effects = new List<Effect>();
 
@@ -100,6 +107,8 @@ namespace BehaviorEngine.Personality {
 
         position++;
       }
+
+      return effects;
     }
 
     void Shuffle(IList<InfluencedEffect> list) {
