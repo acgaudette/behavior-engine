@@ -15,6 +15,9 @@ investigate
 	investigates
 	observes
 	watches
+	probes
+	interrogates
+	grills
 despair
 	despairs
 	loses hope
@@ -22,13 +25,20 @@ despair
 	becomes depressed
 	distresses
 	feels discouraged
+	cries
+	feels very sad
 hallucinate
 	hallucinates
 	feels delirious
+	experiences blurry vision
 sleep
-	rests
+	blocks it all out
+	attempts to relax
+	stands impassively
+	tries to rest
 attack
 	verbally attacks
+	criticizes
 	yells at
 	lambasts
 	shouts at
