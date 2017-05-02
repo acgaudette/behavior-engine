@@ -60,6 +60,7 @@ public class Mafia : MonoBehaviour {
 
     Trait.RegisterFactors(repo, Distributions.Normal());
 
+    // The higher the anger, the rasher the actions
     repo.RegisterState(
       new State(
         "anger",
@@ -68,6 +69,7 @@ public class Mafia : MonoBehaviour {
       )
     );
 
+    // The higher the confusion, the more likely energy will needlessly go down
     repo.RegisterState(
       new State(
         "confusion",
@@ -76,6 +78,7 @@ public class Mafia : MonoBehaviour {
       )
     );
 
+    // Need energy to perform certain actions
     repo.RegisterState(
       new State(
         "energy", () => 1,
@@ -83,14 +86,122 @@ public class Mafia : MonoBehaviour {
       )
     );
 
+    // The higher the stress, the more likely people will be suspicious of
+    // each other
+    repo.RegisterState(
+      new State(
+        "stress", Distributions.Uniform(),
+        Transformations.InvertedSquared()
+      )
+    );
+
     /* Effects */
 
     repo.Effects.Add(
       new InfluencedEffect(
-        "effect-example",
-        LS( repo.GetTrait(Factor.CONSCIENTIOUSNESS) ),
-        LS( repo.GetState("anger") ),
-        LS( repo.MOD("confusion", .3f) )
+        "accuse",
+        LS(
+          repo.GetTrait(Factor.AGREEABLENESS),
+          repo.GetTrait(Factor.NEUROTICISM)
+        ),
+        LS(
+          repo.GetState("anger"),
+          repo.GetState("stress")
+        ),
+        LS(
+          repo.MOD("anger", .1f),
+          repo.MOD("confusion", -.3f)
+        )
+      )
+    );
+
+    repo.Effects.Add(
+      new InfluencedEffect(
+        "despair",
+        LS(
+          repo.GetTrait(Factor.NEUROTICISM)
+        ),
+        LS(
+          repo.GetState("stress")
+        ),
+        LS(
+          repo.MOD("energy", -.2f),
+          repo.MOD("anger", .2f),
+          repo.MOD("stress", .2f)
+        )
+      )
+    );
+
+    repo.Effects.Add(
+      new InfluencedEffect(
+        "sleep",
+        LS(
+          repo.GetTrait(Factor.CONSCIENTIOUSNESS)
+        ),
+        LS(
+          repo.GetState("energy")
+        ),
+        LS(
+          repo.MOD("energy", .3f),
+          repo.MOD("confusion", -.1f)
+        )
+      )
+    );
+
+    repo.Effects.Add(
+      new InfluencedEffect(
+        "investigate",
+        LS(
+          repo.GetTrait(Factor.EXTRAVERSION),
+          repo.GetTrait(Factor.OPENNESS)
+        ),
+        LS(
+          repo.GetState("energy")
+        ),
+        LS(
+          repo.MOD("energy", -.3f),
+          repo.MOD("confusion", -.2f),
+          repo.MOD("stress", .1f)
+        )
+      )
+    );
+
+    repo.Effects.Add(
+      new InfluencedEffect(
+        "attack",
+        LS(
+          repo.GetTrait(Factor.AGREEABLENESS),
+          repo.GetTrait(Factor.NEUROTICISM)
+        ),
+        LS(
+          repo.GetState("energy")
+        ),
+        LS(
+          repo.MOD("energy", -.2f),
+          repo.MOD("anger", -.2f),
+          repo.MOD("stress", .3f)
+        )
+      )
+    );
+
+    repo.Effects.Add(
+      new InfluencedEffect(
+        "hallucinate",
+        LS(
+          repo.GetTrait(Factor.EXTRAVERSION),
+          repo.GetTrait(Factor.NEUROTICISM)
+        ),
+        LS(
+          repo.GetState("energy"),
+          repo.GetState("confusion"),
+          repo.GetState("stress")
+        ),
+        LS(
+          repo.MOD("energy", -.2f),
+          repo.MOD("anger", .2f),
+          repo.MOD("stress", .3f),
+          repo.MOD("confusion", .2f)
+        )
       )
     );
 

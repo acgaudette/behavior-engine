@@ -3,9 +3,15 @@
 using System;
 using System.Collections.Generic;
 
+using BehaviorEngine.Float;
+
 namespace BehaviorEngine.Personality {
 
   public class Brain {
+
+    private const float LOW_STABILITY = 0.3f;
+    private const float MED_STABILITY = 0.5f;
+    private const float HI_STABILITY = 0.8f;
 
     static Random random = new Random();
 
@@ -54,16 +60,102 @@ namespace BehaviorEngine.Personality {
     }
 
     public float ComboScore(
-      IEnumerable<State> state,
+      IEnumerable<State> state, Character host,
       InfluencedInteraction interaction,
       ICollection<IEntity> targets,
       BrainRepository repo
     ) {
-      var effects = getStronglyInfluencedEffects(repo, interaction);
-      foreach(IEntity target in targets) {
-        //TODO: Change selection via host/other methods
+      float score = 0f;
+      int count = 0;
+      foreach(State s in interaction.strongStateInfluences.Values) {
+        State.TransformedInstance currState
+        = host[s] as State.TransformedInstance;
+        if(currState == null) {
+          continue;
+        }
+        score = currState.TransformedState;
+        foreach(State t in state) {
+          if(t.Equals(s)) {
+            score += .25f;
+          }
+        }
+        count++;
       }
-      return Float.Distributions.Uniform()(); // Placeholder
+      score /= count;
+      return score;
+    }
+
+    private float StabilityScore(
+      IEnumerable<State> state, Character host,
+      InfluencedInteraction interaction,
+      ICollection<IEntity> targets,
+      BrainRepository repo
+    ) {
+      float ownScore = 0f;
+      int count = 0;
+      foreach(State s in state) {
+        State.TransformedInstance currState 
+        = host[s] as State.TransformedInstance;
+        ownScore += currState.TransformedState;
+        count++;
+      }
+      ownScore /= count;
+      float ease = .3f;
+      if(ownScore < LOW_STABILITY) {
+        ease = .5f;
+      } else {
+        if(ownScore > HI_STABILITY) {
+          ease = .1f;
+        }
+      }
+
+      var func = Transformations.EaseSquaredAtValue(ease);
+
+
+      var effects = getStronglyInfluencedEffects(repo, interaction);
+      //List<FloatModifier> modifiers = new List<FloatModifier>();
+      float modifyVal = 0f;
+      foreach(Effect e in effects) {
+        float currMod = 0f;
+        foreach(IModifier m in e.Modifiers) {
+          FloatModifier floatMod = m as FloatModifier;
+          currMod = Math.Abs(floatMod.offset);
+        }
+        currMod /= e.Modifiers.Count;
+        modifyVal += currMod;
+      }
+      modifyVal /= effects.Count;
+
+      ownScore = func(modifyVal);
+
+      if(targets == null) {
+        BehaviorEngine.Debug.Logger.Log("Score: " + ownScore);
+        return ownScore;
+      }
+
+      float otherScore = 0f;
+      foreach(IEntity target in targets) {
+        var attrs = target.GetAttributeInstances();
+        float stabilityValue = 0f;
+        float weight = 1f;
+        foreach(IAttributeInstance a in attrs) {
+          NormalizedAttribute.Instance attr = a as NormalizedAttribute.Instance;
+          stabilityValue += attr.State;
+        }
+        stabilityValue /= attrs.Count;
+        weight = .3f;
+        if(stabilityValue <= LOW_STABILITY) {
+          weight = .5f;
+        } else {
+          weight = .1f;
+        }
+        var f = Transformations.EaseSquaredAtValue(weight);
+        otherScore += f(modifyVal);
+      }
+      otherScore /= targets.Count;
+      float score = (ownScore + otherScore) / 2;
+      BehaviorEngine.Debug.Logger.Log("Score: " + score);
+      return score;
     }
 
     private IList<Effect> getStronglyInfluencedEffects(

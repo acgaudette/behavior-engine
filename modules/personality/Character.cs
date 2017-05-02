@@ -84,7 +84,7 @@ namespace BehaviorEngine.Personality {
     ) {
       // Black box
       return oracle.ComboScore(
-        state,
+        state, this,
         interaction as InfluencedInteraction,
         targets, BrainRepo
       );
