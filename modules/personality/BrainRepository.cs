@@ -68,6 +68,7 @@ namespace BehaviorEngine.Personality {
       return actions.Keys;
     }
 
+    // Effects
     public ICollection<InfluencedEffect> Effects { get; set; }
 
     public BrainRepository() {
