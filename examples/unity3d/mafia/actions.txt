@@ -6,3 +6,29 @@ Frown
 	frowns
 Cry
 	cries
+accuse
+	accuses
+	blames
+	condemns
+	lays the guilt on
+investigate
+	investigates
+	observes
+	watches
+despair
+	despairs
+	loses hope
+	anguishes
+	becomes depressed
+	distresses
+	feels discouraged
+hallucinate
+	hallucinates
+	feels delirious
+sleep
+	rests
+attack
+	verbally attacks
+	yells at
+	lambasts
+	shouts at
