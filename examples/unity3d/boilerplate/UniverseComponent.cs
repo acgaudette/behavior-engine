@@ -8,6 +8,7 @@ using BehaviorEngine;
 public class UniverseComponent : MonoBehaviour {
 
   [HideInInspector] public ComponentManager manager;
+  [SerializeField] ulong tick = 0;
   public Universe reference;
   public List<EntityComponent> entities = new List<EntityComponent>();
 
@@ -28,6 +29,8 @@ public class UniverseComponent : MonoBehaviour {
     reference.entities.RemoveWhere(
       e => e is IDestroyable && (e as IDestroyable).Destroy
     );
+
+    tick++;
   }
 
   protected virtual void ReplaceEntities() {

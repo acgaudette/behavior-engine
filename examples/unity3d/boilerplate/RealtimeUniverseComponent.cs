@@ -8,8 +8,6 @@ using BehaviorEngine;
 public class RealtimeUniverseComponent : UniverseComponent {
 
   public float pollRate;
-  [SerializeField] ulong tick = 0;
-
   float lastPoll = 0;
 
   void Start() {
@@ -25,7 +23,6 @@ public class RealtimeUniverseComponent : UniverseComponent {
       PollAll();
 
       lastPoll = Time.time;
-      tick++;
     }
   }
 }

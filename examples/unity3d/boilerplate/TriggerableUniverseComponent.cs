@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class TriggerableUniverseComponent : UniverseComponent {
 
-  public KeyCode key;
-  [SerializeField] ulong tick = 0;
+  public KeyCode key = KeyCode.Space;
 
   protected override void Update() {
     if (reference == null) return;
@@ -14,7 +13,6 @@ public class TriggerableUniverseComponent : UniverseComponent {
     if (Input.GetKeyUp(key)) {
       ReplaceEntities();
       PollAll();
-      tick++;
     }
   }
 }
