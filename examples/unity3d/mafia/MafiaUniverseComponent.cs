@@ -59,7 +59,7 @@ public class MafiaUniverseComponent : UniverseComponent {
   }
 
   bool UpdateFalloutStage() {
-    Step(0, "The group gathers together...\n");
+    Step(0, "<b>The group gathers together...\n</b>");
 
     base.Update();
     return tick >= lastTick + falloutTicks;
@@ -76,7 +76,7 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   void UpdateEndStage() {
     if ((killer as IDestroyable).Destroy) {
-      string s = "The killer, " + killer.name + ", is dead--only ";
+      string s = "<b>The killer, " + killer.name + ", is dead--only ";
 
       int i = 0;
       foreach (IEntity e in reference.entities) {
@@ -91,7 +91,7 @@ public class MafiaUniverseComponent : UniverseComponent {
         i++;
       }
 
-      s += " remains.\n";
+      s += " remains.\n</b>";
 
       Step(0, s);
     }
@@ -99,37 +99,49 @@ public class MafiaUniverseComponent : UniverseComponent {
     else {
       MafiaCharacter last = SelectRandom();
       Step(0,
-        "Everyone is dead--only " + last.name + ", the killer, remains.\n"
+        "<b>Everyone is dead--only " + last.name
+        + ", the killer, remains.\n</b>"
       );
     }
   }
 
   bool RenderKill(MafiaCharacter victim) {
-    Step(0, "The KILLER goes on the hunt...\n");
+    Step(0, "<b>The KILLER goes on the hunt...\n</b>");
 
     if (Sleep(1)) return false;
 
-    Step(1, victim.name + " is murdered!\n");
+    Step(1,
+      "<b><color=red>" + victim.name
+      + " is murdered!\n</color></b>"
+    );
 
     return step == 2;
   }
 
   bool RenderLynch(MafiaCharacter victim) {
-    Step(0, "The group deliberates over the likely killer...\n");
+    Step(0, "<b>The group deliberates over the likely killer...\n</b>");
 
     if (Sleep(1)) return false;
 
-    Step(1, victim.name + " is thrown from the roof!\n");
+    Step(1,
+      "<b><color=red>" + victim.name
+      + " is thrown from the roof!\n</color></b>"
+    );
 
     Step(2,
-      "The group investigates the evidence on " + victim.name + "'s body...\n"
+      "<b>The group investigates the evidence on " + victim.name
+      + "'s body...\n</b>"
     );
 
     if (Sleep(3)) return false;
 
+    bool match = victim == killer;
+    string color = match ? "cyan" : "#fc4e4e";
+
     Step(3,
-      victim.name + (victim == killer ? " IS" : " IS NOT")
-      + " the killer!\n"
+      "<b><color=" + color + ">" + victim.name
+      + (match ? " IS" : " IS NOT")
+      + " the killer!\n</color></b>"
     );
 
     return step == 4;
