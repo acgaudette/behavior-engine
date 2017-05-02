@@ -38,6 +38,31 @@ namespace BehaviorEngine.Personality {
       Character host, // Unused
       BrainRepository repo
     ) {
+      var effects = getStronglyInfluencedEffects(i);
+      //TODO: Change selection via host/other methods
+      return effects;
+    }
+
+    public IList<Effect> ObservationEffects(
+      InfluencedInteraction interaction, Character host,
+      ICollection<IEntity> targets,
+      BrainRepository repo
+    ) {
+      var effects = getStronglyInfluencedEffects();
+      //
+      return effects;
+    }
+
+    public float ComboScore(
+      IEnumerable<State> state,
+      InfluencedInteraction interaction,
+      ICollection<IEntity> targets,
+      BrainRepository repo
+    ) {
+      return Float.Distributions.Uniform()(); // Placeholder
+    }
+
+    private void getStronglyInfluencedEffects(InfluencedInteraction i) {
       // Return value
       List<Effect> effects = new List<Effect>();
 
@@ -64,38 +89,17 @@ namespace BehaviorEngine.Personality {
         if (differential == 0) {
           effects.Add(e);
         } else {
-          double top = random.NextDouble() * differential;
-          double currentCount = effects.Count;
-          double s = random.NextDouble() * differential;
           double toTheEnd = (total - position) / (total * differential);
+          double selectChance = random.NextDouble() / random.NextDouble();
 
-          // s / top is always guaranteed to be positive
-          if (s / top > Math.Min(toTheEnd, currentCount)) {
+          // the values are always guaranteed to be non-negative
+          if (selectChance > Math.Min(toTheEnd, effects.Count)) {
             effects.Add(e);
           }
         }
 
         position++;
       }
-
-      return effects;
-    }
-
-    public IList<Effect> ObservationEffects(
-      InfluencedInteraction interaction, Character host,
-      ICollection<IEntity> targets,
-      BrainRepository repo
-    ) {
-      return null; // Placeholder
-    }
-
-    public float ComboScore(
-      IEnumerable<State> state,
-      InfluencedInteraction interaction,
-      ICollection<IEntity> targets,
-      BrainRepository repo
-    ) {
-      return Float.Distributions.Uniform()(); // Placeholder
     }
 
     void Shuffle(IList<InfluencedEffect> list) {
