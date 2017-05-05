@@ -7,11 +7,11 @@ public class Render {
 
   public const string ENDL = "\n";
 
-  public static void Log(string message, string analysis) {
+  public static void Log(string observation, string analysis) {
     string timestamp = "[00:00:00]"; // stub
     Debug.Log(
       timestamp + ENDL
-      + "observation: " + message + ENDL
+      + "observation: " + observation + ENDL
       + "analysis: " + analysis + ENDL
     );
   }
