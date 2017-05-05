@@ -36,11 +36,11 @@ public class MafiaRenderer {
       "[ SHIP CYCLE " + cycle + " ]", log:false
     );
 
-    if (Sleep(1)) return false;
+    if (Sleep(0)) return false;
 
     Step(1, "The crew files into the conference room.");
 
-    if (Sleep(2)) return false;
+    if (Sleep(1)) return false;
 
     Step(2,
       "<color=red>" + victim.Title + " is missing.</color>",
@@ -62,7 +62,7 @@ public class MafiaRenderer {
       "They are arguing over the likely killer"
     );
 
-    if (Sleep(1)) return false;
+    if (Sleep(0)) return false;
 
     Step(1,
       "<color=red>" + victim.Title + " is iced.</color>"
@@ -73,7 +73,7 @@ public class MafiaRenderer {
       "They are looking for evidence."
     );
 
-    if (Sleep(3)) return false;
+    if (Sleep(2)) return false;
 
     bool match = victim == killer;
     string color = match ? "cyan" : "#fc4e4e";
@@ -144,7 +144,7 @@ public class MafiaRenderer {
   bool Sleep(int s, float t = -1) {
     t = t < 0 ? sleepTime : t;
 
-    if (step != s)
+    if (step != s + 1)
       return false;
 
     if (Time.time > lastTime + t) {
