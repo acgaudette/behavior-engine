@@ -1,4 +1,4 @@
-// ConsoleActionReader.cs
+// LogEntryReader.cs
 // Created by Aaron C Gaudette on 24.04.17
 
 using System;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorEngine.Personality;
 
-public class ConsoleActionReader {
+public class LogEntryReader {
 
   public static bool LoadFile(string path, BrainRepository repo) {
     if (repo == null)
@@ -17,7 +17,7 @@ public class ConsoleActionReader {
 
     if (!File.Exists(@path)) {
       Debug.LogError(
-        "ConsoleActionReader: File does not exist at "
+        "LogEntryReader: File does not exist at "
           + new FileInfo(@path).FullName
       );
       return false;
@@ -25,7 +25,7 @@ public class ConsoleActionReader {
 
     try {
       using (StreamReader reader = File.OpenText(@path)) {
-        List<string> buffer = new List<string>();
+        List<LogEntry.Phrase> buffer = new List<LogEntry.Phrase>();
 
         for (string key = null, line = null;;) {
           line = reader.ReadLine();
@@ -37,15 +37,18 @@ public class ConsoleActionReader {
             // Error
             } else if (key == null) {
               Debug.LogError(
-                "ConsoleActionReader: Parse error: tabbed data with no header"
+                "LogEntryReader: Parse error: tabbed data with no header"
               );
               return false;
             }
 
             // Add Action
             repo.RegisterAction(
-              new ConsoleAction(
-                key, buffer.Count == 0 ? new string[] { key } : buffer.ToArray()
+              new LogEntry(
+                key,
+                buffer.Count == 0 ?
+                  new LogEntry.Phrase[] { new LogEntry.Phrase(key) }
+                  : buffer.ToArray()
               )
             );
             count++;
@@ -55,19 +58,19 @@ public class ConsoleActionReader {
               break;
 
             key = line;
-            buffer = new List<string>();
+            buffer = new List<LogEntry.Phrase>();
           }
 
           // Add tabbed data
-          else buffer.Add(line.Substring(1));
+          else buffer.Add(new LogEntry.Phrase(line.Substring(1)));
         }
       }
     } catch (Exception e) {
-      Debug.LogError("ConsoleActionReader: " + e);
+      Debug.LogError("LogEntryReader: " + e);
       return false;
     }
 
-    Debug.Log("ConsoleActionReader: loaded " + count + " actions");
+    Debug.Log("LogEntryReader: loaded " + count + " actions");
     return true;
   }
 }
