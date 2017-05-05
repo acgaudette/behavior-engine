@@ -22,27 +22,35 @@ public class LogEntry : ICharacterAction {
   }
 
   Phrase[] phrases;
+  string[] analyses;
 
   public LogEntry(string id, Phrase[] phrases) {
     ID = id;
     this.phrases = phrases;
+    // analyses
   }
 
   public virtual void Perform(CharacterActionInfo info) {
     int i = Random.Range(0, phrases.Length);
+    //int j = Random.Range(0, analyses.Length);
 
-    Crewmember target = null;
+    Crewmember self = info.character as Crewmember, target = null;
+
     foreach (IEntity e in info.targets) {
       target = e as Crewmember;
       break;
     }
 
-    Crewmember self = info.character as Crewmember;
+    // Fill in pronoun
+    string message = phrases[i].message.Replace("%p", self.pronoun);
 
-    string observation = self.Title + " " + phrases[i].message
-      + (target == null ? "" : " " + target.Title);
-    string analysis = ""; // stub
-
-    Render.Log(observation, analysis);
+    Render.Log(
+      // Observation
+      self.Title + " " + message
+        + (target == null ? "": " " + target.Title),
+      // Analysis
+      "?"
+      //analyses[j]
+    );
   }
 }
