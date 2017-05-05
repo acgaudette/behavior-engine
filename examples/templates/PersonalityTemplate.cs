@@ -39,9 +39,11 @@ public class PersonalityTemplate : MonoBehaviour {
 
     /* Actions */
 
+    /*
     ConsoleActionReader.LoadFile(
       DATAPATH + "/" + FILENAME, repo
     );
+    */
 
     List<string> actionIDs = new List<string>(repo.GetActionIDs());
 
