@@ -38,15 +38,15 @@ public class Mafia : MonoBehaviour {
     BrainRepository repo = new BrainRepository();
 
     // Characters
-    MafiaCharacter[] characters = {
-      new MafiaCharacter("Jurgen"),
-      new MafiaCharacter("Francis"),
-      new MafiaCharacter("Eugene"),
-      new MafiaCharacter("Peter"),
-      new MafiaCharacter("Yasmin"),
-      new MafiaCharacter("Leonie"),
-      new MafiaCharacter("Micaela"),
-      new MafiaCharacter("Nora"),
+    Crewmember[] characters = {
+      new Crewmember("Jurgen", "Engineer", Crewmember.M),
+      new Crewmember("Francis", "First Mate", Crewmember.M),
+      new Crewmember("Eugene", "Swabbie", Crewmember.M),
+      new Crewmember("Peter", "Security", Crewmember.M),
+      new Crewmember("Yasmin", "Navigator", Crewmember.F),
+      new Crewmember("Leonie", "Pilot", Crewmember.F),
+      new Crewmember("Micaela", "Quartermaster", Crewmember.F),
+      new Crewmember("Nora", "Captain", Crewmember.F)
     };
 
     // Link each character to the central repository
@@ -55,7 +55,7 @@ public class Mafia : MonoBehaviour {
 
     /* Actions */
 
-    ConsoleActionReader.LoadFile(
+    LogEntryReader.LoadFile(
       DATAPATH + "/" + FILENAME, repo
     );
 
