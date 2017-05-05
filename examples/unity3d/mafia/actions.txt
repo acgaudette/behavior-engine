@@ -1,16 +1,8 @@
-Smile
-	smiles
-Laugh
-	laughs
-Frown
-	frowns
-Cry
-	cries
 accuse
 	accuses
 	blames
 	condemns
-	lays the guilt on
+	points %p finger at
 investigate
 	investigates
 	observes
@@ -27,6 +19,8 @@ despair
 	feels discouraged
 	cries
 	feels very sad
+	puts %p head in %p hands
+	stares at the floor
 hallucinate
 	hallucinates
 	feels delirious
@@ -36,9 +30,10 @@ sleep
 	attempts to relax
 	stands impassively
 	tries to rest
+	closes %p eyes and covers %p ears
 attack
 	verbally attacks
 	criticizes
 	yells at
-	lambasts
 	shouts at
+	gestures angrily at
