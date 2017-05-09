@@ -49,9 +49,11 @@ public class Render {
     );
   }
 
-  public static void LogBiometrics(string data) {
+  public static void LogBiometrics(Crewmember source, string data) {
     LogEntry(
       GetTimestamp() + ENDL
+      + "BIOMETRICS AI -- " + source.name.ToUpper()
+      + ", " + source.firstName.ToUpper()
       + data + ENDL
     );
   }
