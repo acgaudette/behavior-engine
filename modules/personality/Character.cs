@@ -112,22 +112,29 @@ namespace BehaviorEngine.Personality {
         }
       }
 
-      RegisterRelationship(c, agreeability, trustworthiness);
+      AugmentRelationship(c, agreeability - .5f, trustworthiness - .5f);
     }
 
     // Update an existing relationship
-    public void RegisterRelationship(
-      Character target, float agreeability, float trustworthiness
+    public void AugmentRelationship(
+      Character target,
+      float agreeabilityOffset, float trustworthinessOffset
     ) {
-      Relationship r = new Relationship(
-        target, agreeability, trustworthiness
-      );
+      Relationship r = GetRelationship(target);
+      if (r == null) {
+        r = new Relationship(target);
+        relationships[target.name] = r;
+      }
 
-      relationships[target.name] =  r;
+      r.agreeability += agreeabilityOffset;
+      r.trustworthiness += trustworthinessOffset;
 
-      OnRegisterRelationshipEventHandler handler = OnRegisterRelationship;
-      if (handler != null)
-        handler(this, target, r);
+      OnAugmentRelationshipEventHandler handler = OnAugmentRelationship;
+      if (handler != null) {
+        handler(
+          this, target, agreeabilityOffset, trustworthinessOffset, r
+        );
+      }
     }
 
     // Access a relationship with another character, if it exists
@@ -137,12 +144,14 @@ namespace BehaviorEngine.Personality {
       return null;
     }
 
-    public delegate void OnRegisterRelationshipEventHandler(
+    public delegate void OnAugmentRelationshipEventHandler(
       object sender,
-      Character target, Relationship relationship
+      Character target,
+      float agreeabilityOffset, float trustworthinessOffset,
+      Relationship relationship
     );
 
-    public event OnRegisterRelationshipEventHandler OnRegisterRelationship;
+    public event OnAugmentRelationshipEventHandler OnAugmentRelationship;
 
     /* Actions */
 
