@@ -63,7 +63,7 @@ namespace BehaviorEngine.Personality {
     }
 
     public string RenderAxis() {
-      return "( " + trustworthiness + ", " + agreeability + " )";
+      return "( " + agreeability + ", " + trustworthiness + " )";
     }
   }
 }

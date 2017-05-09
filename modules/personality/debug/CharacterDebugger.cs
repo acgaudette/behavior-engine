@@ -22,14 +22,13 @@ namespace BehaviorEngine.Debug {
       string debug = character.GetDebugLabel() + "\n";
       debug += "RELATIONSHIP\n";
 
-      string trust = (trustworthinessOffset >= 0 ? "+" : "")
-        + trustworthinessOffset;
       string agree = (agreeabilityOffset >= 0 ? "+" : "")
         + agreeabilityOffset;
+      string trust = (trustworthinessOffset >= 0 ? "+" : "")
+        + trustworthinessOffset;
 
       debug += "Target = " + target.GetDebugLabel() + "\n";
-      debug += "Trustworthiness " + trust
-        + ", Agreeability " + agree + "\n";
+      debug += "Agreeability " + agree + ", Trustworthiness " + trust + "\n";
       debug += "Axis = " + relationship.RenderAxis() + "\n";
 
       Logger.Log(debug);
