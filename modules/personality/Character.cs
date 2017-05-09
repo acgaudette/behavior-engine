@@ -74,11 +74,19 @@ namespace BehaviorEngine.Personality {
       negativeTrustStates.AddRange(relevantStates);
     }
 
-    public void RegisterRelationship(Character c,
-      float agreeability,
-      float trustworthiness) {
-      Relationship r = new Relationship(c, agreeability, trustworthiness);
-      relationships[c.name] =  r;
+    // Update an existing relationship
+    public void RegisterRelationship(
+      Character target, float agreeability, float trustworthiness
+    ) {
+      Relationship r = new Relationship(
+        target, agreeability, trustworthiness
+      );
+
+      relationships[target.name] =  r;
+
+      OnRegisterRelationshipEventHandler handler = OnRegisterRelationship;
+      if (handler != null)
+        handler(this, target, r);
     }
 
     public Relationship GetRelationship(Character c) {
@@ -98,6 +106,7 @@ namespace BehaviorEngine.Personality {
       return true;
     }
 
+    // Create first-time relationship
     private void SetupRelationship(
       Character c,
       InfluencedInteraction interaction
@@ -143,6 +152,13 @@ namespace BehaviorEngine.Personality {
 
       RegisterRelationship(c, agreeability, trustworthiness);
     }
+
+    public delegate void OnRegisterRelationshipEventHandler(
+      object sender,
+      Character target, Relationship relationship
+    );
+
+    public event OnRegisterRelationshipEventHandler OnRegisterRelationship;
 
     protected virtual CharacterActionInfo GetActionInfo(
       ICollection<IEntity> targets
