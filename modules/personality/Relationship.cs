@@ -18,10 +18,14 @@ namespace BehaviorEngine.Personality {
     public List<State> positiveTrustStates;
     public List<State> negativeTrustStates;
 
+    public Relationship(Character p) : this(p, .5f, .5f) { }
+
     public Relationship(Character p, float agree, float trust) {
       target = p;
+
       agreeability = agree;
       trustworthiness = trust;
+
       positiveAgreeableStates = new List<State>();
       negativeAgreeableStates = new List<State>();
       positiveTrustStates = new List<State>();
@@ -42,27 +46,19 @@ namespace BehaviorEngine.Personality {
       positiveTrustStates.AddRange(relevantStates);
     }
 
-    public void registerPositiveAgree(
-      List<State> relevantStates
-    ) {
+    public void registerPositiveAgree(List<State> relevantStates) {
       positiveAgreeableStates.AddRange(relevantStates);
     }
 
-    public void registerNegativeAgree(
-      List<State> relevantStates
-    ) {
+    public void registerNegativeAgree(List<State> relevantStates) {
       negativeAgreeableStates.AddRange(relevantStates);
     }
 
-    public void registerPositiveTrust(
-      List<State> relevantStates
-    ) {
+    public void registerPositiveTrust(List<State> relevantStates) {
       positiveTrustStates.AddRange(relevantStates);
     }
 
-    public void registerNegativeTrust(
-      List<State> relevantStates
-    ) {
+    public void registerNegativeTrust(List<State> relevantStates) {
       negativeTrustStates.AddRange(relevantStates);
     }
 
