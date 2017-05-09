@@ -59,7 +59,9 @@ public class Render {
       return false;
     }
 
-    Debug.Log("Render: Wrote " + log.Count + " lines to file");
+    Debug.Log(
+      "Render: Wrote " + log.Count + " lines to " + Path.GetFileName(path)
+    );
 
     return true;
   }
