@@ -40,20 +40,25 @@ public class Render {
   public static void Log(
     string observation, string analysis
   ) {
-    string entry = GetTimestamp() + ENDL
-      + "observation: " + observation + ENDL
-      + "analysis: " + analysis + ENDL;
+    UpdateTimestamp();
 
-    Debug.Log(entry);
-    log.Add(Clean(entry));
+    LogEntry(
+      GetTimestamp() + ENDL
+      + "observation: " + observation + ENDL
+      + "analysis: " + analysis + ENDL
+    );
+  }
+
+  public static void LogBiometrics(string data) {
+    LogEntry(
+      GetTimestamp() + ENDL
+      + data + ENDL
+    );
   }
 
   // Log a single line
   public static void Print(string message) {
-    string entry = message + ENDL;
-
-    Debug.Log(entry);
-    log.Add(Clean(entry));
+    LogEntry(message + ENDL);
   }
 
   // Output log to file
@@ -81,6 +86,10 @@ public class Render {
 
   // Increment static timestamp
   static Timestamp GetTimestamp() {
+    return new Timestamp(cycle, tick, offset);
+  }
+
+  static void UpdateTimestamp() {
     int seconds = Random.Range(3, 15);
 
     if (offset + seconds > 60)
@@ -88,8 +97,12 @@ public class Render {
 
     offset += seconds;
     offset %= 60;
+  }
 
-    return new Timestamp(cycle, tick, offset);
+  // Output/store log entry
+  static void LogEntry(string entry) {
+    Debug.Log(entry);
+    log.Add(Clean(entry));
   }
 
   // Clean a string of tags
