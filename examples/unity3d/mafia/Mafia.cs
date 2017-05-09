@@ -39,14 +39,14 @@ public class Mafia : MonoBehaviour {
 
     // Characters
     Crewmember[] characters = {
-      new Crewmember("Jurgen", "Engineer", Crewmember.M),
-      new Crewmember("Francis", "First Mate", Crewmember.M),
-      new Crewmember("Eugene", "Swabbie", Crewmember.M),
-      new Crewmember("Peter", "Security", Crewmember.M),
-      new Crewmember("Yasmin", "Navigator", Crewmember.F),
-      new Crewmember("Leonie", "Pilot", Crewmember.F),
-      new Crewmember("Micaela", "Quartermaster", Crewmember.F),
-      new Crewmember("Nora", "Captain", Crewmember.F)
+      new Crewmember("Jurgen", "Burgstaller", "Engineer", Crewmember.M),
+      new Crewmember("Francis", "Bertrand", "First Mate", Crewmember.M),
+      new Crewmember("Eugene", "Parsons", "Swabbie", Crewmember.M),
+      new Crewmember("Peter", "Strickland", "Security", Crewmember.M),
+      new Crewmember("Yasmin", "Pahlavi", "Navigator", Crewmember.F),
+      new Crewmember("Leonie", "Laurent", "Pilot", Crewmember.F),
+      new Crewmember("Micaela", "Valenti", "Quartermaster", Crewmember.F),
+      new Crewmember("Nora", "Murphy", "Captain", Crewmember.F)
     };
 
     // Link each character to the central repository
