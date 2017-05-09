@@ -146,8 +146,8 @@ public class ConsoleReader {
 
     for (
       int i = 0;
-      line.Substring(i, TAB_STRING.Length).Equals(TAB_STRING)
-        && i + TAB_STRING.Length <= line.Length;
+      i + TAB_STRING.Length <= line.Length
+        && line.Substring(i, TAB_STRING.Length).Equals(TAB_STRING);
       i += TAB_STRING.Length
     ) indent++;
 
@@ -160,7 +160,10 @@ public class ConsoleReader {
     if (line.Length < TAB_STRING.Length)
       return line;
 
-    while (line.Substring(0, TAB_STRING.Length).Equals(TAB_STRING)) {
+    while (
+      line.Substring(0, Math.Min(TAB_STRING.Length, line.Length))
+        .Equals(TAB_STRING)
+    ) {
       line = line.Substring(
         TAB_STRING.Length, line.Length - TAB_STRING.Length
       );
