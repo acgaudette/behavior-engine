@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ public class ConsoleReader {
 
   public const string TAB_STRING = "  ";
 
-  public struct Node {
+  public struct Node : IEnumerable<Node> {
 
     public const string NULL_DATA = "null";
 
@@ -29,6 +30,14 @@ public class ConsoleReader {
     public Node(string data, Node[] children = null) {
       this.data = data;
       this.children = children == null ? new Node[0] : children;
+    }
+
+    public IEnumerator<Node> GetEnumerator() {
+      return ((IEnumerable<Node>)children).GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() {
+      return GetEnumerator();
     }
 
     public override string ToString() {
