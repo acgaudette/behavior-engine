@@ -44,6 +44,8 @@ public class MafiaRenderer {
 
     if (Sleep(0)) return false;
 
+    if (step == 1) Render.IncrementCycle();
+
     Step(1, "The crew files into the conference room.");
 
     if (Sleep(1)) return false;
@@ -144,10 +146,12 @@ public class MafiaRenderer {
     int s, string message, string analysis = "...", bool log = true
   ) {
     if (step == s) {
-      if (log)
+      if (log) {
         Render.Log("<b>" + message + "</b>", analysis);
-      else
-        Render.Print(message);
+      }
+
+      else Render.Print(message);
+
       step++;
     }
   }
