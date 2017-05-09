@@ -17,11 +17,11 @@ public class MafiaUniverseComponent : UniverseComponent {
   Crewmember victim = null;
   Dictionary<Crewmember, Crewmember> accusations;
   ulong lastTick = 0;
-  int cycle = 0;
+  int cycle = 0, cycleOffset;
 
   protected override void Start() {
     base.Start();
-    cycle = Random.Range(999, 9999);
+    cycleOffset = Random.Range(999, 9999);
 
     ReplaceEntities();
     killer = SelectRandom();
@@ -89,7 +89,9 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   // Kill
   bool UpdateKillStage() {
-    if (mafiaRenderer.RenderKill(victim, cycle, reference.entities.Count == 2 ? killer : null)) {
+    if (mafiaRenderer.RenderKill(
+      victim, cycle, cycleOffset, reference.entities.Count == 2 ? killer : null
+    )) {
       Kill(victim);
       return true;
     }

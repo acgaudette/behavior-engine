@@ -60,10 +60,10 @@ public class MafiaRenderer {
   }
 
   public bool RenderKill(
-    Crewmember victim, int cycle, Crewmember lastKiller
+    Crewmember victim, int cycle, int offset, Crewmember lastKiller
   ) {
     Step(0,
-      "[ SHIP CYCLE " + cycle + " ]", log: false
+      "[ SHIP CYCLE " + (cycle + offset) + " ]", log: false
     );
 
     if (Sleep(0)) return false;
@@ -78,8 +78,9 @@ public class MafiaRenderer {
     if (Sleep(1)) return false;
 
     Step(2,
-      "<color=red>" + victim.Title + " is missing.</color>",
-      victim.name + " has been murdered."
+      "<color=red>" + victim.Title + " "
+        + RandomMessage("missing") + "</color>",
+      cycle == 1 ? "?" : victim.name + " has been murdered."
     );
 
     return step == 3;
