@@ -85,8 +85,12 @@ public class ConsoleReader {
           else if (indent < lastIndent) {
             lines.Peek().Add(new Node(lastLine));
 
-            Node[] nodes = lines.Pop().ToArray();
-            lines.Peek().Add(new Node(data.Pop(), nodes));
+            while (lastIndent - indent > 0) {
+              Node[] nodes = lines.Pop().ToArray();
+              lines.Peek().Add(new Node(data.Pop(), nodes));
+
+              lastIndent--;
+            }
           }
 
           else lines.Peek().Add(new Node(lastLine));
