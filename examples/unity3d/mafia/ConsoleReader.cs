@@ -32,6 +32,13 @@ public class ConsoleReader {
       this.children = children == null ? new Node[0] : children;
     }
 
+    public string[] ChildrenToString() {
+      string[] strings = new string[children.Length];
+      for (int i = 0; i < children.Length; ++i)
+        strings[i] = children[i].data;
+      return strings;
+    }
+
     public IEnumerator<Node> GetEnumerator() {
       return ((IEnumerable<Node>)children).GetEnumerator();
     }
@@ -123,14 +130,19 @@ public class ConsoleReader {
     }
 
     if (lines.Count == 0) {
-      Debug.LogWarning("ConsoleReader: Input file is empty");
+      Debug.LogWarning(
+        "ConsoleReader: Input file " + Path.GetFileName(path) + " is empty"
+      );
 
       root = new Node(Node.NULL_DATA);
       return false;
     }
 
     root = lines.Pop()[0];
-    Debug.Log("ConsoleReader: loaded " + root.Count + " nodes");
+    Debug.Log(
+      "ConsoleReader: loaded " + root.Count + " nodes from "
+      + Path.GetFileName(path)
+    );
 
     return true;
   }
