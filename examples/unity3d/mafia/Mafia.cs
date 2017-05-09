@@ -55,9 +55,35 @@ public class Mafia : MonoBehaviour {
 
     /* Actions */
 
-    LogEntryReader.LoadFile(
-      DATAPATH + "/" + FILENAME, repo
+    ConsoleReader.Node root;
+    ConsoleReader.LoadFile(
+      DATAPATH + "/" + FILENAME, out root
     );
+
+    Debug.Log(root);
+
+    foreach (ConsoleReader.Node action in root.children) {
+      if (action.children.Length == 0) {
+        repo.RegisterAction(
+          new LogEntry(
+            action.data,
+            new LogEntry.Phrase[] { new LogEntry.Phrase(action.data) }
+          )
+        );
+      }
+
+      else {
+        LogEntry.Phrase[] phrases = new LogEntry.Phrase[
+          action.children.Length
+        ];
+
+        for (int i = 0; i < action.children.Length; ++i) {
+          phrases[i] = new LogEntry.Phrase(action.children[i].data);
+        }
+
+        repo.RegisterAction(new LogEntry(action.data, phrases));
+      }
+    }
 
     //List<string> actionIDs = new List<string>(repo.GetActionIDs());
 
