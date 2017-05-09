@@ -74,6 +74,13 @@ namespace BehaviorEngine.Personality {
           continue;
         }
         score = currState.TransformedState;
+
+        if(score > 0.8) {
+          //Too high?
+          //BehaviorEngine.Debug.Logger.Log(currState.GetDebugLabel());
+          //BehaviorEngine.Debug.Logger.Log("Value: " + score);
+        }
+
         foreach(State t in state) {
           if(t.Equals(s)) {
             score += .25f;
@@ -84,6 +91,15 @@ namespace BehaviorEngine.Personality {
       score /= count;
       //BehaviorEngine.Debug.Logger.Log("Calculated score");
       score *= StabilityScore(state, host, interaction, targets, repo);
+
+      if(targets != null) {
+
+        foreach(IEntity e in targets) {
+
+        }
+
+      }
+
       return score;
     }
 

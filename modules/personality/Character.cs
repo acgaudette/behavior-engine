@@ -18,6 +18,14 @@ namespace BehaviorEngine.Personality {
 
     Brain oracle;
     CharacterState state;
+    Dictionary<string, Relationship> relationships;
+
+    //TODO: As mentioned inside Relationship.cs, may want to replace with a
+    //dictionary or some kind of data structure to make it more maintainable.
+    List<State> positiveTrustStates;
+    List<State> negativeTrustStates;
+    List<State> positiveAgreeStates;
+    List<State> negativeAgreeStates;
 
     // Action link
     EntityEvents.OnPollEventHandler TriggerAction = (
@@ -32,9 +40,49 @@ namespace BehaviorEngine.Personality {
     public Character(string name) : base() {
       this.name = name;
       oracle = new Brain();
-
+      relationships = new Dictionary<string, Relationship>();
       // Perform Action on Interaction trigger
       OnPoll += TriggerAction;
+
+      positiveAgreeStates = new List<State>();
+      negativeAgreeStates = new List<State>();
+      positiveTrustStates = new List<State>();
+      negativeTrustStates = new List<State>();
+    }
+
+    public void registerPositiveAgree(
+      List<State> relevantStates
+    ) {
+      positiveAgreeStates.AddRange(relevantStates);
+    }
+
+    public void registerNegativeAgree(
+      List<State> relevantStates
+    ) {
+      negativeAgreeStates.AddRange(relevantStates);
+    }
+
+    public void registerPositiveTrust(
+      List<State> relevantStates
+    ) {
+      positiveTrustStates.AddRange(relevantStates);
+    }
+
+    public void registerNegativeTrust(
+      List<State> relevantStates
+    ) {
+      negativeTrustStates.AddRange(relevantStates);
+    }
+
+    public void RegisterRelationship(Character c,
+      float agreeability,
+      float trustworthiness) {
+      Relationship r = new Relationship(c, agreeability, trustworthiness);
+      relationships[c.name] =  r;
+    }
+
+    public Relationship GetRelationship(Character c) {
+      return relationships[c.name];
     }
 
     public bool PerformAction(string id, ICollection<IEntity> targets) {
@@ -44,6 +92,52 @@ namespace BehaviorEngine.Personality {
 
       action.Perform(GetActionInfo(targets));
       return true;
+    }
+
+    private void SetupRelationship(
+      Character c,
+      InfluencedInteraction interaction
+    ) {
+      var states = interaction.strongStateInfluences;
+      int trust = 0;
+      int agree = 0;
+      foreach(string name in states.Keys) {
+        if(positiveAgreeStates.Find(x => x.name.Equals(name)) != null) {
+          agree++;
+        }
+        if(negativeAgreeStates.Find(x => x.name.Equals(name)) != null) {
+          agree--;
+        }
+        if(positiveTrustStates.Find(x => x.name.Equals(name)) != null) {
+          trust++;
+        }
+        if(negativeTrustStates.Find(x => x.name.Equals(name)) != null) {
+          trust--;
+        }
+      }
+      float trustworthiness = trust;
+      if(trustworthiness == 0) {
+        trustworthiness = .5f;
+      } else {
+        if(trustworthiness < 0) {
+          trustworthiness = 1.0f / (-(trustworthiness - 2));
+        } else {
+          trustworthiness = .5f + (.05f * trustworthiness);
+        }
+      }
+
+      float agreeability = agree;
+      if(agreeability == 0) {
+        agreeability = .5f;
+      } else {
+        if(agreeability < 0) {
+          agreeability = 1.0f / (-(agreeability - 2));
+        } else {
+          agreeability = .5f + (.05f * agreeability);
+        }
+      }
+
+      RegisterRelationship(c, agreeability, trustworthiness);
     }
 
     protected virtual CharacterActionInfo GetActionInfo(
@@ -72,11 +166,42 @@ namespace BehaviorEngine.Personality {
     protected override IList<Effect> Observation(
       Interaction interaction, IEntity host, ICollection<IEntity> targets
     ) {
+      InfluencedInteraction influencedInteraction
+        = interaction as InfluencedInteraction;
       // Black box
-      return oracle.ObservationEffects(
-        interaction as InfluencedInteraction,
+      var effects =  oracle.ObservationEffects(
+        influencedInteraction,
         host as Character, targets, BrainRepo
       );
+
+      Relationship withHost = GetRelationship(host as Character);
+      if(withHost == null) {
+        SetupRelationship(host as Character, influencedInteraction);
+      }
+
+      foreach(Effect e in effects) {
+        var effect = e as InfluencedEffect;
+        if(effect == null) {
+          continue;
+        }
+        var influences = effect.strongStateInfluences;
+        foreach(State s in influences.Values) {
+          var name = s.name;
+          if(positiveAgreeStates.Find(x => x.name.Equals(name)) != null) {
+            withHost.agreeability += .05f;
+          }
+          if(negativeAgreeStates.Find(x => x.name.Equals(name)) != null) {
+            withHost.agreeability -= .05f;
+          }
+          if(positiveTrustStates.Find(x => x.name.Equals(name)) != null) {
+            withHost.trustworthiness += .05f;
+          }
+          if(negativeTrustStates.Find(x => x.name.Equals(name)) != null) {
+            withHost.trustworthiness -= .05f;
+          }
+        }
+      }
+      return effects;
     }
 
     protected override float Score(
