@@ -15,6 +15,9 @@ public partial class Crewmember : Character, IDestroyable {
     object sender,
     Interaction interaction, IEntity host, IList<Effect> effects
   ) => {
+    // Don't always render
+    if (Random.Range(0, 1f) > .5f) return;
+
     string data = "";
 
     foreach (Effect effect in effects) {
@@ -37,13 +40,19 @@ public partial class Crewmember : Character, IDestroyable {
         string indicator = current < .2f ?
           "LOW" : current > .8f ? "HIGH" : "NORMAL";
 
+        // Randomly fail
+        if (Random.Range(0, 1f) > .75f)
+          indicator = "UNCERTAIN";
+        string percentString = percent.ToString("F2") + "%";
+        if (Random.Range(0, 1f) > .85f)
+          percentString = "??.??%";
+
         // Error
         percent += Random.Range(-BIOMETRICS_ERROR, BIOMETRICS_ERROR);
 
         data += "\n_" + state.name + " ";
         data += (percent >= 0 ? "+" : "")
-          + percent.ToString("F2") + "%"
-          + " +/- " + BIOMETRICS_ERROR + "%"
+          + percentString + " +/- " + BIOMETRICS_ERROR + "%"
           + " STATUS=" + indicator;
       }
     }
