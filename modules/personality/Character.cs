@@ -82,7 +82,11 @@ namespace BehaviorEngine.Personality {
     }
 
     public Relationship GetRelationship(Character c) {
-      return relationships[c.name];
+      if(relationships.ContainsKey(c.name)) {
+        return relationships[c.name];
+      } else {
+        return null;
+      }
     }
 
     public bool PerformAction(string id, ICollection<IEntity> targets) {
