@@ -24,15 +24,15 @@ public class LogEntry : ICharacterAction {
   Phrase[] phrases;
   string[] analyses;
 
-  public LogEntry(string id, Phrase[] phrases) {
+  public LogEntry(string id, Phrase[] phrases, string[] analyses) {
     ID = id;
     this.phrases = phrases;
-    // analyses
+    this.analyses = analyses;
   }
 
   public virtual void Perform(CharacterActionInfo info) {
     int i = Random.Range(0, phrases.Length);
-    //int j = Random.Range(0, analyses.Length);
+    int j = Random.Range(0, analyses.Length);
 
     Crewmember self = info.character as Crewmember, target = null;
 
@@ -49,8 +49,7 @@ public class LogEntry : ICharacterAction {
       self.name + " " + message
         + (target == null ? "": " " + target.name),
       // Analysis
-      "?"
-      //analyses[j]
+      analyses[j]
     );
   }
 }

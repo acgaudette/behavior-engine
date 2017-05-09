@@ -29,8 +29,6 @@ public class Mafia : MonoBehaviour {
 
   public const string DATAPATH
     = "./Assets/behavior-engine/examples/unity3d/mafia/data/";
-  const string FILENAME
-    = "actions.txt";
 
   void Awake() {
     // Initialize environment
@@ -55,34 +53,9 @@ public class Mafia : MonoBehaviour {
 
     /* Actions */
 
-    ConsoleReader.Node root;
-    ConsoleReader.LoadFile(
-      DATAPATH + FILENAME, out root
-    );
-
-    //Debug.Log(root);
-
-    foreach (ConsoleReader.Node action in root.children) {
-      if (action.children.Length == 0) {
-        repo.RegisterAction(
-          new LogEntry(
-            action.data,
-            new LogEntry.Phrase[] { new LogEntry.Phrase(action.data) }
-          )
-        );
-      }
-
-      else {
-        LogEntry.Phrase[] phrases = new LogEntry.Phrase[
-          action.children.Length
-        ];
-
-        for (int i = 0; i < action.children.Length; ++i) {
-          phrases[i] = new LogEntry.Phrase(action.children[i].data);
-        }
-
-        repo.RegisterAction(new LogEntry(action.data, phrases));
-      }
+    if (!LoadActions("phrases.txt", "analyses.txt", repo)) {
+      Debug.LogError("Mafia: Invalid Action data");
+      return;
     }
 
     //List<string> actionIDs = new List<string>(repo.GetActionIDs());
@@ -306,6 +279,47 @@ public class Mafia : MonoBehaviour {
     ComponentManager hook = GetComponent<ComponentManager>();
     hook.Hook("Universe.root", Universe.root);
     hook.Hook<BrainRepoComponent>("brain-repo", repo);
+  }
+
+  // Load phrases/analyses files into repository Actions
+  bool LoadActions(
+    string phrasesFilename, string analysesFilename, BrainRepository repo
+  ) {
+    ConsoleReader.Node actionPhrases, actionAnalyses;
+    bool valid = true;
+
+    valid &= ConsoleReader.LoadFile(
+      DATAPATH + phrasesFilename, out actionPhrases
+    );
+    valid &= ConsoleReader.LoadFile(
+      DATAPATH + analysesFilename, out actionAnalyses
+    );
+    valid &= actionPhrases.children.Length == actionAnalyses.children.Length;
+
+    if (!valid) return false;
+
+    for (int i = 0; i < actionPhrases.children.Length; ++i) {
+      ConsoleReader.Node action = actionPhrases.children[i];
+      ConsoleReader.Node analysis = actionAnalyses.children[i];
+      int length = action.children.Length;
+
+      // Actions must have child nodes
+      if (length > 0) {
+        LogEntry.Phrase[] phrases = new LogEntry.Phrase[length];
+        string[] analyses = new string[length];
+
+        for (int j = 0; j < length; ++j) {
+          phrases[j] = new LogEntry.Phrase(action.children[j].data);
+          analyses[j] = analysis.children[j].data;
+        }
+
+        repo.RegisterAction(
+          new LogEntry(action.data, phrases, analyses)
+        );
+      }
+    }
+
+    return true;
   }
 
   IEnumerable<Trait> TraitLinksFromState(State state, BrainRepository repo) {
