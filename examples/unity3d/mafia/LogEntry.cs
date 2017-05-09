@@ -19,19 +19,25 @@ public class LogEntry : ICharacterAction {
       this.message = message;
       this.finisher = finisher;
     }
+
+    public string Render(string name, string pronoun, string target) {
+      string m = message.Replace("%p", pronoun); // Fill in pronoun
+      target = string.IsNullOrEmpty(target) ? "" : " " + target;
+      return name + " " + m + target + " " + finisher;
+    }
   }
 
-  Phrase[] phrases;
-  string[] analyses;
+  Phrase[] observations;
+  Phrase[] analyses;
 
-  public LogEntry(string id, Phrase[] phrases, string[] analyses) {
+  public LogEntry(string id, Phrase[] observations, Phrase[] analyses) {
     ID = id;
-    this.phrases = phrases;
+    this.observations = observations;
     this.analyses = analyses;
   }
 
   public virtual void Perform(CharacterActionInfo info) {
-    int i = Random.Range(0, phrases.Length);
+    int i = Random.Range(0, observations.Length);
     int j = Random.Range(0, analyses.Length);
 
     Crewmember self = info.character as Crewmember, target = null;
@@ -41,16 +47,11 @@ public class LogEntry : ICharacterAction {
       break;
     }
 
-    // Fill in pronoun
-    string message = phrases[i].message.Replace("%p", self.pronoun);
+    string targetName = target == null ? "" : target.name;
 
     Render.Log(
-      // Observation
-      self.name + " " + message
-        + (target == null ? "" : " " + target.name) + phrases[i].finisher,
-      // Analysis
-      self.name + " " + analyses[j]
-        + (target == null ? "" : " " + target.name)
+      observations[i].Render(self.name, self.pronoun, targetName),
+      analyses[j].Render(self.name, self.pronoun, targetName)
     );
   }
 }
