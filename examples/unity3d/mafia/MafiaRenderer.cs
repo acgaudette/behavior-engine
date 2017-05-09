@@ -9,6 +9,8 @@ using BehaviorEngine.Personality;
 [System.Serializable]
 public class MafiaRenderer {
 
+  const string FILENAME = "log.txt";
+
   public float sleepTime = 0;
 
   int step;
@@ -33,7 +35,7 @@ public class MafiaRenderer {
 
   public bool RenderKill(Crewmember victim, int cycle) {
     Step(0,
-      "[ SHIP CYCLE " + cycle + " ]", log:false
+      "[ SHIP CYCLE " + cycle + " ]", log: false
     );
 
     if (Sleep(0)) return false;
@@ -124,6 +126,12 @@ public class MafiaRenderer {
         "Everyone is dead--only " + last.name
         + ", the killer, remains."
       );
+    }
+
+    Step(1, "[ END TRANSCRIPT ]", log: false);
+    if (step == 2) {
+      Render.WriteToFile(Mafia.DATAPATH + FILENAME);
+      step++;
     }
   }
 

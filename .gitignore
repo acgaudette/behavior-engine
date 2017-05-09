@@ -2,3 +2,5 @@
 *.swo
 *.meta
 *.DS_Store
+
+examples/unity3d/mafia/data/log.txt
