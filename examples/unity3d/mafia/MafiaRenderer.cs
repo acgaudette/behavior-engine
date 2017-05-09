@@ -38,7 +38,7 @@ public class MafiaRenderer {
 
     foreach (IEntity entity in entities) {
       Crewmember c = entity as Crewmember;
-      register += "\n" + c.name + "...{" + c.role + "}";
+      register += "\n" + c.name + ", " + c.firstName + " ... {" + c.role + "}";
     }
 
     Render.Print(register);
