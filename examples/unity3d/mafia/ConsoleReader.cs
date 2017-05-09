@@ -130,11 +130,15 @@ public class ConsoleReader {
     if (line == null)
       return -1;
 
+    if (line.Length < TAB_STRING.Length)
+      return 0;
+
     int indent = 0;
 
     for (
       int i = 0;
-      line.Substring(i, TAB_STRING.Length).Equals(TAB_STRING);
+      line.Substring(i, TAB_STRING.Length).Equals(TAB_STRING)
+        && i + TAB_STRING.Length <= line.Length;
       i += TAB_STRING.Length
     ) indent++;
 
@@ -144,11 +148,15 @@ public class ConsoleReader {
   static string Clean(string line) {
     if (line == null) return null;
 
+    if (line.Length < TAB_STRING.Length)
+      return line;
+
     while (line.Substring(0, TAB_STRING.Length).Equals(TAB_STRING)) {
       line = line.Substring(
         TAB_STRING.Length, line.Length - TAB_STRING.Length
       );
     }
+
     return line;
   }
 }
