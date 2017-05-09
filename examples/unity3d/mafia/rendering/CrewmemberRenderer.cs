@@ -29,11 +29,13 @@ public partial class Crewmember : Character, IDestroyable {
 
         float percent = 100;
         float offset = (mod as FloatModifier).offset;
+        float current = instance.TransformedState;
 
-        if (Mathf.Abs(offset) < instance.TransformedState) {
-          percent *= (mod as FloatModifier).offset
-            / instance.TransformedState;
-        }
+        if (Mathf.Abs(offset) < instance.TransformedState)
+          percent *= offset / current;
+
+        string indicator = current < .2f ?
+          "LOW" : current > .8f ? "HIGH" : "NORMAL";
 
         // Error
         percent += Random.Range(-BIOMETRICS_ERROR, BIOMETRICS_ERROR);
@@ -41,7 +43,8 @@ public partial class Crewmember : Character, IDestroyable {
         data += "\n_" + state.name + " ";
         data += (percent >= 0 ? "+" : "")
           + percent.ToString("F2") + "%"
-          + " +/- " + BIOMETRICS_ERROR + "%";
+          + " +/- " + BIOMETRICS_ERROR + "%"
+          + " STATUS=" + indicator;
       }
     }
 
