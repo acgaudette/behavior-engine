@@ -13,7 +13,7 @@ public class Crewmember : Character, IDestroyable {
   public string pronoun;
 
   public string Title {
-    get { return firstName + " " + name + " the " + role; }
+    get { return firstName + " " + name + " (" + role + ")"; }
   }
 
   public Crewmember(
