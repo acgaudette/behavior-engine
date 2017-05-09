@@ -3,7 +3,7 @@
 
 using BehaviorEngine.Personality;
 
-public class Crewmember : Character, IDestroyable {
+public partial class Crewmember : Character, IDestroyable {
 
   public const string M = "his";
   public const string F = "her";
@@ -22,6 +22,8 @@ public class Crewmember : Character, IDestroyable {
     this.firstName = firstName;
     this.role = role;
     this.pronoun = pronoun;
+
+    HookRenderer();
   }
 
   public Crewmember ChooseVote() {
