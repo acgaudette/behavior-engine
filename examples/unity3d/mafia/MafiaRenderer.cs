@@ -9,8 +9,6 @@ using BehaviorEngine.Personality;
 [System.Serializable]
 public class MafiaRenderer {
 
-  const string FILENAME = "log.txt";
-
   public float sleepTime = 0;
 
   int step;
@@ -30,6 +28,12 @@ public class MafiaRenderer {
   }
 
   public void RenderStart() {
+    ConsoleReader.Node root;
+    ConsoleReader.LoadFile(Mafia.DATAPATH + "foreword.txt", out root);
+
+    foreach (ConsoleReader.Node line in root.children)
+      if (line.data != "") Render.Print(line.data);
+
     Render.Print("[ BEGIN TRANSCRIPT ]");
   }
 
@@ -130,7 +134,7 @@ public class MafiaRenderer {
 
     Step(1, "[ END TRANSCRIPT ]", log: false);
     if (step == 2) {
-      Render.WriteToFile(Mafia.DATAPATH + FILENAME);
+      Render.WriteToFile(Mafia.DATAPATH + "log.txt");
       step++;
     }
   }
