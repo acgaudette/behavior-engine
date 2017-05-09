@@ -11,6 +11,7 @@ public class ConsoleReader {
 
   public const string TAB_STRING = "  ";
 
+  // Generic hierarchical string data container (immutable)
   public struct Node : IEnumerable<Node> {
 
     public const string NULL_DATA = "null";
@@ -18,6 +19,7 @@ public class ConsoleReader {
     public readonly string data;
     public readonly Node[] children;
 
+    // Count self plus all children (recursive)
     public int Count {
       get {
         int count = 1;
@@ -32,6 +34,7 @@ public class ConsoleReader {
       this.children = children == null ? new Node[0] : children;
     }
 
+    // Convert children array to array of strings (prunes branches)
     public string[] ChildrenToString() {
       string[] strings = new string[children.Length];
       for (int i = 0; i < children.Length; ++i)
@@ -64,6 +67,7 @@ public class ConsoleReader {
     }
   }
 
+  // Load properly formatted text file into root Node
   public static bool LoadFile(string path, out Node root) {
     if (!File.Exists(@path)) {
       Debug.LogError(
@@ -85,6 +89,7 @@ public class ConsoleReader {
         string line, lastLine = "root";
         int indent = -1, lastIndent;
 
+        // Read data
         do {
           line = reader.ReadLine();
 
@@ -93,11 +98,13 @@ public class ConsoleReader {
 
           line = Clean(line);
 
+          // New sub-Node
           if (indent > lastIndent) {
             data.Push(lastLine);
             lines.Push(new List<Node>());
           }
 
+          // Clean up sub-Nodes
           else if (indent < lastIndent) {
             lines.Peek().Add(new Node(lastLine));
 
@@ -147,6 +154,7 @@ public class ConsoleReader {
     return true;
   }
 
+  // Get the indent level of a string
   static int GetIndent(string line) {
     if (line == null)
       return -1;
@@ -166,6 +174,7 @@ public class ConsoleReader {
     return indent;
   }
 
+  // Clean a string of indentation
   static string Clean(string line) {
     if (line == null) return null;
 
