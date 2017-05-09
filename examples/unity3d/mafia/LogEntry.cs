@@ -47,9 +47,10 @@ public class LogEntry : ICharacterAction {
     Render.Log(
       // Observation
       self.name + " " + message
-        + (target == null ? "": " " + target.name),
+        + (target == null ? "" : " " + target.name) + phrases[i].finisher,
       // Analysis
-      analyses[j]
+      self.name + " " + analyses[j]
+        + (target == null ? "" : " " + target.name)
     );
   }
 }

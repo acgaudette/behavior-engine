@@ -309,7 +309,10 @@ public class Mafia : MonoBehaviour {
         string[] analyses = new string[length];
 
         for (int j = 0; j < length; ++j) {
-          phrases[j] = new LogEntry.Phrase(action.children[j].data);
+          string finisher = action.children[j].children.Length > 0 ?
+            action.children[j].children[0].data : "";
+
+          phrases[j] = new LogEntry.Phrase(action.children[j].data, finisher);
           analyses[j] = analysis.children[j].data;
         }
 
