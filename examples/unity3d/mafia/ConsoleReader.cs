@@ -66,11 +66,10 @@ public class ConsoleReader {
       using (StreamReader reader = File.OpenText(@path)) {
         var data = new Stack<string>();
 
-        string line = "root", lastLine;
+        string line, lastLine = "root";
         int indent = -1, lastIndent;
 
         do {
-          lastLine = line;
           line = reader.ReadLine();
 
           lastIndent = indent;
@@ -91,6 +90,8 @@ public class ConsoleReader {
           }
 
           else lines.Peek().Add(new Node(lastLine));
+
+          lastLine = line;
         }
 
         while (lastLine != null);
