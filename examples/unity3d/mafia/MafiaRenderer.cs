@@ -31,7 +31,7 @@ public class MafiaRenderer {
     ConsoleReader.Node root;
     ConsoleReader.LoadFile(Mafia.DATAPATH + "foreword.txt", out root);
 
-    foreach (ConsoleReader.Node line in root.children)
+    foreach (ConsoleReader.Node line in root)
       if (line.data != "") Render.Print(line.data);
 
     string register = "CREW REGISTER";
