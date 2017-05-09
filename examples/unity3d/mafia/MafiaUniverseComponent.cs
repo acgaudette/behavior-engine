@@ -1,6 +1,8 @@
 // MafiaUniverseComponent.cs
 // Created by Aaron C Gaudette on 01.05.17
 
+using System.Collections.Generic;
+
 using UnityEngine;
 using BehaviorEngine;
 
@@ -68,7 +70,7 @@ public class MafiaUniverseComponent : UniverseComponent {
         break;
 
       case Stage.LYNCH:
-        victim = SelectRandom();
+        victim = SelectByVote();
         break;
 
       case Stage.KILL:
@@ -148,6 +150,27 @@ public class MafiaUniverseComponent : UniverseComponent {
     } while (target == avoid as Crewmember);
 
     return target as Crewmember;
+  }
+
+  Crewmember SelectByVote() {
+    Dictionary<Crewmember, int> votes = new Dictionary<Crewmember, int>();
+    foreach(IEntity e in reference.entities) {
+      var member = e as Crewmember;
+      var v = member.ChooseVote();
+      if(!votes.ContainsKey(v)) {
+        votes[v] = 1;
+      } else {
+        votes[v]++;
+      }
+    }
+    Crewmember selected = null;
+    int total = -1;
+    foreach(var pair in votes) {
+      if(pair.Value > total) {
+        selected = pair.Key;
+      }
+    }
+    return selected;
   }
 
   void Kill(IDestroyable d) {

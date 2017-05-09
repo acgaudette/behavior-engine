@@ -18,7 +18,7 @@ namespace BehaviorEngine.Personality {
 
     Brain oracle;
     CharacterState state;
-    Dictionary<string, Relationship> relationships;
+    public Dictionary<string, Relationship> relationships;
 
     //TODO: As mentioned inside Relationship.cs, may want to replace with a
     //dictionary or some kind of data structure to make it more maintainable.
@@ -181,6 +181,7 @@ namespace BehaviorEngine.Personality {
       Relationship withHost = GetRelationship(host as Character);
       if(withHost == null) {
         SetupRelationship(host as Character, influencedInteraction);
+        withHost = GetRelationship(host as Character);
       }
 
       foreach(Effect e in effects) {

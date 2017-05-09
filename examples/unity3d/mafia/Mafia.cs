@@ -91,38 +91,87 @@ public class Mafia : MonoBehaviour {
 
     Trait.RegisterFactors(repo, Distributions.Normal());
 
+    List<State> states = new List<State>();
+
     // The higher the anger, the rasher the actions
-    repo.RegisterState(
+    State anger = 
       new State(
         "anger", () => Random.Range(0, .25f),
         Transformations.EaseSquared()
-      )
-    );
+      );
+    repo.RegisterState(anger);
+    states.Add(anger);
 
     // Need energy to perform certain actions
-    repo.RegisterState(
-      new State(
-        "energy", () => 1,
-        Transformations.Linear()
-      )
+    State energy = new State(
+      "energy", () => 1,
+      Transformations.Linear()
     );
+    repo.RegisterState(energy);
+    states.Add(energy);
 
     // The higher the confusion, the more likely energy will needlessly go down
-    repo.RegisterState(
-      new State(
-        "confusion", () => Random.Range(0, .25f),
-        Transformations.InvertedSquared()
-      )
+    State confusion
+      = new State(
+      "confusion", () => Random.Range(0, .25f),
+      Transformations.InvertedSquared()
     );
+    repo.RegisterState(confusion);
+    states.Add(confusion);
 
     // The higher the stress, the more likely people will be suspicious of
     // each other
-    repo.RegisterState(
-      new State(
+    State stress
+    = new State(
         "stress", () => Random.Range(0, .25f),
         Transformations.InvertedSquared()
-      )
-    );
+      );
+    repo.RegisterState(stress);
+    states.Add(stress);
+
+    /**
+     * Randomly assigning pos/neg agree/trust for the purposes of
+     * the relationship graph
+     * Ideally, this should not be randomly assigned, perhaps chosen when
+     * creating the characters
+     */
+    foreach(Crewmember c in characters) {
+      List<State> negAgree = new List<State>();
+      List<State> posAgree = new List<State>();
+      List<State> negTrust = new List<State>();
+      List<State> posTrust = new List<State>();
+      foreach(State s in states) {
+        if(Random.Range(0f, 1f) < .3f) {
+          negAgree.Add(s);
+        }
+      }
+
+      foreach(State s in states) {
+        if(Random.Range(0f, 1f) < .3f) {
+          if(!negAgree.Contains(s)) {
+            posAgree.Add(s);
+          }
+        }
+      }
+
+      foreach(State s in states) {
+        if(Random.Range(0f, 1f) < .3f) {
+          negTrust.Add(s);
+        }
+      }
+
+      foreach(State s in states) {
+        if(Random.Range(0f, 1f) < .3f) {
+          if(!negTrust.Contains(s)) {
+            posTrust.Add(s);
+          }
+        }
+      }
+      c.registerNegativeAgree(negAgree);
+      c.registerPositiveAgree(posAgree);
+      c.registerNegativeTrust(negTrust);
+      c.registerPositiveTrust(posTrust);
+    }
 
     /* Effects */
 
