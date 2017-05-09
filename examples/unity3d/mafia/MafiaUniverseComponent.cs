@@ -33,7 +33,6 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   // State machine
   protected override void Update() {
-    //TODO: two-person case
     if (
       stage != Stage.END
       && (reference.entities.Count == 1 || (killer as IDestroyable).Destroy)
@@ -90,7 +89,7 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   // Kill
   bool UpdateKillStage() {
-    if (mafiaRenderer.RenderKill(victim, cycle)) {
+    if (mafiaRenderer.RenderKill(victim, cycle, reference.entities.Count == 2 ? killer : null)) {
       Kill(victim);
       return true;
     }
@@ -122,7 +121,7 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   // End
   void UpdateEndStage() {
-    mafiaRenderer.RenderEnd(killer, reference.entities);
+    mafiaRenderer.RenderEnd(killer, SelectRandom(), reference.entities);
   }
 
   Crewmember SelectRandom(IEntity avoid = null) {

@@ -59,7 +59,9 @@ public class MafiaRenderer {
     Render.Print("[ BEGIN TRANSCRIPT ]");
   }
 
-  public bool RenderKill(Crewmember victim, int cycle) {
+  public bool RenderKill(
+    Crewmember victim, int cycle, Crewmember lastKiller
+  ) {
     Step(0,
       "[ SHIP CYCLE " + cycle + " ]", log: false
     );
@@ -68,7 +70,10 @@ public class MafiaRenderer {
 
     if (step == 1) Render.IncrementCycle();
 
-    Step(1, RandomMessage("enter"));
+    Step(1,
+      (lastKiller != null ? lastKiller.name : "The crew")
+      + " " + RandomMessage("enter")
+    );
 
     if (Sleep(1)) return false;
 
@@ -128,7 +133,11 @@ public class MafiaRenderer {
   }
 
   // End
-  public void RenderEnd(Crewmember killer, ICollection<IEntity> entities) {
+  public void RenderEnd(
+    Crewmember killer, Crewmember last, ICollection<IEntity> entities
+  ) {
+    Step(0, last.name + " reaches for the camera and breaks the connection");
+
     if ((killer as IDestroyable).Destroy) {
       bool single = entities.Count == 1;
       string s = "The killer, " + killer.name + ", is dead--only ";
@@ -148,24 +157,19 @@ public class MafiaRenderer {
 
       s += " " + (single ? "remains" : "remain") + ".";
 
-      Step(0, s);
+      Step(1, s);
     }
 
     else {
-      Crewmember last = null;
-      foreach (IEntity e in entities) {
-        last = e as Crewmember;
-        break;
-      }
-
-      Step(0,
+      Step(1,
         "Everyone is dead--only " + last.name
         + ", the killer, remains."
       );
     }
 
-    Step(1, "[ END TRANSCRIPT ]", log: false);
-    if (step == 2) {
+    Step(2, "[ END TRANSCRIPT ]", log: false);
+
+    if (step == 3) {
       Render.WriteToFile(Mafia.DATAPATH + "log.txt");
       step++;
     }
