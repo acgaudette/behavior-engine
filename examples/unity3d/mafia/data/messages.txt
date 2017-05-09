@@ -6,3 +6,7 @@ enter
 evidence
   Incriminating evidence is located
   Some kind of weapon is found
+missing
+  is missing
+  is not present
+  is absent
