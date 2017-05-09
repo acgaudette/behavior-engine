@@ -8,14 +8,18 @@ public class Crewmember : Character, IDestroyable {
   public const string M = "his";
   public const string F = "her";
 
+  public string firstName;
   public string role;
   public string pronoun;
 
   public string Title {
-    get { return name + " the " + role; }
+    get { return firstName + " " + name + " the " + role; }
   }
 
-  public Crewmember(string name, string role, string pronoun) : base(name) {
+  public Crewmember(
+    string firstName, string lastName, string role, string pronoun
+  ) : base(lastName) {
+    this.firstName = firstName;
     this.role = role;
     this.pronoun = pronoun;
   }

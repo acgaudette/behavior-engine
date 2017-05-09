@@ -46,8 +46,8 @@ public class LogEntry : ICharacterAction {
 
     Render.Log(
       // Observation
-      self.Title + " " + message
-        + (target == null ? "": " " + target.Title),
+      self.name + " " + message
+        + (target == null ? "": " " + target.name),
       // Analysis
       "?"
       //analyses[j]
