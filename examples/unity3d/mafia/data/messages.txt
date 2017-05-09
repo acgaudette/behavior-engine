@@ -1,7 +1,8 @@
 enter
-  The crew files into the conference room.
-  The crew walks into the room.
-  The crew enters the conference room.
+  files into the conference room.
+  walks into the room.
+  enters the conference room.
+  rushes through the conference room door.
 evidence
   Incriminating evidence is located
   Some kind of weapon is found
