@@ -53,7 +53,7 @@ public class Mafia : MonoBehaviour {
 
     /* Actions */
 
-    if (!LoadActions("phrases.txt", "analyses.txt", repo)) {
+    if (!LoadActions("observations.txt", "analyses.txt", repo)) {
       Debug.LogError("Mafia: Invalid Action data");
       return;
     }
@@ -281,43 +281,58 @@ public class Mafia : MonoBehaviour {
     hook.Hook<BrainRepoComponent>("brain-repo", repo);
   }
 
-  // Load phrases/analyses files into repository Actions
+  // Load observations/analyses files into repository Actions
   bool LoadActions(
-    string phrasesFilename, string analysesFilename, BrainRepository repo
+    string observationsFilename, string analysesFilename,
+    BrainRepository repo
   ) {
-    ConsoleReader.Node actionPhrases, actionAnalyses;
+    ConsoleReader.Node actionObservations, actionAnalyses;
     bool valid = true;
 
     valid &= ConsoleReader.LoadFile(
-      DATAPATH + phrasesFilename, out actionPhrases
+      DATAPATH + observationsFilename, out actionObservations
     );
     valid &= ConsoleReader.LoadFile(
       DATAPATH + analysesFilename, out actionAnalyses
     );
-    valid &= actionPhrases.children.Length == actionAnalyses.children.Length;
+    valid &= actionObservations.children.Length == actionAnalyses.children.Length;
 
     if (!valid) return false;
 
-    for (int i = 0; i < actionPhrases.children.Length; ++i) {
-      ConsoleReader.Node action = actionPhrases.children[i];
+    for (int i = 0; i < actionObservations.children.Length; ++i) {
+      ConsoleReader.Node observation = actionObservations.children[i];
       ConsoleReader.Node analysis = actionAnalyses.children[i];
-      int length = action.children.Length;
+
+      int observationCount = observation.children.Length;
+      int analysisCount = analysis.children.Length;
 
       // Actions must have child nodes
-      if (length > 0) {
-        LogEntry.Phrase[] phrases = new LogEntry.Phrase[length];
-        string[] analyses = new string[length];
+      if (observationCount > 0 && analysisCount > 0) {
+        LogEntry.Phrase[] observations
+          = new LogEntry.Phrase[observationCount];
+        LogEntry.Phrase[] analyses
+          = new LogEntry.Phrase[analysisCount];
 
-        for (int j = 0; j < length; ++j) {
-          string finisher = action.children[j].children.Length > 0 ?
-            action.children[j].children[0].data : "";
+        for (int j = 0; j < observationCount; ++j) {
+          string finisher = observation.children[j].children.Length > 0 ?
+            observation.children[j].children[0].data : "";
 
-          phrases[j] = new LogEntry.Phrase(action.children[j].data, finisher);
-          analyses[j] = analysis.children[j].data;
+          observations[j] = new LogEntry.Phrase(
+            observation.children[j].data, finisher
+          );
+        }
+
+        for (int k = 0; k < analysisCount; ++k) {
+          string finisher = analysis.children[k].children.Length > 0 ?
+            analysis.children[k].children[0].data : "";
+
+          analyses[k] = new LogEntry.Phrase(
+            analysis.children[k].data, finisher
+          );
         }
 
         repo.RegisterAction(
-          new LogEntry(action.data, phrases, analyses)
+          new LogEntry(observation.data, observations, analyses)
         );
       }
     }
