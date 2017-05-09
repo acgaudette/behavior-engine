@@ -1,4 +1,4 @@
-accuse
+highangerhighstress_onother
   points %p finger at
 investigate
   watches
@@ -21,7 +21,9 @@ sleep
   leans back
   stands impassively
   closes %p eyes and covers %p ears
-attack
+highenergyhighanger_onother
   yells at
   shouts at
   gestures angrily at
+  freaks out at
+    for no apparent reason

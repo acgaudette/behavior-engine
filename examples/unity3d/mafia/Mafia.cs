@@ -172,7 +172,7 @@ public class Mafia : MonoBehaviour {
     /* Interactions */
 
     // Accuse
-    var accuse = 
+    var highangerhighstress_onother = 
       new InfluencedInteraction(
         1,
         LS(
@@ -183,9 +183,9 @@ public class Mafia : MonoBehaviour {
           repo.GetState("anger"),
           repo.GetState("stress")
         ),
-        repo.GetAction("accuse")
+        repo.GetAction("highangerhighstress_onother")
       );
-    accuse.SetDebugLabel("accuse");
+    highangerhighstress_onother.SetDebugLabel("highangerhighstress_onother");
 
     // Investigate
     var investigate =
@@ -210,7 +210,8 @@ public class Mafia : MonoBehaviour {
           repo.GetTrait(Factor.NEUROTICISM)
         ),
         LS(
-          repo.GetState("stress")
+          repo.GetState("stress"),
+          repo.GetState("confusion")
         ),
         repo.GetAction("despair")
       );
@@ -226,7 +227,6 @@ public class Mafia : MonoBehaviour {
         ),
         LS(
           repo.GetState("energy"),
-          repo.GetState("confusion"),
           repo.GetState("stress")
         ),
         repo.GetAction("hallucinate")
@@ -248,7 +248,7 @@ public class Mafia : MonoBehaviour {
     sleep.SetDebugLabel("sleep");
 
     // Attack
-    var attack =
+    var highenergyhighanger_onother =
       new InfluencedInteraction(
         1,
         LS(
@@ -256,18 +256,19 @@ public class Mafia : MonoBehaviour {
           repo.GetTrait(Factor.NEUROTICISM)
         ),
         LS(
-          repo.GetState("energy")
+          repo.GetState("energy"),
+          repo.GetState("anger")
         ),
-        repo.GetAction("attack")
+        repo.GetAction("highenergyhighanger_onother")
       );
-    attack.SetDebugLabel("attack");
+    highenergyhighanger_onother.SetDebugLabel("highenergyhighanger_onother");
 
-    repo.RegisterInteraction(accuse);
+    repo.RegisterInteraction(highangerhighstress_onother);
     repo.RegisterInteraction(investigate);
     repo.RegisterInteraction(despair);
     repo.RegisterInteraction(hallucinate);
     repo.RegisterInteraction(sleep);
-    repo.RegisterInteraction(attack);
+    repo.RegisterInteraction(highenergyhighanger_onother);
 
     // Attribution
     foreach (Character character in characters) {

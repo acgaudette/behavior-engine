@@ -1,4 +1,4 @@
-accuse
+highangerhighstress_onother
   is accusing
   is blaming
   is condemning
@@ -24,7 +24,7 @@ sleep
   is trying to rest
   is attempting to relax
   ...
-attack
+highenergyhighanger_onother
   is angry at
   is criticizing
   ...
