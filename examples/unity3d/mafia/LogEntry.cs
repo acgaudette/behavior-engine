@@ -21,6 +21,8 @@ public class LogEntry : ICharacterAction {
     }
 
     public string Render(string name, string pronoun, string target) {
+      if (message == "?" || message == "...") return message;
+
       string m = message.Replace("%p", pronoun); // Fill in pronoun
       target = string.IsNullOrEmpty(target) ? "" : " " + target;
       return name + " " + m + target + " " + finisher;
