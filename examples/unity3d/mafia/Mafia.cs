@@ -20,6 +20,8 @@ public static class MafiaExtensions {
 
 public class Mafia : MonoBehaviour {
 
+  public bool forceRandomResults = false;
+
   // Macro
   static List<T> LS<T>(params T[] p) {
     List<T> list = new List<T>();
@@ -30,22 +32,15 @@ public class Mafia : MonoBehaviour {
   public const string DATAPATH
     = "./Assets/behavior-engine/examples/unity3d/mafia/data/";
 
-  void Awake() {
+  void Awake() { Initialize(); }
+
+  void Initialize() {
     // Initialize environment
     Universe.root = new Universe();
     BrainRepository repo = new BrainRepository();
 
     // Characters
-    Crewmember[] characters = {
-      new Crewmember("Jurgen", "Burgstaller", "Engineer", Crewmember.M),
-      new Crewmember("Francis", "Bertrand", "First Mate", Crewmember.M),
-      new Crewmember("Eugene", "Parsons", "Swabbie", Crewmember.M),
-      new Crewmember("Peter", "Strickland", "Security", Crewmember.M),
-      new Crewmember("Yasmin", "Pahlavi", "Navigator", Crewmember.F),
-      new Crewmember("Leonie", "Cruz", "Pilot", Crewmember.F),
-      new Crewmember("Micaela", "Valenti", "Quartermaster", Crewmember.F),
-      new Crewmember("Nora", "Murphy", "Captain", Crewmember.F)
-    };
+    Crewmember[] characters = GetCharacters();
 
     // Link each character to the central repository
     foreach (Character character in characters)
@@ -279,6 +274,51 @@ public class Mafia : MonoBehaviour {
     ComponentManager hook = GetComponent<ComponentManager>();
     hook.Hook("Universe.root", Universe.root);
     hook.Hook<BrainRepoComponent>("brain-repo", repo);
+  }
+
+  struct CrewmemberData {
+
+    public readonly string firstName, lastName, role, pronoun;
+
+    public CrewmemberData(
+      string firstName, string lastName, string role, string pronoun
+    ) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.role = role;
+      this.pronoun = pronoun;
+    }
+  }
+
+  CrewmemberData[] crewmemberData = {
+    new CrewmemberData("Jurgen", "Burgstaller", "Engineer", Crewmember.M),
+    new CrewmemberData("Francis", "Bertrand", "First Mate", Crewmember.M),
+    new CrewmemberData("Eugene", "Parsons", "Swabbie", Crewmember.M),
+    new CrewmemberData("Peter", "Strickland", "Security", Crewmember.M),
+    new CrewmemberData("Yasmin", "Pahlavi", "Navigator", Crewmember.F),
+    new CrewmemberData("Leonie", "Cruz", "Pilot", Crewmember.F),
+    new CrewmemberData("Micaela", "Valenti", "Quartermaster", Crewmember.F),
+    new CrewmemberData("Nora", "Murphy", "Captain", Crewmember.F)
+  };
+
+  Crewmember[] GetCharacters() {
+    var crewmembers = new List<Crewmember>();
+
+    if (forceRandomResults) {
+      foreach (var data in crewmemberData) {
+        crewmembers.Add(
+          new RandomCrewmember(data.firstName, data.lastName, data.role, data.pronoun)
+        );
+      }
+    } else {
+      foreach (var data in crewmemberData) {
+        crewmembers.Add(
+          new Crewmember(data.firstName, data.lastName, data.role, data.pronoun)
+        );
+      }
+    }
+
+    return crewmembers.ToArray();
   }
 
   // Load observations/analyses files into repository Actions
