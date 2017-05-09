@@ -27,8 +27,8 @@ public class Mafia : MonoBehaviour {
     return list;
   }
 
-  const string DATAPATH
-    = "./Assets/behavior-engine/examples/unity3d/mafia";
+  public const string DATAPATH
+    = "./Assets/behavior-engine/examples/unity3d/mafia/data/";
   const string FILENAME
     = "actions.txt";
 
@@ -57,10 +57,10 @@ public class Mafia : MonoBehaviour {
 
     ConsoleReader.Node root;
     ConsoleReader.LoadFile(
-      DATAPATH + "/" + FILENAME, out root
+      DATAPATH + FILENAME, out root
     );
 
-    Debug.Log(root);
+    //Debug.Log(root);
 
     foreach (ConsoleReader.Node action in root.children) {
       if (action.children.Length == 0) {
@@ -146,7 +146,6 @@ public class Mafia : MonoBehaviour {
         }
       }
     }
-
 
     /* Interactions */
 
