@@ -50,60 +50,23 @@ namespace BehaviorEngine.Personality {
       negativeTrustStates = new List<State>();
     }
 
-    public void registerPositiveAgree(
-      List<State> relevantStates
-    ) {
+    public void registerPositiveAgree(List<State> relevantStates) {
       positiveAgreeStates.AddRange(relevantStates);
     }
 
-    public void registerNegativeAgree(
-      List<State> relevantStates
-    ) {
+    public void registerNegativeAgree(List<State> relevantStates) {
       negativeAgreeStates.AddRange(relevantStates);
     }
 
-    public void registerPositiveTrust(
-      List<State> relevantStates
-    ) {
+    public void registerPositiveTrust(List<State> relevantStates) {
       positiveTrustStates.AddRange(relevantStates);
     }
 
-    public void registerNegativeTrust(
-      List<State> relevantStates
-    ) {
+    public void registerNegativeTrust(List<State> relevantStates) {
       negativeTrustStates.AddRange(relevantStates);
     }
 
-    // Update an existing relationship
-    public void RegisterRelationship(
-      Character target, float agreeability, float trustworthiness
-    ) {
-      Relationship r = new Relationship(
-        target, agreeability, trustworthiness
-      );
-
-      relationships[target.name] =  r;
-
-      OnRegisterRelationshipEventHandler handler = OnRegisterRelationship;
-      if (handler != null)
-        handler(this, target, r);
-    }
-
-    // Access a relationship with another character, if it exists
-    public Relationship GetRelationship(Character character) {
-      if(relationships.ContainsKey(character.name))
-        return relationships[character.name];
-      return null;
-    }
-
-    public bool PerformAction(string id, ICollection<IEntity> targets) {
-      ICharacterAction action = BrainRepo.GetAction(id);
-      if (action == null)
-        return false;
-
-      action.Perform(GetActionInfo(targets));
-      return true;
-    }
+    /* Relationships */
 
     // Create first-time relationship
     private void SetupRelationship(
@@ -152,6 +115,28 @@ namespace BehaviorEngine.Personality {
       RegisterRelationship(c, agreeability, trustworthiness);
     }
 
+    // Update an existing relationship
+    public void RegisterRelationship(
+      Character target, float agreeability, float trustworthiness
+    ) {
+      Relationship r = new Relationship(
+        target, agreeability, trustworthiness
+      );
+
+      relationships[target.name] =  r;
+
+      OnRegisterRelationshipEventHandler handler = OnRegisterRelationship;
+      if (handler != null)
+        handler(this, target, r);
+    }
+
+    // Access a relationship with another character, if it exists
+    public Relationship GetRelationship(Character character) {
+      if(relationships.ContainsKey(character.name))
+        return relationships[character.name];
+      return null;
+    }
+
     public delegate void OnRegisterRelationshipEventHandler(
       object sender,
       Character target, Relationship relationship
@@ -159,11 +144,24 @@ namespace BehaviorEngine.Personality {
 
     public event OnRegisterRelationshipEventHandler OnRegisterRelationship;
 
+    /* Actions */
+
+    public bool PerformAction(string id, ICollection<IEntity> targets) {
+      ICharacterAction action = BrainRepo.GetAction(id);
+      if (action == null)
+        return false;
+
+      action.Perform(GetActionInfo(targets));
+      return true;
+    }
+
     protected virtual CharacterActionInfo GetActionInfo(
       ICollection<IEntity> targets
     ) {
       return new CharacterActionInfo(this, targets);
     }
+
+    /* Overrides */
 
     protected override void PrePoll() {
       // State evaluation
@@ -235,7 +233,8 @@ namespace BehaviorEngine.Personality {
       );
     }
 
-    // Debug
+    /* Debug */
+
     protected override void AssignDebugLabel(ref string label) {
       label = name;
     }
