@@ -68,8 +68,43 @@ public partial class Crewmember : Character, IDestroyable {
     //Render.LogBiometrics(sender as Crewmember, "");
   };
 
+  Character.OnAugmentRelationshipEventHandler RenderAugment = (
+    object sender,
+    Character target,
+    float agreeabilityOffset, float trustworthinessOffset,
+    Relationship relationship
+  ) => {
+    // Don't always render
+    if (Random.Range(0, 1f) > .5f) return;
+
+    string data = "";
+    Crewmember t = target as Crewmember;
+
+    data += "\nAGREEMENT with " + t.name + " "
+      + (agreeabilityOffset > 0 ? "INCREASED" : "DECREASED");
+
+    data += "\nTRUST of " + t.name + " "
+      + (trustworthinessOffset > 0 ? "INCREASED" : "DECREASED");
+
+    float agree = relationship.agreeability;
+    float trust = relationship.trustworthiness;
+
+    string agreeIndicator = agree < .25f ?
+      "DISAGREES" : agree > .75f ? "IN AGREEMENT"
+      : "AGREEMENT UNCERTAIN";
+    string trustIndicator = trust < .25f ?
+      "DISTRUSTS" : trust > .75f ? "TRUSTS"
+      : "TRUST UNCERTAIN";
+
+    data += "\n" + agreeIndicator + " and " + trustIndicator
+      + " " + t.name;
+
+    Render.LogBiometrics(sender as Crewmember, data);
+  };
+
   void HookRenderer() {
     OnReact += RenderReaction;
     OnObserve += RenderObservation;
+    OnAugmentRelationship += RenderAugment;
   }
 }
