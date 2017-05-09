@@ -25,7 +25,7 @@ public class MafiaUniverseComponent : UniverseComponent {
     ChangeStage(stage);
 
     // Render
-    mafiaRenderer.RenderStart();
+    mafiaRenderer.RenderStart(reference.entities);
   }
 
   // State machine

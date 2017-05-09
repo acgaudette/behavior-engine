@@ -27,13 +27,21 @@ public class MafiaRenderer {
     lastTime = t;
   }
 
-  public void RenderStart() {
+  public void RenderStart(ICollection<IEntity> entities) {
     ConsoleReader.Node root;
     ConsoleReader.LoadFile(Mafia.DATAPATH + "foreword.txt", out root);
 
     foreach (ConsoleReader.Node line in root.children)
       if (line.data != "") Render.Print(line.data);
 
+    string register = "CREW REGISTER";
+
+    foreach (IEntity entity in entities) {
+      Crewmember c = entity as Crewmember;
+      register += "\n" + c.name + "...{" + c.role + "}";
+    }
+
+    Render.Print(register);
     Render.Print("[ BEGIN TRANSCRIPT ]");
   }
 
