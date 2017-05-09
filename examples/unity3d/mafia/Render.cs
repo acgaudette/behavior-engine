@@ -20,19 +20,23 @@ public class Render {
       this.offset = offset;
     }
 
+    // Output timestamp string
     public override string ToString() {
       return "[" + Pad(cycle) + ":" + Pad(tick) + ":" + Pad(offset) + "]";
     }
 
+    // Pad with a single zero
     string Pad(int i) {
-      return i < 10 ? "0" + i : i.ToString();
+      return (i < 10 && i >= 0) ? "0" + i : i.ToString();
     }
   }
 
-  static List<string> log = new List<string>();
+  static List<string> log = new List<string>(); // Log store
 
+  // Static timestamp data
   static int cycle = 0, tick = 0, offset = 0;
 
+  // Log timestamped observation/analysis block
   public static void Log(
     string observation, string analysis
   ) {
@@ -44,6 +48,7 @@ public class Render {
     log.Add(Clean(entry));
   }
 
+  // Log a single line
   public static void Print(string message) {
     string entry = message + ENDL;
 
@@ -51,6 +56,7 @@ public class Render {
     log.Add(Clean(entry));
   }
 
+  // Output log to file
   public static bool WriteToFile(string path) {
     try {
       File.WriteAllLines(@path, log.ToArray());
@@ -66,12 +72,14 @@ public class Render {
     return true;
   }
 
+  // Increment static cycle variable
   public static void IncrementCycle() {
     cycle++;
     tick = 0;
     offset = 0;
   }
 
+  // Increment static timestamp
   static Timestamp GetTimestamp() {
     int seconds = Random.Range(3, 15);
 
@@ -84,6 +92,7 @@ public class Render {
     return new Timestamp(cycle, tick, offset);
   }
 
+  // Clean a string of tags
   static string Clean(string entry) {
     return Regex.Replace(entry, "<.*?>", "");
   }
