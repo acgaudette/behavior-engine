@@ -1,0 +1,30 @@
+accuse
+  is accusing
+  is blaming
+  is condemning
+  ...
+investigate
+  is trying to suss out
+    's motives
+  is investigating
+  ...
+despair
+  is despairing
+  is losing hope
+  is becoming depressed
+  is distressed
+  is feeling discouraged
+  is feeling sad
+  ...
+hallucinate
+  is hallucinating
+  is delirious
+  ...
+sleep
+  is trying to rest
+  is attempting to relax
+  ...
+attack
+  is angry at
+  is criticizing
+  ...
