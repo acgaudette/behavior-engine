@@ -340,6 +340,7 @@ public class Mafia : MonoBehaviour {
     return true;
   }
 
+  // Get the Traits associated with a given State
   IEnumerable<Trait> TraitLinksFromState(State state, BrainRepository repo) {
     if (state.name == "anger") {
       return LS(
