@@ -9,9 +9,11 @@ namespace BehaviorEngine.Personality {
     //TODO: Replace with two Dictionaries of lists, where key is the associated
     //value for relationship (agreeability, trust, etc.). One is for positive,
     //other for negative. Perhaps a custom data structure?
+
     public float agreeability;
     public List<State> positiveAgreeableStates;
     public List<State> negativeAgreeableStates;
+
     public float trustworthiness;
     public List<State> positiveTrustStates;
     public List<State> negativeTrustStates;
@@ -62,6 +64,10 @@ namespace BehaviorEngine.Personality {
       List<State> relevantStates
     ) {
       negativeTrustStates.AddRange(relevantStates);
+    }
+
+    public string RenderAxis() {
+      return "( " + trustworthiness + ", " + agreeability + " )";
     }
   }
 }
