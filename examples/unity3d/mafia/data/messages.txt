@@ -1,0 +1,7 @@
+enter
+  The crew files into the conference room.
+  The crew walks into the room.
+  The crew enters the conference room.
+evidence
+  Incriminating evidence is located
+  Some kind of weapon is found

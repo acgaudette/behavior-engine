@@ -14,9 +14,23 @@ public class MafiaRenderer {
   int step;
   float lastTime;
 
+  Dictionary<string, string[]> messageTable;
+
   public MafiaRenderer() {
     ResetStep();
     lastTime = 0;
+
+    ConsoleReader.Node messages;
+    if (!ConsoleReader.LoadFile(
+      Mafia.DATAPATH + "messages.txt", out messages
+    )) {
+      Debug.LogError("MafiaRenderer: Invalid message data");
+    }
+
+    messageTable = new Dictionary<string, string[]>();
+
+    foreach (var message in messages)
+      messageTable[message.data] = message.ChildrenToString();
   }
 
   public void ResetStep() {
@@ -54,7 +68,7 @@ public class MafiaRenderer {
 
     if (step == 1) Render.IncrementCycle();
 
-    Step(1, "The crew files into the conference room.");
+    Step(1, RandomMessage("enter"));
 
     if (Sleep(1)) return false;
 
@@ -67,9 +81,7 @@ public class MafiaRenderer {
   }
 
   // Fallout
-  public void RenderFallout() {
-    //Step(0, "The crew files into the conference room.");
-  }
+  public void RenderFallout() { }
 
   // Lynch
   public bool RenderLynch(
@@ -106,7 +118,7 @@ public class MafiaRenderer {
 
     Step(4,
       match ?
-        "Incriminating evidence is located"
+        RandomMessage("evidence")
         : "No evidence to incriminate " + victim.name + " is found.",
       "<color=" + color + ">" + victim.name + " "
       + (match ? "is" : "is NOT") + " the killer.</color>"
@@ -159,7 +171,7 @@ public class MafiaRenderer {
     }
   }
 
-  //
+  // Render a specific message at a step
   void Step(
     int s, string message, string analysis = "...", bool log = true
   ) {
@@ -174,7 +186,7 @@ public class MafiaRenderer {
     }
   }
 
-  //
+  // Pause rendering at a step
   bool Sleep(int s, float t = -1) {
     t = t < 0 ? sleepTime : t;
 
@@ -189,4 +201,11 @@ public class MafiaRenderer {
     return true;
   }
 
+  // Select a random message from a message key in the message table
+  string RandomMessage(string key) {
+    if (!messageTable.ContainsKey(key))
+      return null;
+
+    return messageTable[key][Random.Range(0, messageTable[key].Length)];
+  }
 }
