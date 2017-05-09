@@ -72,29 +72,39 @@ public class MafiaRenderer {
   }
 
   // Lynch
-  public bool RenderLynch(Crewmember victim, Crewmember killer) {
+  public bool RenderLynch(
+    Crewmember victim, Crewmember killer,
+    Dictionary<Crewmember, Crewmember> accusations
+  ) {
     Step(0,
       "The group appears to be arguing and gesturing wildly",
       "They are arguing over the likely killer"
     );
 
-    if (Sleep(0)) return false;
+    string a = "";
+    foreach (Crewmember member in accusations.Keys) {
+      a += "\n" + member.name + " points at " + accusations[member].name;
+    }
 
-    Step(1,
+    Step(1, a);
+
+    if (Sleep(1)) return false;
+
+    Step(2,
       "<color=red>" + victim.Title + " is iced.</color>"
     );
 
-    Step(2,
+    Step(3,
       "The group investigates " + victim.name + "'s body",
       "They are looking for evidence."
     );
 
-    if (Sleep(2)) return false;
+    if (Sleep(3)) return false;
 
     bool match = victim == killer;
     string color = match ? "cyan" : "#fc4e4e";
 
-    Step(3,
+    Step(4,
       match ?
         "Incriminating evidence is located"
         : "No evidence to incriminate " + victim.name + " is found.",
@@ -102,7 +112,7 @@ public class MafiaRenderer {
       + (match ? "is" : "is NOT") + " the killer.</color>"
     );
 
-    return step == 4;
+    return step == 5;
   }
 
   // End

@@ -26,14 +26,20 @@ public class Crewmember : Character, IDestroyable {
 
   public Crewmember ChooseVote() {
     Character chosen = null;
-    float currVal = 100f; //Some arbitrary value that will definitely decrease
-    foreach(Relationship r in relationships.Values) {
-      //TODO: Check if target/character is alive before the vote!
+    float currVal = 100f; // Magic number
+
+    foreach (Relationship r in relationships.Values) {
+      // Skip dead targets
+      if ((r.target as IDestroyable).Destroy)
+        continue;
+
       if(chosen == null) {
         chosen = r.target;
       }
+
       float calculation = 0f;
       calculation += r.trustworthiness + r.agreeability;
+
       /**
        * Proposed calculation as an alternative to the addition: use 
        * trustworthiness and agreeability as the max of a random function 
@@ -45,6 +51,7 @@ public class Crewmember : Character, IDestroyable {
        * and add an offset of .25 because we don't want this crewmember to be
        * picked that easily.
        */
+
       if(calculation < currVal) {
         currVal = calculation;
         chosen = r.target;

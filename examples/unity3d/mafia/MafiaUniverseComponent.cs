@@ -15,6 +15,7 @@ public class MafiaUniverseComponent : UniverseComponent {
   [HideInInspector] public Crewmember killer;
 
   Crewmember victim = null;
+  Dictionary<Crewmember, Crewmember> accusations;
   ulong lastTick = 0;
   int cycle = 0;
 
@@ -111,7 +112,7 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   // Lynch
   bool UpdateLynchStage() {
-    if (mafiaRenderer.RenderLynch(victim, killer)) {
+    if (mafiaRenderer.RenderLynch(victim, killer, accusations)) {
       Kill(victim);
       return true;
     }
@@ -154,22 +155,34 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   Crewmember SelectByVote() {
     Dictionary<Crewmember, int> votes = new Dictionary<Crewmember, int>();
+    accusations = new Dictionary<Crewmember, Crewmember>();
+
     foreach(IEntity e in reference.entities) {
+      // Skip dead Entities
+      if ((e as IDestroyable).Destroy)
+        continue;
+
       var member = e as Crewmember;
-      var v = member.ChooseVote();
-      if(!votes.ContainsKey(v)) {
-        votes[v] = 1;
+      Crewmember target = member.ChooseVote();
+      accusations[member] = target;
+
+      if(!votes.ContainsKey(target)) {
+        votes[target] = 1;
       } else {
-        votes[v]++;
+        votes[target]++;
       }
     }
+
     Crewmember selected = null;
-    int total = -1;
-    foreach(var pair in votes) {
-      if(pair.Value > total) {
-        selected = pair.Key;
+    int best = -1;
+
+    foreach(var entry in votes) {
+      if(entry.Value > best) {
+        selected = entry.Key;
+        best = entry.Value;
       }
     }
+
     return selected;
   }
 
