@@ -15,7 +15,6 @@ public partial class Crewmember : Character, IDestroyable {
   public string Title {
     get { return firstName + " " + name + " (" + role + ")"; }
   }
-
   public Crewmember(
     string firstName, string lastName, string role, string pronoun
   ) : base(lastName) {
@@ -26,7 +25,7 @@ public partial class Crewmember : Character, IDestroyable {
     HookRenderer();
   }
 
-  public Crewmember ChooseVote() {
+  public virtual Crewmember ChooseVote() {
     Character chosen = null;
     float currVal = 100f; // Magic number
 

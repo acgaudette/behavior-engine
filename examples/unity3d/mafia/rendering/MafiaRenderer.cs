@@ -19,7 +19,9 @@ public class MafiaRenderer {
   public MafiaRenderer() {
     ResetStep();
     lastTime = 0;
+  }
 
+  public void Load() {
     ConsoleReader.Node messages;
     if (!ConsoleReader.LoadFile(
       Mafia.DATAPATH + "messages.txt", out messages

@@ -10,7 +10,7 @@ public class MafiaUniverseComponent : UniverseComponent {
 
   public enum Stage { KILL, FALLOUT, LYNCH, END };
   public Stage stage = Stage.KILL;
-  public MafiaRenderer mafiaRenderer = new MafiaRenderer();
+  public MafiaRenderer mafiaRenderer;
   public ulong falloutTicks = 4;
   [HideInInspector] public Crewmember killer;
 
@@ -28,6 +28,7 @@ public class MafiaUniverseComponent : UniverseComponent {
     ChangeStage(stage);
 
     // Render
+    mafiaRenderer.Load();
     mafiaRenderer.RenderStart(reference.entities);
   }
 

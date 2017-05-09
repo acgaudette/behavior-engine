@@ -37,13 +37,13 @@ public partial class Crewmember : Character, IDestroyable {
         if (Mathf.Abs(offset) < instance.TransformedState)
           percent *= offset / current;
 
+        string percentString = percent.ToString("F2") + "%";
         string indicator = current < .2f ?
           "LOW" : current > .8f ? "HIGH" : "NORMAL";
 
         // Randomly fail
         if (Random.Range(0, 1f) > .75f)
           indicator = "UNCERTAIN";
-        string percentString = percent.ToString("F2") + "%";
         if (Random.Range(0, 1f) > .85f)
           percentString = "??.??%";
 
