@@ -44,7 +44,7 @@ public class Mafia : MonoBehaviour {
       new Crewmember("Eugene", "Parsons", "Swabbie", Crewmember.M),
       new Crewmember("Peter", "Strickland", "Security", Crewmember.M),
       new Crewmember("Yasmin", "Pahlavi", "Navigator", Crewmember.F),
-      new Crewmember("Leonie", "Laurent", "Pilot", Crewmember.F),
+      new Crewmember("Leonie", "Cruz", "Pilot", Crewmember.F),
       new Crewmember("Micaela", "Valenti", "Quartermaster", Crewmember.F),
       new Crewmember("Nora", "Murphy", "Captain", Crewmember.F)
     };
