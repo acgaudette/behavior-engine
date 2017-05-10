@@ -1,69 +1,86 @@
-﻿using System.Collections.Generic;
+﻿// Relationship.cs
+
+using System;
+using System.Collections.Generic;
 
 namespace BehaviorEngine.Personality {
 
   public class Relationship {
 
-    public Character target;
+    public class Affinities {
 
-    //TODO: Replace with two Dictionaries of lists, where key is the associated
-    //value for relationship (agreeability, trust, etc.). One is for positive,
-    //other for negative. Perhaps a custom data structure?
+      public enum MatchResult { POSITIVE = 1, NEGATIVE = -1, DNE = 0 };
 
-    public float agreeability;
-    public List<State> positiveAgreeableStates;
-    public List<State> negativeAgreeableStates;
+      Dictionary<string, State> positive, negative;
 
-    public float trustworthiness;
-    public List<State> positiveTrustStates;
-    public List<State> negativeTrustStates;
+      public Affinities() {
+        positive = new Dictionary<string, State>();
+        negative = new Dictionary<string, State>();
+      }
 
-    public Relationship(Character p) : this(p, .5f, .5f) { }
+      public Affinities (
+        IEnumerable<State> positive,
+        IEnumerable<State> negative
+      ) : this() {
+        RegisterPositive(positive);
+        RegisterNegative(negative);
+      }
 
-    public Relationship(Character p, float agree, float trust) {
-      target = p;
+      public void RegisterPositive(IEnumerable<State> states) {
+        foreach (State state in states)
+          positive[state.name] = state;
+      }
 
-      agreeability = agree;
-      trustworthiness = trust;
+      public void RegisterNegative(IEnumerable<State> states) {
+        foreach (State state in states)
+          negative[state.name] = state;
+      }
 
-      positiveAgreeableStates = new List<State>();
-      negativeAgreeableStates = new List<State>();
-      positiveTrustStates = new List<State>();
-      negativeTrustStates = new List<State>();
+      public MatchResult Match(string name) {
+        return positive.ContainsKey(name) ? MatchResult.POSITIVE
+          : negative.ContainsKey(name) ? MatchResult.NEGATIVE
+          : MatchResult.DNE;
+      }
     }
 
-    public void registerPositiveAgreeNegativeTrust(
-      List<State> relevantStates
-    ) {
-      positiveAgreeableStates.AddRange(relevantStates);
-      negativeTrustStates.AddRange(relevantStates);
+    public class Axis {
+
+      public float Value { get; private set; }
+
+      public Affinities affinities;
+
+      public static implicit operator float(Axis a) {
+        return a.Value;
+      }
+
+      public Axis() {
+        Value = 0; // Center
+        affinities = new Affinities();
+      }
+
+      public Axis(Affinities affinities) {
+        Value = 0; // Center
+        this.affinities = affinities;
+      }
+
+      public void Offset(float offset) {
+        Value = Math.Min(1, Math.Max(-1, Value + offset));
+      }
     }
 
-    public void registerNegativeAgreePositiveTrust(
-      List<State> relevantStates
-    ) {
-      negativeAgreeableStates.AddRange(relevantStates);
-      positiveTrustStates.AddRange(relevantStates);
+    public readonly Character target;
+
+    public Axis trust, agreement;
+
+    public Relationship(Character target) {
+      this.target = target;
+
+      trust = new Axis();
+      agreement = new Axis();
     }
 
-    public void registerPositiveAgree(List<State> relevantStates) {
-      positiveAgreeableStates.AddRange(relevantStates);
-    }
-
-    public void registerNegativeAgree(List<State> relevantStates) {
-      negativeAgreeableStates.AddRange(relevantStates);
-    }
-
-    public void registerPositiveTrust(List<State> relevantStates) {
-      positiveTrustStates.AddRange(relevantStates);
-    }
-
-    public void registerNegativeTrust(List<State> relevantStates) {
-      negativeTrustStates.AddRange(relevantStates);
-    }
-
-    public string RenderAxis() {
-      return "( " + agreeability + ", " + trustworthiness + " )";
+    public string RenderAxes() {
+      return "( " + trust + ", " + agreement + " )";
     }
   }
 }
