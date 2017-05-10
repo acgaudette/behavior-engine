@@ -80,7 +80,7 @@ namespace BehaviorEngine.Personality {
     }
 
     public string RenderAxes() {
-      return "( " + trust + ", " + agreement + " )";
+      return "( " + trust.Value + ", " + agreement.Value + " )";
     }
   }
 }
