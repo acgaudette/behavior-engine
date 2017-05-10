@@ -36,6 +36,14 @@ namespace BehaviorEngine.Personality {
           negative[state.name] = state;
       }
 
+      public ICollection<State> GetPositive() {
+        return positive.Values;
+      }
+
+      public ICollection<State> GetNegative() {
+        return negative.Values;
+      }
+
       public MatchResult Match(string name) {
         return positive.ContainsKey(name) ? MatchResult.POSITIVE
           : negative.ContainsKey(name) ? MatchResult.NEGATIVE
