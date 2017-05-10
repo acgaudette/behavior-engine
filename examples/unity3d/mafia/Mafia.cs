@@ -69,7 +69,7 @@ public class Mafia : MonoBehaviour {
       );
     repo.RegisterState(anger);
     states.Add(anger);
-
+    /*
     // Need energy to perform certain actions
     State energy = new State(
       "energy", () => 1,
@@ -96,7 +96,7 @@ public class Mafia : MonoBehaviour {
       );
     repo.RegisterState(stress);
     states.Add(stress);
-
+    */
     /**
      * Randomly assigning pos/neg agree/trust for the purposes of
      * the relationship graph
@@ -135,6 +135,33 @@ public class Mafia : MonoBehaviour {
           }
         }
       }
+
+      if(negAgree.Count == 0 && 
+          posAgree.Count == 0 && 
+          negTrust.Count == 0 && 
+          posTrust.Count == 0
+        ) {
+        do {
+          int i = 0;
+          i = (Random.Range(0, 4));
+          int index = (Random.Range(0, states.Count));
+          switch(i) {
+          case 0:
+            negAgree.Add(states[index]);
+            break;
+          case 1:
+            posAgree.Add(states[index]);
+            break;
+          case 2:
+            negTrust.Add(states[index]);
+            break;
+          case 3:
+            posTrust.Add(states[index]);
+            break;
+          }
+        } while(Random.Range(0, 2f) < 1.2f);
+      }
+
       c.registerNegativeAgree(negAgree);
       c.registerPositiveAgree(posAgree);
       c.registerNegativeTrust(negTrust);
@@ -167,6 +194,7 @@ public class Mafia : MonoBehaviour {
     /* Interactions */
 
     // Accuse
+    /*
     var highangerhighstress_onother = 
       new InfluencedInteraction(
         1,
@@ -264,11 +292,34 @@ public class Mafia : MonoBehaviour {
     repo.RegisterInteraction(hallucinate);
     repo.RegisterInteraction(sleep);
     repo.RegisterInteraction(highenergyhighanger_onother);
+    */
+
+    var highanger_onother =
+      new InfluencedInteraction(
+        1,
+        LS(
+          repo.GetTrait(Factor.AGREEABLENESS)
+        ),
+        LS(
+          repo.GetState("anger")
+        ),
+        repo.GetAction("highanger_onother")
+      );
+    highanger_onother.SetDebugLabel("highanger_onother");
+
+    repo.RegisterInteraction(highanger_onother);
 
     // Attribution
     foreach (Character character in characters) {
       character.Subscribe();
       Universe.root.entities.Add(character);
+    }
+    foreach(Entity e in Universe.root.entities) {
+      var m = e as Character;
+      if(m == null) {
+        continue;
+      }
+      BehaviorEngine.Debug.Logger.Log(m.name);
     }
 
     // Unity hooks
