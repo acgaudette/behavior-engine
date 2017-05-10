@@ -25,6 +25,32 @@ public class RandomCrewmember : Crewmember {
     return targets[Random.Range(0, targets.Count)];
   }
 
+  // Randomly select a reaction Effect
+  protected override IList<Effect> Reaction(
+    Interaction interaction, IEntity host
+  ) {
+    int i = 0;
+    int target = Random.Range(0, BrainRepo.Effects.Count);
+    Effect effect = null;
+
+    foreach (Effect e in BrainRepo.Effects) {
+      if (i == target) {
+        effect = e;
+        break;
+      }
+      i++;
+    }
+
+    return new List<Effect>(1) { effect };
+  }
+
+  // Randomly select an observation Effect
+  protected override IList<Effect> Observation(
+    Interaction interaction, IEntity host, ICollection<IEntity> targets
+  ) {
+    return Reaction(interaction, host);
+  }
+
   // Randomly score Interactions
   protected override float Score(
     Interaction interaction, ICollection<IEntity> targets
