@@ -16,6 +16,7 @@ public class ComponentManager : MonoBehaviour {
 
   public bool compileWithDebugLabeling = true;
   public UniverseComponent defaultUniverse;
+  public bool verboseMode = false;
 
   // Editor mirrors to Unity components (for display purposes)
   public List<UniverseComponent> universes = new List<UniverseComponent>();
@@ -132,6 +133,7 @@ public class ComponentManager : MonoBehaviour {
       GameObject o = new GameObject();
       EntityComponent component = o.AddComponent<EntityComponent>();
       component.reference = new UnityEntity(target); // Decorate
+      component.debug = verboseMode;
 
       o.name = target.GetDebugLabel();
 
