@@ -99,23 +99,16 @@ namespace BehaviorEngine.Personality {
       return r;
     }
 
-    /*
-    public delegate void OnAugmentRelationshipEventHandler(
+    // Event
+
+    public delegate void OnUpdateRelationshipEventHandler(
       object sender,
       Character target,
-      float agreeabilityOffset, float trustworthinessOffset,
+      float trustOffset, float agreementOffset,
       Relationship relationship
     );
 
-    public event OnAugmentRelationshipEventHandler OnAugmentRelationship;
-
-    OnAugmentRelationshipEventHandler handler = OnAugmentRelationship;
-    if (handler != null) {
-      handler(
-        this, target, agreeabilityOffset, trustworthinessOffset, r
-      );
-    }
-    */
+    public event OnUpdateRelationshipEventHandler OnUpdateRelationship;
 
     /* Actions */
 
@@ -156,23 +149,29 @@ namespace BehaviorEngine.Personality {
     protected override IList<Effect> Observation(
       Interaction interaction, IEntity host, ICollection<IEntity> targets
     ) {
+      Character character = host as Character;
+
+      if (character == null) return null;
+
       InfluencedInteraction influencedInteraction
         = interaction as InfluencedInteraction;
 
       // Black box
       var effects =  oracle.ObservationEffects(
         influencedInteraction,
-        host as Character, targets, BrainRepo
+        character, targets, BrainRepo
       );
 
       /* Relationship (with host) */
 
-      Relationship withHost = GetRelationship(host as Character);
+      Relationship withHost = GetRelationship(character);
       if (withHost == null) {
         withHost = CreateRelationship(
-          host as Character, influencedInteraction
+          character, influencedInteraction
         );
       }
+
+      float trustOffset = 0, agreementOffset = 0;
 
       foreach (Effect effect in effects) {
         var e = effect as InfluencedEffect;
@@ -180,15 +179,23 @@ namespace BehaviorEngine.Personality {
 
         // Check for matches
         foreach (string name in e.strongStateInfluences.Keys) {
-          withHost.trust.Offset(
-            withHost.trust.affinities.Match(name) > 0 ? .15f : -.15f
-          );
+          float trust = withHost.trust.affinities.Match(name) > 0 ?
+            .1f : -.1f;
+          float agreement = withHost.agreement.affinities.Match(name) > 0 ?
+            .1f : -.1f;
 
-          withHost.agreement.Offset(
-            withHost.agreement.affinities.Match(name) > 0 ? .15f : -.15f
-          );
+          withHost.trust.Offset(trust);
+          withHost.agreement.Offset(agreement);
+
+          trustOffset += trust;
+          agreementOffset += agreement;
         }
       }
+
+      // Event
+      OnUpdateRelationshipEventHandler handler = OnUpdateRelationship;
+      if (handler != null)
+        handler(this, character, trustOffset, agreementOffset, withHost);
 
       return effects;
     }
