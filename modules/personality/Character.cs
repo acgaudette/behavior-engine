@@ -10,6 +10,8 @@ namespace BehaviorEngine.Personality {
 
   public class Character : Entity {
 
+    const float RELATIONSHIP_OFFSET = .2f;
+
     public string name;
 
     public BrainRepository BrainRepo {
@@ -180,9 +182,9 @@ namespace BehaviorEngine.Personality {
         // Check for matches
         foreach (string name in e.strongStateInfluences.Keys) {
           float trust = withHost.trust.affinities.Match(name) > 0 ?
-            .1f : -.1f;
+            RELATIONSHIP_OFFSET : -RELATIONSHIP_OFFSET;
           float agreement = withHost.agreement.affinities.Match(name) > 0 ?
-            .1f : -.1f;
+            RELATIONSHIP_OFFSET : -RELATIONSHIP_OFFSET;
 
           withHost.trust.Offset(trust);
           withHost.agreement.Offset(agreement);

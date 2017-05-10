@@ -75,7 +75,7 @@ public partial class Crewmember : Character, IDestroyable {
     Relationship relationship
   ) => {
     // Don't always render
-    if (Random.Range(0, 1f) > .5f) return;
+    if (Random.Range(0, 1f) > .75f) return;
 
     string data = "";
     Crewmember t = target as Crewmember;
@@ -86,14 +86,16 @@ public partial class Crewmember : Character, IDestroyable {
     data += "\nAGREEMENT with " + t.name.ToUpper() + " "
       + (agreementOffset > 0 ? "INCREASED" : "DECREASED");
 
-    string agreementIndicator = relationship.agreement < .25f ?
-      "DISAGREES WITH" : relationship.agreement > .75f ? "IN AGREEMENT WITH"
-      : "AGREEMENT UNCERTAIN WITH";
-    string trustIndicator = relationship.trust < .25f ?
-      "DISTRUSTS" : relationship.trust > .75f ? "TRUSTS"
-      : "TRUST UNCERTAIN OF";
+    data += "\n-=-=-";
 
-    data += "\n" + agreementIndicator + " and " + trustIndicator
+    string trustIndicator = relationship.trust < -.5f ?
+      "DISTRUSTS" : relationship.trust > .5f ? "TRUSTS"
+      : "TRUST UNCERTAIN of";
+    string agreementIndicator = relationship.agreement < -.5f ?
+      "DISAGREES with" : relationship.agreement > .5f ? "IN AGREEMENT with"
+      : "AGREEMENT UNCERTAIN with";
+
+    data += "\n" + trustIndicator + " and " + agreementIndicator
       + " " + t.name.ToUpper();
 
     Render.LogBiometrics(sender as Crewmember, data);
