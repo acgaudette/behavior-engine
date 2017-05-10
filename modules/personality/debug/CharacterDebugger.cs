@@ -10,11 +10,10 @@ namespace BehaviorEngine.Debug {
 
 #if BVE_DEBUG
 
-    static Character.OnAugmentRelationshipEventHandler
-    LogAugment = (
+    static Character.OnUpdateRelationshipEventHandler RenderRelationship = (
       object sender,
       Character target,
-      float agreeabilityOffset, float trustworthinessOffset,
+      float trustOffset, float agreementOffset,
       Relationship relationship
     ) => {
       Character character = sender as Character;
@@ -22,14 +21,14 @@ namespace BehaviorEngine.Debug {
       string debug = character.GetDebugLabel() + "\n";
       debug += "RELATIONSHIP\n";
 
-      string agree = (agreeabilityOffset >= 0 ? "+" : "")
-        + agreeabilityOffset;
-      string trust = (trustworthinessOffset >= 0 ? "+" : "")
-        + trustworthinessOffset;
+      string t = (trustOffset >= 0 ? "+" : "")
+        + trustOffset;
+      string a = (agreementOffset >= 0 ? "+" : "")
+        + agreementOffset;
 
       debug += "Target = " + target.GetDebugLabel() + "\n";
-      debug += "Agreeability " + agree + ", Trustworthiness " + trust + "\n";
-      debug += "Axis = " + relationship.RenderAxis() + "\n";
+      debug += "Agreement " + a + ", Trust " + t + "\n";
+      debug += "Axes = " + relationship.RenderAxes() + "\n";
 
       Logger.Log(debug);
     };
@@ -41,7 +40,7 @@ namespace BehaviorEngine.Debug {
 
 #if BVE_DEBUG
 
-      character.OnAugmentRelationship += LogAugment;
+      character.OnUpdateRelationship += RenderRelationship;
 
 #endif
 
@@ -52,7 +51,7 @@ namespace BehaviorEngine.Debug {
 
 #if BVE_DEBUG
 
-      character.OnAugmentRelationship -= LogAugment;
+      character.OnUpdateRelationship -= RenderRelationship;
 
 #endif
 

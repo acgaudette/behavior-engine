@@ -68,10 +68,10 @@ public partial class Crewmember : Character, IDestroyable {
     //Render.LogBiometrics(sender as Crewmember, "");
   };
 
-  Character.OnAugmentRelationshipEventHandler RenderAugment = (
+  Character.OnUpdateRelationshipEventHandler RenderRelationship = (
     object sender,
     Character target,
-    float agreeabilityOffset, float trustworthinessOffset,
+    float trustOffset, float agreementOffset,
     Relationship relationship
   ) => {
     // Don't always render
@@ -80,24 +80,21 @@ public partial class Crewmember : Character, IDestroyable {
     string data = "";
     Crewmember t = target as Crewmember;
 
-    data += "\nAGREEMENT with " + t.name + " "
-      + (agreeabilityOffset > 0 ? "INCREASED" : "DECREASED");
+    data += "\nTRUST of " + t.name.ToUpper() + " "
+      + (trustOffset > 0 ? "INCREASED" : "DECREASED");
 
-    data += "\nTRUST of " + t.name + " "
-      + (trustworthinessOffset > 0 ? "INCREASED" : "DECREASED");
+    data += "\nAGREEMENT with " + t.name.ToUpper() + " "
+      + (agreementOffset > 0 ? "INCREASED" : "DECREASED");
 
-    float agree = relationship.agreeability;
-    float trust = relationship.trustworthiness;
+    string agreementIndicator = relationship.agreement < .25f ?
+      "DISAGREES WITH" : relationship.agreement > .75f ? "IN AGREEMENT WITH"
+      : "AGREEMENT UNCERTAIN WITH";
+    string trustIndicator = relationship.trust < .25f ?
+      "DISTRUSTS" : relationship.trust > .75f ? "TRUSTS"
+      : "TRUST UNCERTAIN OF";
 
-    string agreeIndicator = agree < .25f ?
-      "DISAGREES" : agree > .75f ? "IN AGREEMENT"
-      : "AGREEMENT UNCERTAIN";
-    string trustIndicator = trust < .25f ?
-      "DISTRUSTS" : trust > .75f ? "TRUSTS"
-      : "TRUST UNCERTAIN";
-
-    data += "\n" + agreeIndicator + " and " + trustIndicator
-      + " " + t.name;
+    data += "\n" + agreementIndicator + " and " + trustIndicator
+      + " " + t.name.ToUpper();
 
     Render.LogBiometrics(sender as Crewmember, data);
   };
@@ -105,6 +102,6 @@ public partial class Crewmember : Character, IDestroyable {
   void HookRenderer() {
     OnReact += RenderReaction;
     OnObserve += RenderObservation;
-    OnAugmentRelationship += RenderAugment;
+    OnUpdateRelationship += RenderRelationship;
   }
 }
