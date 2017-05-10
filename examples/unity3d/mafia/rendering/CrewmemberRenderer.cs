@@ -60,13 +60,15 @@ public partial class Crewmember : Character, IDestroyable {
     Render.LogBiometrics(sender as Crewmember, data);
   };
 
+  /*
   EntityEvents.OnObserveEventHandler RenderObservation = (
     object sender,
     Interaction interaction, IEntity host,
     ICollection<IEntity> targets, IList<Effect> effects
   ) => {
-    //Render.LogBiometrics(sender as Crewmember, "");
+    Render.LogBiometrics(sender as Crewmember, "");
   };
+  */
 
   Character.OnUpdateRelationshipEventHandler RenderRelationship = (
     object sender,
@@ -78,7 +80,7 @@ public partial class Crewmember : Character, IDestroyable {
     if (trustOffset == 0 && agreementOffset == 0) return;
 
     // Don't always render
-    if (Random.Range(0, 1f) > .75f) return;
+    if (Random.Range(0, 1f) > .85f) return;
 
     string data = "";
     Crewmember t = target as Crewmember;
@@ -109,7 +111,7 @@ public partial class Crewmember : Character, IDestroyable {
 
   void HookRenderer() {
     OnReact += RenderReaction;
-    OnObserve += RenderObservation;
+    //OnObserve += RenderObservation;
     OnUpdateRelationship += RenderRelationship;
   }
 }

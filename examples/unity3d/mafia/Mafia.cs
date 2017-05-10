@@ -130,27 +130,27 @@ public class Mafia : MonoBehaviour {
      * Ideally, this should not be randomly assigned, perhaps chosen when
      * creating the characters
      */
-    foreach(Crewmember c in characters) {
+    foreach (Crewmember c in characters) {
       List<State> negTrust = new List<State>();
       List<State> posTrust = new List<State>();
       List<State> posAgree = new List<State>();
       List<State> negAgree = new List<State>();
 
-      foreach(State s in states) {
-        if(Random.Range(0, 1f) < .3f) negTrust.Add(s);
+      foreach (State s in states) {
+        if (Random.Range(0, 1f) < .3f) negTrust.Add(s);
       }
       foreach(State s in states) {
-        if(Random.Range(0, 1f) < .4f) {
-          if(!negTrust.Contains(s)) posTrust.Add(s);
+        if (Random.Range(0, 1f) < .4f) {
+          if (!negTrust.Contains(s)) posTrust.Add(s);
         }
       }
 
-      foreach(State s in states) {
-        if(Random.Range(0, 1f) < .3f) negAgree.Add(s);
+      foreach (State s in states) {
+        if (Random.Range(0, 1f) < .3f) negAgree.Add(s);
       }
-      foreach(State s in states) {
-        if(Random.Range(0, 1f) < .4f) {
-          if(!negAgree.Contains(s)) posAgree.Add(s);
+      foreach (State s in states) {
+        if (Random.Range(0, 1f) < .4f) {
+          if (!negAgree.Contains(s)) posAgree.Add(s);
         }
       }
 
