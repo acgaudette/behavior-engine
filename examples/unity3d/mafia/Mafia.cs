@@ -104,23 +104,10 @@ public class Mafia : MonoBehaviour {
      * creating the characters
      */
     foreach(Crewmember c in characters) {
-      List<State> negAgree = new List<State>();
-      List<State> posAgree = new List<State>();
       List<State> negTrust = new List<State>();
       List<State> posTrust = new List<State>();
-      foreach(State s in states) {
-        if(Random.Range(0f, 1f) < .3f) {
-          negAgree.Add(s);
-        }
-      }
-
-      foreach(State s in states) {
-        if(Random.Range(0f, 1f) < .3f) {
-          if(!negAgree.Contains(s)) {
-            posAgree.Add(s);
-          }
-        }
-      }
+      List<State> posAgree = new List<State>();
+      List<State> negAgree = new List<State>();
 
       foreach(State s in states) {
         if(Random.Range(0f, 1f) < .3f) {
@@ -135,10 +122,26 @@ public class Mafia : MonoBehaviour {
           }
         }
       }
-      c.registerNegativeAgree(negAgree);
-      c.registerPositiveAgree(posAgree);
-      c.registerNegativeTrust(negTrust);
-      c.registerPositiveTrust(posTrust);
+
+      foreach(State s in states) {
+        if(Random.Range(0f, 1f) < .3f) {
+          negAgree.Add(s);
+        }
+      }
+
+      foreach(State s in states) {
+        if(Random.Range(0f, 1f) < .3f) {
+          if(!negAgree.Contains(s)) {
+            posAgree.Add(s);
+          }
+        }
+      }
+
+      c.agreementAffinities.RegisterPositive(posAgree);
+      c.agreementAffinities.RegisterNegative(negAgree);
+
+      c.trustAffinities.RegisterPositive(posTrust);
+      c.trustAffinities.RegisterNegative(negTrust);
     }
 
     /* Effects */
