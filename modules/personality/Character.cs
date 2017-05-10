@@ -181,10 +181,13 @@ namespace BehaviorEngine.Personality {
 
         // Check for matches
         foreach (string name in e.strongStateInfluences.Keys) {
-          float trust = withHost.trust.affinities.Match(name) > 0 ?
-            RELATIONSHIP_OFFSET : -RELATIONSHIP_OFFSET;
-          float agreement = withHost.agreement.affinities.Match(name) > 0 ?
-            RELATIONSHIP_OFFSET : -RELATIONSHIP_OFFSET;
+          var matchTrust = trustAffinities.Match(name);
+          var matchAgreement = agreementAffinities.Match(name);
+
+          float trust = matchTrust > 0 ? RELATIONSHIP_OFFSET
+            : matchTrust < 0 ? -RELATIONSHIP_OFFSET : 0;
+          float agreement = matchAgreement > 0 ? RELATIONSHIP_OFFSET
+            : matchAgreement < 0 ? -RELATIONSHIP_OFFSET : 0;
 
           withHost.trust.Offset(trust);
           withHost.agreement.Offset(agreement);
