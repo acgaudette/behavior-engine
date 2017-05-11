@@ -30,6 +30,8 @@ namespace BehaviorEngine.Personality {
       object sender,
       Interaction choice, ICollection<IEntity> targets, float highscore
     ) => {
+      if (choice == null) return;
+
       (sender as Character).PerformAction(
         (choice as InfluencedInteraction).actionID, targets
       );
