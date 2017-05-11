@@ -173,7 +173,7 @@ public class MafiaRenderer {
     Step(2, "[ END TRANSCRIPT ]", log: false);
 
     if (step == 3) {
-      Render.WriteToFile(Mafia.DATAPATH + "log.txt");
+      Render.WriteToFile(Mafia.DATAPATH, "log");
       step++;
     }
   }

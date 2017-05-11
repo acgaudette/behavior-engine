@@ -10,6 +10,11 @@ public class Render {
 
   public const string ENDL = "\n";
 
+  const string STYLE_CSS =
+    "<style>body{"
+    + "background-color:black;color:red;font-family:monospace"
+    + "}</style>";
+
   public struct Timestamp {
 
     public int cycle, tick, offset;
@@ -64,7 +69,27 @@ public class Render {
   }
 
   // Output log to file
-  public static bool WriteToFile(string path) {
+  public static bool WriteToFile(
+    string directory, string filename, bool html = true
+  ) {
+    return Output(directory + filename, false)
+      && (!html || Output(directory + filename, true));
+  }
+
+  static bool Output(string path, bool html) {
+    if (html) {
+      path += ".html";
+
+      for (int i = 0; i < log.Count; ++i) {
+        log[i] = Regex.Replace(log[i], @"\n", "<br>") + "<br>";
+      }
+
+      log.Insert(0, "<html>" + STYLE_CSS);
+      log.Add("</html>");
+    } else {
+      path += ".txt";
+    }
+
     try {
       File.WriteAllLines(@path, log.ToArray());
     } catch (System.Exception e) {
