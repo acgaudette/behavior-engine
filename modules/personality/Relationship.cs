@@ -55,20 +55,12 @@ namespace BehaviorEngine.Personality {
 
       public float Value { get; private set; }
 
-      public Affinities affinities;
-
       public static implicit operator float(Axis a) {
         return a.Value;
       }
 
       public Axis() {
         Value = 0; // Center
-        affinities = new Affinities();
-      }
-
-      public Axis(Affinities affinities) {
-        Value = 0; // Center
-        this.affinities = affinities;
       }
 
       public void Offset(float offset) {

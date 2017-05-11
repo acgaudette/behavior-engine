@@ -32,6 +32,31 @@ public class Mafia : MonoBehaviour {
   public const string DATAPATH
     = "./Assets/behavior-engine/examples/unity3d/mafia/data/";
 
+  struct CrewmemberData {
+
+    public readonly string firstName, lastName, role, pronoun;
+
+    public CrewmemberData(
+      string firstName, string lastName, string role, string pronoun
+    ) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.role = role;
+      this.pronoun = pronoun;
+    }
+  }
+
+  CrewmemberData[] crewmemberData = {
+    new CrewmemberData("Jurgen", "Burgstaller", "Engineer", Crewmember.M),
+    new CrewmemberData("Francis", "Bertrand", "First Mate", Crewmember.M),
+    new CrewmemberData("Eugene", "Parsons", "Swabbie", Crewmember.M),
+    new CrewmemberData("Peter", "Strickland", "Security", Crewmember.M),
+    new CrewmemberData("Yasmin", "Pahlavi", "Navigator", Crewmember.F),
+    new CrewmemberData("Leonie", "Cruz", "Pilot", Crewmember.F),
+    new CrewmemberData("Micaela", "Valenti", "Quartermaster", Crewmember.F),
+    new CrewmemberData("Nora", "Murphy", "Captain", Crewmember.F)
+  };
+
   void Awake() { Initialize(); }
 
   void Initialize() {
@@ -97,43 +122,35 @@ public class Mafia : MonoBehaviour {
     repo.RegisterState(stress);
     states.Add(stress);
     */
+
+    /* Relationships */
     /**
      * Randomly assigning pos/neg agree/trust for the purposes of
      * the relationship graph
      * Ideally, this should not be randomly assigned, perhaps chosen when
      * creating the characters
      */
-    foreach(Crewmember c in characters) {
+    foreach (Crewmember c in characters) {
       List<State> negTrust = new List<State>();
       List<State> posTrust = new List<State>();
       List<State> posAgree = new List<State>();
       List<State> negAgree = new List<State>();
 
+      foreach (State s in states) {
+        if (Random.Range(0, 1f) < .3f) negTrust.Add(s);
+      }
       foreach(State s in states) {
-        if(Random.Range(0f, 1f) < .3f) {
-          negTrust.Add(s);
+        if (Random.Range(0, 1f) < .4f) {
+          if (!negTrust.Contains(s)) posTrust.Add(s);
         }
       }
 
-      foreach(State s in states) {
-        if(Random.Range(0f, 1f) < .3f) {
-          if(!negTrust.Contains(s)) {
-            posTrust.Add(s);
-          }
-        }
+      foreach (State s in states) {
+        if (Random.Range(0, 1f) < .3f) negAgree.Add(s);
       }
-
-      foreach(State s in states) {
-        if(Random.Range(0f, 1f) < .3f) {
-          negAgree.Add(s);
-        }
-      }
-
-      foreach(State s in states) {
-        if(Random.Range(0f, 1f) < .3f) {
-          if(!negAgree.Contains(s)) {
-            posAgree.Add(s);
-          }
+      foreach (State s in states) {
+        if (Random.Range(0, 1f) < .4f) {
+          if (!negAgree.Contains(s)) posAgree.Add(s);
         }
       }
 
@@ -324,31 +341,6 @@ public class Mafia : MonoBehaviour {
     hook.Hook<BrainRepoComponent>("brain-repo", repo);
   }
 
-  struct CrewmemberData {
-
-    public readonly string firstName, lastName, role, pronoun;
-
-    public CrewmemberData(
-      string firstName, string lastName, string role, string pronoun
-    ) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.role = role;
-      this.pronoun = pronoun;
-    }
-  }
-
-  CrewmemberData[] crewmemberData = {
-    new CrewmemberData("Jurgen", "Burgstaller", "Engineer", Crewmember.M),
-    new CrewmemberData("Francis", "Bertrand", "First Mate", Crewmember.M),
-    new CrewmemberData("Eugene", "Parsons", "Swabbie", Crewmember.M),
-    new CrewmemberData("Peter", "Strickland", "Security", Crewmember.M),
-    new CrewmemberData("Yasmin", "Pahlavi", "Navigator", Crewmember.F),
-    new CrewmemberData("Leonie", "Cruz", "Pilot", Crewmember.F),
-    new CrewmemberData("Micaela", "Valenti", "Quartermaster", Crewmember.F),
-    new CrewmemberData("Nora", "Murphy", "Captain", Crewmember.F)
-  };
-
   Crewmember[] GetCharacters() {
     var crewmembers = new List<Crewmember>();
 
@@ -367,6 +359,38 @@ public class Mafia : MonoBehaviour {
     }
 
     return crewmembers.ToArray();
+  }
+
+  // Get the Traits associated with a given State
+  IEnumerable<Trait> TraitLinksFromState(State state, BrainRepository repo) {
+    if (state.name == "anger") {
+      return LS(
+        repo.GetTrait(Factor.AGREEABLENESS),
+        repo.GetTrait(Factor.CONSCIENTIOUSNESS),
+        repo.GetTrait(Factor.NEUROTICISM)
+      );
+    }
+
+    if (state.name == "energy") {
+      return LS(
+        repo.GetTrait(Factor.EXTRAVERSION),
+        repo.GetTrait(Factor.OPENNESS)
+      );
+    }
+
+    if (state.name == "confusion") {
+      return LS(
+        repo.GetTrait(Factor.CONSCIENTIOUSNESS)
+      );
+    }
+
+    if (state.name == "stress") {
+      return LS(
+        repo.GetTrait(Factor.NEUROTICISM)
+      );
+    }
+
+    return null;
   }
 
   // Load observations/analyses files into repository Actions
@@ -426,37 +450,5 @@ public class Mafia : MonoBehaviour {
     }
 
     return true;
-  }
-
-  // Get the Traits associated with a given State
-  IEnumerable<Trait> TraitLinksFromState(State state, BrainRepository repo) {
-    if (state.name == "anger") {
-      return LS(
-        repo.GetTrait(Factor.AGREEABLENESS),
-        repo.GetTrait(Factor.CONSCIENTIOUSNESS),
-        repo.GetTrait(Factor.NEUROTICISM)
-      );
-    }
-
-    if (state.name == "energy") {
-      return LS(
-        repo.GetTrait(Factor.EXTRAVERSION),
-        repo.GetTrait(Factor.OPENNESS)
-      );
-    }
-
-    if (state.name == "confusion") {
-      return LS(
-        repo.GetTrait(Factor.CONSCIENTIOUSNESS)
-      );
-    }
-
-    if (state.name == "stress") {
-      return LS(
-        repo.GetTrait(Factor.NEUROTICISM)
-      );
-    }
-
-    return null;
   }
 }

@@ -73,6 +73,7 @@ namespace BehaviorEngine {
       foreach (Interaction i in Repository.Interactions) {
         float score = 0;
 
+        // Self-interactions
         if (i.limiter == 0) {
           score = Score(i);
 
@@ -90,7 +91,7 @@ namespace BehaviorEngine {
           if (options == null) continue;
 
           foreach (IEntity target in options) {
-            if (target == this) continue; // Skip self
+            if (target == this) continue;
 
             score = Score(i, new List<IEntity>(1){ target });
 
@@ -108,6 +109,7 @@ namespace BehaviorEngine {
         }
       }
 
+      // Fire event even if choice is null
       EntityEvents.OnPollEventHandler handler = OnPoll;
       if (handler != null)
         handler(this, choice, targets, highscore);

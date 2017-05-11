@@ -30,20 +30,10 @@ namespace BehaviorEngine.Personality {
       object sender,
       Interaction choice, ICollection<IEntity> targets, float highscore
     ) => {
-      var character = sender as Character;
-      var influencedInteraction = choice as InfluencedInteraction;
-      if (character == null) {
-        var i = 0;
-        i++;
-        BehaviorEngine.Debug.Logger.Log("CHARACTER NULL");
-        BehaviorEngine.Debug.Logger.Log(sender);
-      }
-      if (influencedInteraction == null) {
-         BehaviorEngine.Debug.Logger.Log("Influenced Interaction NULL");
-        BehaviorEngine.Debug.Logger.Log(choice.GetDebugLabel());
-      }
-      character.PerformAction(
-        influencedInteraction.actionID, targets
+      if (choice == null) return;
+
+      (sender as Character).PerformAction(
+        (choice as InfluencedInteraction).actionID, targets
       );
     };
 
