@@ -30,8 +30,20 @@ namespace BehaviorEngine.Personality {
       object sender,
       Interaction choice, ICollection<IEntity> targets, float highscore
     ) => {
-      (sender as Character).PerformAction(
-        (choice as InfluencedInteraction).actionID, targets
+      var character = sender as Character;
+      var influencedInteraction = choice as InfluencedInteraction;
+      if (character == null) {
+        var i = 0;
+        i++;
+        BehaviorEngine.Debug.Logger.Log("CHARACTER NULL");
+        BehaviorEngine.Debug.Logger.Log(sender);
+      }
+      if (influencedInteraction == null) {
+         BehaviorEngine.Debug.Logger.Log("Influenced Interaction NULL");
+        BehaviorEngine.Debug.Logger.Log(choice.GetDebugLabel());
+      }
+      character.PerformAction(
+        influencedInteraction.actionID, targets
       );
     };
 
@@ -141,11 +153,16 @@ namespace BehaviorEngine.Personality {
     protected override IList<Effect> Reaction(
       Interaction interaction, IEntity host
     ) {
+      Character hostCharacter = host as Character;
+      InfluencedInteraction influencedInteraction
+        = interaction as InfluencedInteraction;
       // Black box
-      return oracle.ReactionEffects(
-        interaction as InfluencedInteraction,
-        host as Character, BrainRepo
+      var effects =  oracle.ReactionEffects(
+        influencedInteraction,
+        hostCharacter, BrainRepo
       );
+      UpdateRelationship(hostCharacter, influencedInteraction, effects);
+      return effects;
     }
 
     protected override IList<Effect> Observation(
@@ -165,7 +182,16 @@ namespace BehaviorEngine.Personality {
       );
 
       /* Relationship (with host) */
+      UpdateRelationship(character, influencedInteraction, effects);
 
+      return effects;
+    }
+
+    protected void UpdateRelationship(
+      Character character,
+      InfluencedInteraction influencedInteraction,
+      IList<Effect> effects    
+    ) {
       Relationship withHost = GetRelationship(character);
       if (withHost == null) {
         withHost = CreateRelationship(
@@ -201,8 +227,6 @@ namespace BehaviorEngine.Personality {
       OnUpdateRelationshipEventHandler handler = OnUpdateRelationship;
       if (handler != null)
         handler(this, character, trustOffset, agreementOffset, withHost);
-
-      return effects;
     }
 
     protected override float Score(

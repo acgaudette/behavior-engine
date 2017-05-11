@@ -28,9 +28,9 @@ namespace BehaviorEngine {
       if (observers != null) {
         foreach (IEntity target in observers) { // Observers
           // Skip host and targets
-          if (target == host || targets.Contains(target))
+          if(target == host || targets.Contains(target)) {
             continue;
-
+          }
           target.Observe(this, host, targets);
         }
       }
