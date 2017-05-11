@@ -27,7 +27,7 @@ public partial class Crewmember : Character, IDestroyable {
 
   public virtual Crewmember ChooseVote() {
     Character chosen = null;
-    float currVal = 100f; // Magic number
+    float current = 8; // Max
 
     foreach (Relationship r in relationships.Values) {
       // Skip dead targets
@@ -38,8 +38,7 @@ public partial class Crewmember : Character, IDestroyable {
         chosen = r.target;
       }
 
-      float calculation = 0f;
-      calculation += r.trustworthiness + r.agreeability;
+      float calculation = .5f * (1 + r.trust) + .5f * (1 + r.agreement);
 
       /**
        * Proposed calculation as an alternative to the addition: use 
@@ -53,8 +52,8 @@ public partial class Crewmember : Character, IDestroyable {
        * picked that easily.
        */
 
-      if(calculation < currVal) {
-        currVal = calculation;
+      if(calculation < current) {
+        current = calculation;
         chosen = r.target;
       }
     }

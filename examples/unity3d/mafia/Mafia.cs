@@ -104,23 +104,10 @@ public class Mafia : MonoBehaviour {
      * creating the characters
      */
     foreach(Crewmember c in characters) {
-      List<State> negAgree = new List<State>();
-      List<State> posAgree = new List<State>();
       List<State> negTrust = new List<State>();
       List<State> posTrust = new List<State>();
-      foreach(State s in states) {
-        if(Random.Range(0f, 1f) < .3f) {
-          negAgree.Add(s);
-        }
-      }
-
-      foreach(State s in states) {
-        if(Random.Range(0f, 1f) < .3f) {
-          if(!negAgree.Contains(s)) {
-            posAgree.Add(s);
-          }
-        }
-      }
+      List<State> posAgree = new List<State>();
+      List<State> negAgree = new List<State>();
 
       foreach(State s in states) {
         if(Random.Range(0f, 1f) < .3f) {
@@ -136,6 +123,21 @@ public class Mafia : MonoBehaviour {
         }
       }
 
+      foreach(State s in states) {
+        if(Random.Range(0f, 1f) < .3f) {
+          negAgree.Add(s);
+        }
+      }
+
+      foreach(State s in states) {
+        if(Random.Range(0f, 1f) < .3f) {
+          if(!negAgree.Contains(s)) {
+            posAgree.Add(s);
+          }
+        }
+      }
+
+      //TODO: Remove when getting rid of randomness
       if(negAgree.Count == 0 && 
           posAgree.Count == 0 && 
           negTrust.Count == 0 && 
@@ -162,10 +164,11 @@ public class Mafia : MonoBehaviour {
         } while(Random.Range(0, 2f) < 1.2f);
       }
 
-      c.registerNegativeAgree(negAgree);
-      c.registerPositiveAgree(posAgree);
-      c.registerNegativeTrust(negTrust);
-      c.registerPositiveTrust(posTrust);
+      c.agreementAffinities.RegisterPositive(posAgree);
+      c.agreementAffinities.RegisterNegative(negAgree);
+
+      c.trustAffinities.RegisterPositive(posTrust);
+      c.trustAffinities.RegisterNegative(negTrust);
     }
 
     /* Effects */
@@ -313,13 +316,6 @@ public class Mafia : MonoBehaviour {
     foreach (Character character in characters) {
       character.Subscribe();
       Universe.root.entities.Add(character);
-    }
-    foreach(Entity e in Universe.root.entities) {
-      var m = e as Character;
-      if(m == null) {
-        continue;
-      }
-      BehaviorEngine.Debug.Logger.Log(m.name);
     }
 
     // Unity hooks

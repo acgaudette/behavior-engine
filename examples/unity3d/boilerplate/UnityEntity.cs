@@ -22,12 +22,28 @@ public class UnityEntity : BehaviorEngine.Debug.Labeled, IEntity {
   public void StartDebug() {
     if (debug) return;
     BehaviorEngine.Debug.EntityDebugger.Attach(entity);
+
+    // TMP
+    if (entity is BehaviorEngine.Personality.Character) {
+      BehaviorEngine.Debug.CharacterDebugger.Attach(
+        entity as BehaviorEngine.Personality.Character
+      );
+    }
+
     debug = true;
   }
 
   public void StopDebug() {
     if (!debug) return;
     BehaviorEngine.Debug.EntityDebugger.Detach(entity);
+
+    // TMP
+    if (entity is BehaviorEngine.Personality.Character) {
+      BehaviorEngine.Debug.CharacterDebugger.Detach(
+        entity as BehaviorEngine.Personality.Character
+      );
+    }
+
     debug = false;
   }
 

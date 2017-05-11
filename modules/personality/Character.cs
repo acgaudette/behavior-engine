@@ -10,6 +10,8 @@ namespace BehaviorEngine.Personality {
 
   public class Character : Entity {
 
+    const float RELATIONSHIP_OFFSET = .2f;
+
     public string name;
 
     public BrainRepository BrainRepo {
@@ -20,12 +22,8 @@ namespace BehaviorEngine.Personality {
     CharacterState state;
     public Dictionary<string, Relationship> relationships;
 
-    //TODO: As mentioned inside Relationship.cs, may want to replace with a
-    //dictionary or some kind of data structure to make it more maintainable.
-    List<State> positiveTrustStates;
-    List<State> negativeTrustStates;
-    List<State> positiveAgreeStates;
-    List<State> negativeAgreeStates;
+    public Relationship.Affinities trustAffinities;
+    public Relationship.Affinities agreementAffinities;
 
     // Action link
     EntityEvents.OnPollEventHandler TriggerAction = (
@@ -41,53 +39,80 @@ namespace BehaviorEngine.Personality {
       this.name = name;
       oracle = new Brain();
       relationships = new Dictionary<string, Relationship>();
+
       // Perform Action on Interaction trigger
       OnPoll += TriggerAction;
 
-      positiveAgreeStates = new List<State>();
-      negativeAgreeStates = new List<State>();
-      positiveTrustStates = new List<State>();
-      negativeTrustStates = new List<State>();
+      agreementAffinities = new Relationship.Affinities();
+      trustAffinities = new Relationship.Affinities();
     }
 
-    public void registerPositiveAgree(
-      List<State> relevantStates
+    /* Relationships */
+
+    // Access a relationship with another character, if it exists
+    public Relationship GetRelationship(Character target) {
+      if(relationships.ContainsKey(target.name))
+        return relationships[target.name];
+      return null;
+    }
+
+    // Create first-time relationship
+    Relationship CreateRelationship(
+      Character target,
+      InfluencedInteraction interaction
     ) {
-      positiveAgreeStates.AddRange(relevantStates);
-    }
+      Relationship r = GetRelationship(target);
+      if (r != null) return null;
 
-    public void registerNegativeAgree(
-      List<State> relevantStates
-    ) {
-      negativeAgreeStates.AddRange(relevantStates);
-    }
+      var states = interaction.strongStateInfluences;
+      float trust = 0, agreement = 0;
 
-    public void registerPositiveTrust(
-      List<State> relevantStates
-    ) {
-      positiveTrustStates.AddRange(relevantStates);
-    }
-
-    public void registerNegativeTrust(
-      List<State> relevantStates
-    ) {
-      negativeTrustStates.AddRange(relevantStates);
-    }
-
-    public void RegisterRelationship(Character c,
-      float agreeability,
-      float trustworthiness) {
-      Relationship r = new Relationship(c, agreeability, trustworthiness);
-      relationships[c.name] =  r;
-    }
-
-    public Relationship GetRelationship(Character c) {
-      if(relationships.ContainsKey(c.name)) {
-        return relationships[c.name];
-      } else {
-        return null;
+      foreach (string name in states.Keys) {
+        agreement = agreementAffinities.Match(name) > 0 ?
+          agreement + 1 : agreement - 1;
+        trust = trustAffinities.Match(name) > 0 ?
+          trust + 1 : trust - 1;
       }
+
+      // Calculate initial axes
+
+      if (trust == 0)
+        trust = .5f;
+      else if (trust < 0)
+        trust = 1.0f / (-(trust - 2));
+      else
+        trust = .5f + (.05f * trust);
+
+      if (agreement == 0)
+        agreement = .5f;
+      else if (agreement < 0)
+        agreement = 1.0f / (-(agreement - 2));
+      else agreement = .5f + (.05f * agreement);
+
+      // Create relationship
+
+      r = new Relationship(target);
+
+      r.trust.Offset(trust * 2 - 1); // Scale
+      r.agreement.Offset(agreement * 2 - 1); // Scale
+
+      relationships[target.name] = r;
+
+      return r;
     }
+
+    // Event
+
+    public delegate void OnUpdateRelationshipEventHandler(
+      object sender,
+      Character target,
+      float trustOffset, float agreementOffset,
+      Relationship relationship
+    );
+
+    public event OnUpdateRelationshipEventHandler OnUpdateRelationship;
+
+    /* Actions */
 
     public bool PerformAction(string id, ICollection<IEntity> targets) {
       ICharacterAction action = BrainRepo.GetAction(id);
@@ -98,57 +123,13 @@ namespace BehaviorEngine.Personality {
       return true;
     }
 
-    private void SetupRelationship(
-      Character c,
-      InfluencedInteraction interaction
-    ) {
-      var states = interaction.strongStateInfluences;
-      int trust = 0;
-      int agree = 0;
-      foreach(string name in states.Keys) {
-        if(positiveAgreeStates.Find(x => x.name.Equals(name)) != null) {
-          agree++;
-        }
-        if(negativeAgreeStates.Find(x => x.name.Equals(name)) != null) {
-          agree--;
-        }
-        if(positiveTrustStates.Find(x => x.name.Equals(name)) != null) {
-          trust++;
-        }
-        if(negativeTrustStates.Find(x => x.name.Equals(name)) != null) {
-          trust--;
-        }
-      }
-      float trustworthiness = trust;
-      if(trustworthiness == 0) {
-        trustworthiness = .5f;
-      } else {
-        if(trustworthiness < 0) {
-          trustworthiness = 1.0f / (-(trustworthiness - 2));
-        } else {
-          trustworthiness = .5f + (.05f * trustworthiness);
-        }
-      }
-
-      float agreeability = agree;
-      if(agreeability == 0) {
-        agreeability = .5f;
-      } else {
-        if(agreeability < 0) {
-          agreeability = 1.0f / (-(agreeability - 2));
-        } else {
-          agreeability = .5f + (.05f * agreeability);
-        }
-      }
-
-      RegisterRelationship(c, agreeability, trustworthiness);
-    }
-
     protected virtual CharacterActionInfo GetActionInfo(
       ICollection<IEntity> targets
     ) {
       return new CharacterActionInfo(this, targets);
     }
+
+    /* Overrides */
 
     protected override void PrePoll() {
       // State evaluation
@@ -170,42 +151,57 @@ namespace BehaviorEngine.Personality {
     protected override IList<Effect> Observation(
       Interaction interaction, IEntity host, ICollection<IEntity> targets
     ) {
+      Character character = host as Character;
+
+      if (character == null) return null;
+
       InfluencedInteraction influencedInteraction
         = interaction as InfluencedInteraction;
+
       // Black box
       var effects =  oracle.ObservationEffects(
         influencedInteraction,
-        host as Character, targets, BrainRepo
+        character, targets, BrainRepo
       );
 
-      Relationship withHost = GetRelationship(host as Character);
-      if(withHost == null) {
-        SetupRelationship(host as Character, influencedInteraction);
-        withHost = GetRelationship(host as Character);
+      /* Relationship (with host) */
+
+      Relationship withHost = GetRelationship(character);
+      if (withHost == null) {
+        withHost = CreateRelationship(
+          character, influencedInteraction
+        );
       }
 
-      foreach(Effect e in effects) {
-        var effect = e as InfluencedEffect;
-        if(effect == null) {
-          continue;
-        }
-        var influences = effect.strongStateInfluences;
-        foreach(State s in influences.Values) {
-          var name = s.name;
-          if(positiveAgreeStates.Find(x => x.name.Equals(name)) != null) {
-            withHost.agreeability += .05f;
-          }
-          if(negativeAgreeStates.Find(x => x.name.Equals(name)) != null) {
-            withHost.agreeability -= .05f;
-          }
-          if(positiveTrustStates.Find(x => x.name.Equals(name)) != null) {
-            withHost.trustworthiness += .05f;
-          }
-          if(negativeTrustStates.Find(x => x.name.Equals(name)) != null) {
-            withHost.trustworthiness -= .05f;
-          }
+      float trustOffset = 0, agreementOffset = 0;
+
+      foreach (Effect effect in effects) {
+        var e = effect as InfluencedEffect;
+        if (e == null) continue;
+
+        // Check for matches
+        foreach (string name in e.strongStateInfluences.Keys) {
+          var matchTrust = trustAffinities.Match(name);
+          var matchAgreement = agreementAffinities.Match(name);
+
+          float trust = matchTrust > 0 ? RELATIONSHIP_OFFSET
+            : matchTrust < 0 ? -RELATIONSHIP_OFFSET : 0;
+          float agreement = matchAgreement > 0 ? RELATIONSHIP_OFFSET
+            : matchAgreement < 0 ? -RELATIONSHIP_OFFSET : 0;
+
+          withHost.trust.Offset(trust);
+          withHost.agreement.Offset(agreement);
+
+          trustOffset += trust;
+          agreementOffset += agreement;
         }
       }
+
+      // Event
+      OnUpdateRelationshipEventHandler handler = OnUpdateRelationship;
+      if (handler != null)
+        handler(this, character, trustOffset, agreementOffset, withHost);
+
       return effects;
     }
 
@@ -220,7 +216,8 @@ namespace BehaviorEngine.Personality {
       );
     }
 
-    // Debug
+    /* Debug */
+
     protected override void AssignDebugLabel(ref string label) {
       label = name;
     }
