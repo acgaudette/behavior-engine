@@ -69,7 +69,6 @@ namespace BehaviorEngine.Personality {
     }
 
     public readonly Character target;
-
     public Axis trust, agreement;
 
     public Relationship(Character target) {
