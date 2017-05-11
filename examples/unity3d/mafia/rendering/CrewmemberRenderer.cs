@@ -80,7 +80,7 @@ public partial class Crewmember : Character, IDestroyable {
     if (trustOffset == 0 && agreementOffset == 0) return;
 
     // Don't always render
-    if (Random.Range(0, 1f) > .85f) return;
+    if (Random.Range(0, 1f) > .3f) return;
 
     string data = "";
     Crewmember t = target as Crewmember;
