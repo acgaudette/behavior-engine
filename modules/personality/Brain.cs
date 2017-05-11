@@ -44,8 +44,9 @@ namespace BehaviorEngine.Personality {
       Character host, // Unused
       BrainRepository repo
     ) {
-      var effects = getStronglyInfluencedEffects(repo, i);
-      //TODO: Change selection via host/other methods
+      var effects = getStronglyInfluencedEffects(repo, i, host);
+      //TODO: Change selection via host/other methods; with the addtion of the
+      //relationship module, this seems more reasonable
       return effects;
     }
 
@@ -54,8 +55,9 @@ namespace BehaviorEngine.Personality {
       ICollection<IEntity> targets,
       BrainRepository repo
     ) {
-      var effects = getStronglyInfluencedEffects(repo, interaction);
-      //TODO: Change selection via host/other methods
+      var effects = getStronglyInfluencedEffects(repo, interaction, host);
+      //TODO: Change selection via host/other methods; with the addtion of the
+      //relationship module, this seems more reasonable
       return effects;
     }
 
@@ -75,12 +77,6 @@ namespace BehaviorEngine.Personality {
         }
         score = currState.TransformedState;
 
-        if(score > 0.8) {
-          //Too high?
-          //BehaviorEngine.Debug.Logger.Log(currState.GetDebugLabel());
-          //BehaviorEngine.Debug.Logger.Log("Value: " + score);
-        }
-
         foreach(State t in state) {
           if(t.Equals(s)) {
             score += .25f;
@@ -88,14 +84,19 @@ namespace BehaviorEngine.Personality {
         }
         count++;
       }
-      score /= count;
+      if(count != 0) {
+        score /= count;
+      }
       //BehaviorEngine.Debug.Logger.Log("Calculated score");
       score *= StabilityScore(state, host, interaction, targets, repo);
 
       if(targets != null) {
 
         foreach(IEntity e in targets) {
-
+          var c = e as Crewmember;
+          if(c.relationships.Count == 0) {
+            //c.re
+          }
         }
 
       }
@@ -129,8 +130,7 @@ namespace BehaviorEngine.Personality {
 
       var func = Transformations.EaseSquaredAtValue(ease);
 
-
-      var effects = getStronglyInfluencedEffects(repo, interaction);
+      var effects = getStronglyInfluencedEffects(repo, interaction, host);
       //List<FloatModifier> modifiers = new List<FloatModifier>();
       float modifyVal = 0f;
       foreach(Effect e in effects) {
@@ -139,10 +139,14 @@ namespace BehaviorEngine.Personality {
           FloatModifier floatMod = m as FloatModifier;
           currMod = Math.Abs(floatMod.offset);
         }
-        currMod /= e.Modifiers.Count;
+        if (e.Modifiers.Count != 0) {
+          currMod /= e.Modifiers.Count;
+        }
         modifyVal += currMod;
       }
-      modifyVal /= effects.Count;
+      if (effects.Count != 0) {
+        modifyVal /= effects.Count;
+      }
 
       ownScore = func(modifyVal);
 
@@ -178,7 +182,8 @@ namespace BehaviorEngine.Personality {
 
     private IList<Effect> getStronglyInfluencedEffects(
       BrainRepository repo,
-      InfluencedInteraction i
+      InfluencedInteraction i,
+      Character host
     ) {
       // Return value
       List<Effect> effects = new List<Effect>();
@@ -206,7 +211,24 @@ namespace BehaviorEngine.Personality {
         }
 
         if (differential == 0) {
-          effects.Add(e);
+          bool chosen = false;
+          foreach(var m in e.Modifiers) {
+            var f = m as FloatModifier;
+            foreach(var instance in host.GetAttributeInstances()) {
+              if(instance.Prototype.Equals(f.Attribute)) {
+                var state = instance as State.TransformedInstance;
+                chosen =
+                  (state.TransformedState < LOW_STABILITY && f.offset > 0) ||
+                  (state.TransformedState > HI_STABILITY && f.offset < 0)
+                  ;
+              }
+            }
+          }
+          if(chosen) {
+            effects.Add(e);
+          } else {
+            unused.Add(e);
+          }
         } else {
           unused.Add(e);
           differentials.Add(differential);
@@ -214,7 +236,7 @@ namespace BehaviorEngine.Personality {
 
         position++;
       }
-
+      /*
       while(effects.Count == 0) {
         Shuffle(unused);
         int index = 0;
@@ -228,6 +250,14 @@ namespace BehaviorEngine.Personality {
         }
         index++;
       }
+      */
+      BehaviorEngine.Debug.Logger.Log("Number of effects chosen: " + effects.Count);
+
+      /*
+      if(effects.Count == 0) {
+        effects.Add(unused[0]);
+      }
+      */
 
       return effects;
     }
