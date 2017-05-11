@@ -17,11 +17,15 @@ namespace BehaviorEngine.Personality {
       IEnumerable<State> strongStateInfluences,
       ICharacterAction action
     ) : this(limiter) {
-      foreach (Trait trait in strongTraitInfluences)
+      foreach (Trait trait in strongTraitInfluences) {
+        if (trait == null) continue;
         this.strongTraitInfluences[trait.type] = trait;
+      }
 
-      foreach (State state in strongStateInfluences)
+      foreach (State state in strongStateInfluences) {
+        if (state == null) continue;
         this.strongStateInfluences[state.name] = state;
+      }
 
       actionID = action.ID;
     }

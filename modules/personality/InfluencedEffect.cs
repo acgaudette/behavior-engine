@@ -18,11 +18,15 @@ namespace BehaviorEngine.Personality {
       IEnumerable<State> strongStateInfluences,
       List<IModifier> modifiers
     ) : this(name) {
-      foreach (Trait trait in strongTraitInfluences)
+      foreach (Trait trait in strongTraitInfluences) {
+        if (trait == null) continue;
         this.strongTraitInfluences[trait.type] = trait;
+      }
 
-      foreach (State state in strongStateInfluences)
+      foreach (State state in strongStateInfluences) {
+        if (state == null) continue;
         this.strongStateInfluences[state.name] = state;
+      }
 
       Modifiers = modifiers;
     }
