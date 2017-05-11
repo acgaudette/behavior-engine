@@ -6,6 +6,11 @@ using System.Collections.Generic;
 namespace BehaviorEngine {
 
   public class Interaction : Debug.Labeled {
+
+    // Maximum number of targets
+    // A value equal to zero defines a self-Interaction
+    // A value greater than zero defines an Interaction that by
+    // definition cannot be performed as a self-Interaction
     public int limiter;
 
     public Interaction(int limiter) {
@@ -38,7 +43,7 @@ namespace BehaviorEngine {
       return true;
     }
 
-    // Determine the observers of this Interaction given a host and  target(s)
+    // Determine the observers of this Interaction given a host and target(s)
     public virtual IEnumerable<IEntity> Observers(
       IEntity host, ICollection<IEntity> targets
     ) {
