@@ -20,15 +20,19 @@ public class LogEntry : ICharacterAction {
       this.finisher = finisher;
     }
 
-    public string Render(string name, string pronoun, string target) {
+    public string Render(Crewmember host, Crewmember target) {
       if (message == "?" || message == "...") return message;
 
-      // Fill in pronoun
-      string m = message.Replace("%p", pronoun);
-      string f = finisher.Replace("%p", pronoun);
+      return host.name + " " + FormatString(message, host, target)
+        + (target == null ? "" : " " + target.name)
+        + FormatString(finisher, host, target);
+    }
 
-      target = string.IsNullOrEmpty(target) ? "" : " " + target;
-      return name + " " + m + target + " " + f;
+    // Fill in pronouns
+    string FormatString(string s, Crewmember host, Crewmember target) {
+      return s.Replace("%p", host.pronoun)
+        .Replace("%tp", target.pronoun)
+        .Replace("%s", " ");
     }
   }
 
@@ -52,11 +56,9 @@ public class LogEntry : ICharacterAction {
       break;
     }
 
-    string targetName = target == null ? "" : target.name;
-
     Render.Log(
-      observations[i].Render(self.name, self.pronoun, targetName),
-      analyses[j].Render(self.name, self.pronoun, targetName)
+      observations[i].Render(self, target),
+      analyses[j].Render(self, target)
     );
   }
 }
