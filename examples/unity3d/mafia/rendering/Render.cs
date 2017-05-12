@@ -11,8 +11,18 @@ public class Render {
   public const string ENDL = "\n";
 
   const string STYLE_CSS =
-    "<style>body{"
-    + "background-color:black;color:red;font-family:monospace"
+    "<style>body{background-color:black}.log{"
+    + "background-color:black;color:red;font-family:monospace;"
+    + "padding-left:16px;padding-top:16px;"
+    + "padding-right:16px;padding-bottom:16px"
+    + "}</style>";
+
+  const string STYLE_CSS_MOBILE =
+    "<style>body{background-color:black}.log{"
+    + "background-color:black;color:red;font-family:monospace;"
+    + "padding-left:16px;padding-top:16px;"
+    + "padding-right:16px;padding-bottom:16px;"
+    + "font-size:60%"
     + "}</style>";
 
   public struct Timestamp {
@@ -76,16 +86,21 @@ public class Render {
       && (!html || Output(directory + filename, true));
   }
 
-  static bool Output(string path, bool html) {
+  static bool Output(string path, bool html, bool mobile = false) {
+    string rawPath = path;
+
     if (html) {
-      path += ".html";
+      path += (mobile ? "-mobile" : "") + ".html";
 
       for (int i = 0; i < log.Count; ++i) {
         log[i] = Regex.Replace(log[i], @"\n", "<br>") + "<br>";
       }
 
-      log.Insert(0, "<html>" + STYLE_CSS);
-      log.Add("</html>");
+      log.Insert(
+        0, "<html>" + (mobile ? STYLE_CSS_MOBILE : STYLE_CSS)
+          + "<div class='log'>"
+      );
+      log.Add("</div></html>");
     } else {
       path += ".txt";
     }
@@ -100,6 +115,10 @@ public class Render {
     Debug.Log(
       "Render: Wrote " + log.Count + " lines to " + Path.GetFileName(path)
     );
+
+    if (html && !mobile) {
+      return Output(rawPath, true, true);
+    }
 
     return true;
   }
