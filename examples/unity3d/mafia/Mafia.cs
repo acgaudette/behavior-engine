@@ -99,7 +99,7 @@ public class Mafia : MonoBehaviour {
     // each other
     State stress
     = new State(
-      "stress", () => Random.Range(.25, .75f),
+      "stress", () => Random.Range(.25f, .75f),
       Transformations.EaseSquared()
     );
     repo.RegisterState(stress);

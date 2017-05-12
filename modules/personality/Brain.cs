@@ -248,7 +248,7 @@ namespace BehaviorEngine.Personality {
           if(chosen) {
             effects.Add(e);
           } else {
-            var t = 0;
+            //TODO: Effect is not chosen; perhaps could be a useful point.
           }
         } else {
           unused.Add(e);
@@ -273,7 +273,12 @@ namespace BehaviorEngine.Personality {
       }
       */
       if(effects.Count != 1) {
-        BehaviorEngine.Debug.Logger.Log("Number of effects chosen: " + effects.Count);
+        //TODO: Debug statement in case no effects or more than one
+        //effect is chosen
+        /*BehaviorEngine.Debug.Logger.Log(
+        "Number of effects chosen: " + effects.Count
+        );
+        */
       }
 
       /*
