@@ -1,8 +1,8 @@
 anger_on_other
-  is unleashing %p anger at
+  is unleashing %p anger on
   has reached %p limit and is letting off steam by tormenting
   is blinded by rage, believing that
-    is the source of all %p problems
+    is the source of all of %p problems
   is expressing anger in an unhealthy way at
   can't control their explosive emotions and is using
     as an outlet
