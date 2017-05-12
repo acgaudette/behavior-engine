@@ -203,6 +203,18 @@ public class Mafia : MonoBehaviour {
     }
 
     /* Interactions */
+    var stress_on_self = 
+      new InfluencedInteraction(
+        0,
+        LS(
+          repo.GetTrait(Factor.NEUROTICISM)
+        ),
+        LS(
+          repo.GetState("stress")
+        ),
+        repo.GetAction("stress_on_self")
+      );
+    stress_on_self.SetDebugLabel("stress_on_self");
 
     var stress_on_other = 
       new InfluencedInteraction(

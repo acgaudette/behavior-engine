@@ -3,9 +3,13 @@ anger_on_other
   has reached %p limit and is letting off steam by tormenting
   's rage is blinding %p judgment, and believes that
     is the source of all %p problems.
+stress_on_self
+  has too much stress, and it shows in %p actions
 stress_on_other
-  is accusing
+  thinks that
+    is suspicious
   's stress is causing mental anguish and %p suspicions about
     are getting worse
-  is condemning
+  can't stop thinking that
+    could be guilty
   ...
