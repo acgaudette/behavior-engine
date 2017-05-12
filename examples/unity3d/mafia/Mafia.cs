@@ -105,6 +105,7 @@ public class Mafia : MonoBehaviour {
     repo.RegisterState(stress);
     states.Add(stress);
 
+    /*
     // The higher the confusion, the more likely energy will needlessly go down
     State confusion
       = new State(
@@ -113,6 +114,7 @@ public class Mafia : MonoBehaviour {
     );
     repo.RegisterState(confusion);
     states.Add(confusion);
+    */
 
     /* Relationships */
     /**
@@ -186,7 +188,8 @@ public class Mafia : MonoBehaviour {
       new InfluencedInteraction(
         0,
         LS(
-          repo.GetTrait(Factor.NEUROTICISM)
+          repo.GetTrait(Factor.NEUROTICISM),
+          repo.GetTrait(Factor.AGREEABLENESS)
         ),
         LS(
           repo.GetState("stress")
@@ -224,6 +227,22 @@ public class Mafia : MonoBehaviour {
     anger_on_other.SetDebugLabel("anger_on_other");
     repo.RegisterInteraction(anger_on_other);
 
+    /*
+    var confusion_on_self = 
+      new InfluencedInteraction(
+        0,
+        LS(
+          repo.GetTrait(Factor.CONSCIENTIOUSNESS)
+        ),
+        LS(
+          repo.GetState("confusion")
+        ),
+        repo.GetAction("confusion_on_self")
+      );
+    stress_on_self.SetDebugLabel("confusion_on_self");
+    repo.RegisterInteraction(confusion_on_self);
+    */
+
     // Attribution
     foreach (Character character in characters) {
       character.Subscribe();
@@ -235,12 +254,22 @@ public class Mafia : MonoBehaviour {
     for(int i = 0; i < characters.Length; ++i) {
       var crewmember = characters[i];
       foreach(var attr in crewmember.GetAttributeInstances()) {
+        var instance = attr as State.TransformedInstance;
         if(attr.Prototype.Equals(repo.GetState("anger"))) {
-          var instance = attr as State.TransformedInstance;
-          if(i < ((characters.Length * 3) / 4)) {
+          if(i < ((characters.Length) / 2)) {
             instance.State = 0f;
           } else {
-            instance.State = Random.Range(.85f, .95f);
+            if(i < ((characters.Length * 3) / 4)) {
+              instance.State = Random.Range(.65f, 7f);
+            }
+            else {
+              instance.State = Random.Range(.85f, .95f);
+            }
+          }
+        }
+        if(attr.Prototype.Equals(repo.GetState("stress"))) {
+          if(i > (characters.Length / 2) && i < ((characters.Length * 3) / 4)) {
+            instance.State = Random.Range(.4f, .6f);
           }
         }
       }
