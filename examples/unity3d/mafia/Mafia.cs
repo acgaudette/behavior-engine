@@ -132,16 +132,23 @@ public class Mafia : MonoBehaviour {
 
       //states[indexer];
 
-      if(i < ((characters.Length * 3) / 4)) {
+      if(i < ((characters.Length) / 2)) {
         negTrust.Add(repo.GetState("anger"));
         negAgree.Add(repo.GetState("anger"));
         posTrust.Add(repo.GetState("stress"));
         posAgree.Add(repo.GetState("stress"));
       } else {
-        negTrust.Add(repo.GetState("stress"));
-        negAgree.Add(repo.GetState("stress"));
-        posTrust.Add(repo.GetState("anger"));
-        posAgree.Add(repo.GetState("anger"));
+        if(i < ((characters.Length * 3) / 4)) {
+          negTrust.Add(repo.GetState("stress"));
+          negAgree.Add(repo.GetState("anger"));
+          posTrust.Add(repo.GetState("anger"));
+          posAgree.Add(repo.GetState("stress"));
+        } else {
+          negTrust.Add(repo.GetState("stress"));
+          negAgree.Add(repo.GetState("stress"));
+          posTrust.Add(repo.GetState("anger"));
+          posAgree.Add(repo.GetState("anger"));
+        }
       }
 
       c.agreementAffinities.RegisterPositive(posAgree);
