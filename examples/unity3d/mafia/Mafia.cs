@@ -194,6 +194,7 @@ public class Mafia : MonoBehaviour {
         repo.GetAction("stress_on_self")
       );
     stress_on_self.SetDebugLabel("stress_on_self");
+    repo.RegisterInteraction(stress_on_self);
 
     var stress_on_other = 
       new InfluencedInteraction(
@@ -207,7 +208,6 @@ public class Mafia : MonoBehaviour {
         repo.GetAction("stress_on_other")
       );
     stress_on_other.SetDebugLabel("stress_on_other");
-
     repo.RegisterInteraction(stress_on_other);
 
     var anger_on_other =
@@ -222,7 +222,6 @@ public class Mafia : MonoBehaviour {
         repo.GetAction("anger_on_other")
       );
     anger_on_other.SetDebugLabel("anger_on_other");
-
     repo.RegisterInteraction(anger_on_other);
 
     // Attribution
