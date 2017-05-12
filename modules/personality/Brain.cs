@@ -9,9 +9,9 @@ namespace BehaviorEngine.Personality {
 
   public class Brain {
 
-    private const float LOW_STABILITY = 0.3f;
-    private const float MED_STABILITY = 0.5f;
-    private const float HI_STABILITY = 0.8f;
+    private const float LOW_STABILITY = .3f;
+    private const float HI_STABILITY = .7f;
+    private const float MIDPOINT = 0.5f;
 
     static Random random = new Random();
 
@@ -71,7 +71,7 @@ namespace BehaviorEngine.Personality {
       int count = 0;
       foreach(State s in interaction.strongStateInfluences.Values) {
         State.TransformedInstance currState
-        = host[s] as State.TransformedInstance;
+          = host[s] as State.TransformedInstance;
         if(currState == null) {
           continue;
         }
@@ -88,18 +88,7 @@ namespace BehaviorEngine.Personality {
         score /= count;
       }
       //BehaviorEngine.Debug.Logger.Log("Calculated score");
-      score *= StabilityScore(state, host, interaction, targets, repo);
-
-      if(targets != null) {
-
-        foreach(IEntity e in targets) {
-          var c = e as Crewmember;
-          if(c.relationships.Count == 0) {
-            //c.re
-          }
-        }
-
-      }
+      //score *= StabilityScore(state, host, interaction, targets, repo);
 
       return score;
     }
@@ -198,36 +187,68 @@ namespace BehaviorEngine.Personality {
       foreach (InfluencedEffect e in allEffects) {
         // Difference in influence (zero = the same)
         int differential = 0;
-        foreach (Factor factor in i.strongTraitInfluences.Keys) {
-          if (!e.strongTraitInfluences.ContainsKey(factor)) {
+        List<float> traitValues = new List<float>();
+        List<float> stateValues = new List<float>();
+        foreach (var pair in i.strongTraitInfluences) {
+          if (!e.strongTraitInfluences.ContainsKey(pair.Key)) {
             differential++;
+          } else {
+            foreach (var instance in host.GetAttributeInstances()) {
+              if (instance.Prototype.Equals(pair.Value)) {
+                var val = instance as Trait.TransformedInstance;
+                traitValues.Add(val.TransformedState);
+              }
+            }
           }
         }
 
-        foreach (string name in i.strongStateInfluences.Keys) {
-          if (!e.strongStateInfluences.ContainsKey(name)) {
+        foreach (var pair in i.strongStateInfluences) {
+          if (!e.strongStateInfluences.ContainsKey(pair.Key)) {
             differential++;
+          } else {
+            foreach (var instance in host.GetAttributeInstances()) {
+              if (instance.Prototype.Equals(pair.Value)) {
+                var val = instance as State.TransformedInstance;
+                stateValues.Add(val.TransformedState);
+              }
+            }
           }
         }
 
         if (differential == 0) {
           bool chosen = false;
+          float accumulatorVal = 0f;
+          float modTotal = 0f;
+          int numTraits = 0;
           foreach(var m in e.Modifiers) {
             var f = m as FloatModifier;
-            foreach(var instance in host.GetAttributeInstances()) {
-              if(instance.Prototype.Equals(f.Attribute)) {
-                var state = instance as State.TransformedInstance;
-                chosen =
-                  (state.TransformedState < LOW_STABILITY && f.offset > 0) ||
-                  (state.TransformedState > HI_STABILITY && f.offset < 0)
-                  ;
+            float valCalc = 0f;
+            foreach (var traitVal in traitValues) {
+              foreach (var stateVal in stateValues) {
+                valCalc += stateVal;
               }
+              numTraits++;
             }
+            valCalc /= numTraits;
+            accumulatorVal += valCalc;
+            modTotal += f.offset;
           }
+          accumulatorVal /= e.Modifiers.Count;
+          modTotal /= e.Modifiers.Count;
+
+          chosen
+            = (accumulatorVal < LOW_STABILITY &&
+          modTotal > 0 && modTotal < .2f) ||
+          (accumulatorVal > LOW_STABILITY && accumulatorVal < MIDPOINT &&
+          modTotal >= .2f) ||
+          (accumulatorVal > MIDPOINT && accumulatorVal < HI_STABILITY &&
+          modTotal < 0f && modTotal > -.2f) ||
+          (accumulatorVal > HI_STABILITY &&
+          modTotal <= -.2f);
           if(chosen) {
             effects.Add(e);
           } else {
-            unused.Add(e);
+            var t = 0;
           }
         } else {
           unused.Add(e);
@@ -251,7 +272,9 @@ namespace BehaviorEngine.Personality {
         index++;
       }
       */
-      BehaviorEngine.Debug.Logger.Log("Number of effects chosen: " + effects.Count);
+      if(effects.Count != 1) {
+        BehaviorEngine.Debug.Logger.Log("Number of effects chosen: " + effects.Count);
+      }
 
       /*
       if(effects.Count == 0) {

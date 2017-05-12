@@ -89,39 +89,30 @@ public class Mafia : MonoBehaviour {
     // The higher the anger, the rasher the actions
     State anger = 
       new State(
-        "anger", () => Random.Range(0, .25f),
+        "anger", () => Random.Range(.1f, .25f),
         Transformations.EaseSquared()
       );
     repo.RegisterState(anger);
     states.Add(anger);
-    /*
-    // Need energy to perform certain actions
-    State energy = new State(
-      "energy", () => 1,
-      Transformations.Linear()
-    );
-    repo.RegisterState(energy);
-    states.Add(energy);
-
-    // The higher the confusion, the more likely energy will needlessly go down
-    State confusion
-      = new State(
-      "confusion", () => Random.Range(0, .25f),
-      Transformations.InvertedSquared()
-    );
-    repo.RegisterState(confusion);
-    states.Add(confusion);
 
     // The higher the stress, the more likely people will be suspicious of
     // each other
     State stress
     = new State(
-        "stress", () => Random.Range(0, .25f),
-        Transformations.InvertedSquared()
-      );
+      "stress", () => Random.Range(.25, .75f),
+      Transformations.EaseSquared()
+    );
     repo.RegisterState(stress);
     states.Add(stress);
-    */
+
+    // The higher the confusion, the more likely energy will needlessly go down
+    State confusion
+      = new State(
+      "confusion", () => Random.Range(.5f, .6f),
+      Transformations.EaseSquared()
+    );
+    repo.RegisterState(confusion);
+    states.Add(confusion);
 
     /* Relationships */
     /**
@@ -213,108 +204,22 @@ public class Mafia : MonoBehaviour {
 
     /* Interactions */
 
-    // Accuse
-    /*
-    var highangerhighstress_onother = 
+    var stress_on_other = 
       new InfluencedInteraction(
         1,
         LS(
-          repo.GetTrait(Factor.AGREEABLENESS),
           repo.GetTrait(Factor.NEUROTICISM)
         ),
         LS(
-          repo.GetState("anger"),
           repo.GetState("stress")
         ),
-        repo.GetAction("highangerhighstress_onother")
+        repo.GetAction("stress_on_other")
       );
-    highangerhighstress_onother.SetDebugLabel("highangerhighstress_onother");
+    stress_on_other.SetDebugLabel("stress_on_other");
 
-    // Investigate
-    var investigate =
-      new InfluencedInteraction(
-        1,
-        LS(
-          repo.GetTrait(Factor.EXTRAVERSION),
-          repo.GetTrait(Factor.OPENNESS)
-        ),
-        LS(
-          repo.GetState("energy")
-        ),
-        repo.GetAction("investigate")
-      );
-    investigate.SetDebugLabel("investigate");
+    repo.RegisterInteraction(stress_on_other);
 
-    // Despair
-    InfluencedInteraction despair =
-      new InfluencedInteraction(
-        0,
-        LS(
-          repo.GetTrait(Factor.NEUROTICISM)
-        ),
-        LS(
-          repo.GetState("stress"),
-          repo.GetState("confusion")
-        ),
-        repo.GetAction("despair")
-      );
-    despair.SetDebugLabel("despair");
-
-    // Hallucinate
-    var hallucinate =
-      new InfluencedInteraction(
-        0,
-        LS(
-          repo.GetTrait(Factor.EXTRAVERSION),
-          repo.GetTrait(Factor.NEUROTICISM)
-        ),
-        LS(
-          repo.GetState("energy"),
-          repo.GetState("stress")
-        ),
-        repo.GetAction("hallucinate")
-      );
-    hallucinate.SetDebugLabel("hallucinate");
-
-    // Sleep
-    var sleep =
-      new InfluencedInteraction(
-        0,
-        LS(
-          repo.GetTrait(Factor.CONSCIENTIOUSNESS)
-        ),
-        LS(
-          repo.GetState("energy")
-        ),
-        repo.GetAction("sleep")
-      );
-    sleep.SetDebugLabel("sleep");
-
-    // Attack
-    var highenergyhighanger_onother =
-      new InfluencedInteraction(
-        1,
-        LS(
-          repo.GetTrait(Factor.AGREEABLENESS),
-          repo.GetTrait(Factor.NEUROTICISM)
-        ),
-        LS(
-          repo.GetState("energy"),
-          repo.GetState("anger")
-        ),
-        repo.GetAction("highenergyhighanger_onother")
-      );
-    highenergyhighanger_onother.SetDebugLabel("highenergyhighanger_onother");
-
-    repo.RegisterInteraction(highangerhighstress_onother);
-    repo.RegisterInteraction(investigate);
-    repo.RegisterInteraction(despair);
-    repo.RegisterInteraction(hallucinate);
-    repo.RegisterInteraction(sleep);
-    repo.RegisterInteraction(highenergyhighanger_onother);
-    */
-
-    var highanger_onother =
+    var anger_on_other =
       new InfluencedInteraction(
         1,
         LS(
@@ -323,11 +228,11 @@ public class Mafia : MonoBehaviour {
         LS(
           repo.GetState("anger")
         ),
-        repo.GetAction("highanger_onother")
+        repo.GetAction("anger_on_other")
       );
-    highanger_onother.SetDebugLabel("highanger_onother");
+    anger_on_other.SetDebugLabel("anger_on_other");
 
-    repo.RegisterInteraction(highanger_onother);
+    repo.RegisterInteraction(anger_on_other);
 
     // Attribution
     foreach (Character character in characters) {
@@ -386,7 +291,8 @@ public class Mafia : MonoBehaviour {
 
     if (state.name == "stress") {
       return LS(
-        repo.GetTrait(Factor.NEUROTICISM)
+        repo.GetTrait(Factor.NEUROTICISM),
+        repo.GetTrait(Factor.EXTRAVERSION)
       );
     }
 

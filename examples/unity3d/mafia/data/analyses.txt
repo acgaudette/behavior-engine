@@ -1,30 +1,11 @@
-highangerhighstress_onother
+anger_on_other
+  is unleashing %p anger at
+  has reached %p limit and is letting off steam by tormenting
+  's rage is blinding %p judgment, and believes that
+    is the source of all %p problems.
+stress_on_other
   is accusing
-  is blaming
+  's stress is causing mental anguish and %p suspicions about
+    are getting worse
   is condemning
-  ...
-investigate
-  is trying to suss out
-    's motives
-  is investigating
-  ...
-despair
-  is despairing
-  is losing hope
-  is becoming depressed
-  is distressed
-  is feeling discouraged
-  is feeling sad
-  ...
-hallucinate
-  is hallucinating
-  is delirious
-  ...
-sleep
-  is trying to rest
-  is attempting to relax
-  ...
-highenergyhighanger_onother
-  is angry at
-  is criticizing
   ...

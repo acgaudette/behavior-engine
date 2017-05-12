@@ -1,29 +1,9 @@
-highangerhighstress_onother
-  points %p finger at
-investigate
-  watches
-  watches
-    carefully
-  observes
-  observes
-    intently
-  trains %p eyes on
-  follows
-    with %p eyes
-despair
-  cries
-  puts %p head in %p hands
-  stares at the floor
-hallucinate
-  laughs wildly
-  makes incoherent gestures
-sleep
-  leans back
-  stands impassively
-  closes %p eyes and covers %p ears
-highenergyhighanger_onother
+highAnger_onOther
   yells at
-  shouts at
-  gestures angrily at
-  freaks out at
-    for no apparent reason
+    in anger
+  throws %p fist at
+    . The other crewmembers prevent the two from fighting
+  stares at
+    with seething eyes
+stress_on_other
+  points %p finger at

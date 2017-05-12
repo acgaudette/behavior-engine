@@ -151,7 +151,9 @@ namespace BehaviorEngine.Personality {
         influencedInteraction,
         hostCharacter, BrainRepo
       );
-      UpdateRelationship(hostCharacter, influencedInteraction, effects);
+      if (this != hostCharacter) {
+        UpdateRelationship(hostCharacter, influencedInteraction, effects);
+      }
       return effects;
     }
 
