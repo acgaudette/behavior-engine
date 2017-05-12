@@ -169,8 +169,24 @@ namespace BehaviorEngine.Personality {
 
         var f = Transformations.EaseSquaredAtValue(weight);
         otherScore += f(modifyVal);
+
+        // Attempt to bias interaction towards people that crew will vote for
+        var crewmember = target as Character;
+        var hostCrew = host as Crewmember;
+        if(crewmember != null && hostCrew != null) {
+          var chooseVote = hostCrew.ChooseVote();
+          //Will be null if relationship does not exist
+          if(chooseVote != null) {
+            if(hostCrew.ChooseVote().Equals(crewmember)) {
+              otherScore *= 2;
+              //Debug.Logger.Log("Doubled, found vote");
+            }
+          }
+        }
       }
-      otherScore /= targets.Count;
+      if(targets.Count != 0) {
+        otherScore /= targets.Count;
+      }
       float score = (ownScore + otherScore) / 2;
       //BehaviorEngine.Debug.Logger.Log("Score: " + score);
       return score;
