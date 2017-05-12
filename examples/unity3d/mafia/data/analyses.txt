@@ -8,6 +8,9 @@ stress_on_self
 stress_on_other
   thinks that
     is suspicious
+  is suspicious of
+  finds
+    suspicious
   %ns's stress is causing mental anguish and %p suspicions about
     are getting worse
   can't stop thinking that
