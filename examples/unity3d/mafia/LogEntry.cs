@@ -23,16 +23,23 @@ public class LogEntry : ICharacterAction {
     public string Render(Crewmember host, Crewmember target) {
       if (message == "?" || message == "...") return message;
 
-      return host.name + " " + FormatString(message, host, target)
-        + (target == null ? "" : " " + target.name)
+      return host.name + FormatString(message, host, target)
+        + (target == null ? "" : target.name)
         + FormatString(finisher, host, target);
     }
 
     // Fill in pronouns
     string FormatString(string s, Crewmember host, Crewmember target) {
-      return s.Replace("%p", host.pronoun)
-        .Replace("%tp", target.pronoun)
-        .Replace("%s", " ");
+      if (s.Length < 4) return s == "%ns" ? "" : s;
+
+      string first = s.Substring(0, 3), last = s.Substring(s.Length - 3, 3);
+
+      s = (first == "%ns" ? s.Substring(3, s.Length - 3) : " " + s)
+        .Replace("%p", host.pronoun)
+        .Replace("%tp", target == null ? "?" : target.pronoun);
+
+      return (last == "%ns" ? s.Substring(0, s.Length - 3)
+        : target == null ? s : s + " ");
     }
   }
 
