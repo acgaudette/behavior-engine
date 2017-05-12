@@ -99,7 +99,7 @@ public class Mafia : MonoBehaviour {
     // each other
     State stress
     = new State(
-      "stress", () => Random.Range(.25f, .75f),
+      "stress", () => Random.Range(.1f, .25f),
       Transformations.EaseSquared()
     );
     repo.RegisterState(stress);
@@ -108,7 +108,7 @@ public class Mafia : MonoBehaviour {
     // The higher the confusion, the more likely energy will needlessly go down
     State confusion
       = new State(
-      "confusion", () => Random.Range(.5f, .6f),
+      "confusion", () => Random.Range(.1f, .25f),
       Transformations.EaseSquared()
     );
     repo.RegisterState(confusion);
@@ -121,55 +121,27 @@ public class Mafia : MonoBehaviour {
      * Ideally, this should not be randomly assigned, perhaps chosen when
      * creating the characters
      */
-    foreach (Crewmember c in characters) {
+    for (int i = 0; i < characters.Length; ++i) {
+
+      var c = characters[i];
+       
       List<State> negTrust = new List<State>();
       List<State> posTrust = new List<State>();
       List<State> posAgree = new List<State>();
       List<State> negAgree = new List<State>();
 
-      foreach (State s in states) {
-        if (Random.Range(0, 1f) < .3f) negTrust.Add(s);
-      }
-      foreach(State s in states) {
-        if (Random.Range(0, 1f) < .4f) {
-          if (!negTrust.Contains(s)) posTrust.Add(s);
-        }
-      }
+      //states[indexer];
 
-      foreach (State s in states) {
-        if (Random.Range(0, 1f) < .3f) negAgree.Add(s);
-      }
-      foreach (State s in states) {
-        if (Random.Range(0, 1f) < .4f) {
-          if (!negAgree.Contains(s)) posAgree.Add(s);
-        }
-      }
-
-      //TODO: Remove when getting rid of randomness
-      if(negAgree.Count == 0 && 
-          posAgree.Count == 0 && 
-          negTrust.Count == 0 && 
-          posTrust.Count == 0
-        ) {
-        do {
-          int i = 0;
-          i = (Random.Range(0, 4));
-          int index = (Random.Range(0, states.Count));
-          switch(i) {
-          case 0:
-            negAgree.Add(states[index]);
-            break;
-          case 1:
-            posAgree.Add(states[index]);
-            break;
-          case 2:
-            negTrust.Add(states[index]);
-            break;
-          case 3:
-            posTrust.Add(states[index]);
-            break;
-          }
-        } while(Random.Range(0, 2f) < 1.2f);
+      if(i < ((characters.Length * 3) / 4)) {
+        negTrust.Add(repo.GetState("anger"));
+        negAgree.Add(repo.GetState("anger"));
+        posTrust.Add(repo.GetState("stress"));
+        posAgree.Add(repo.GetState("stress"));
+      } else {
+        negTrust.Add(repo.GetState("stress"));
+        negAgree.Add(repo.GetState("stress"));
+        posTrust.Add(repo.GetState("anger"));
+        posAgree.Add(repo.GetState("anger"));
       }
 
       c.agreementAffinities.RegisterPositive(posAgree);
@@ -250,6 +222,22 @@ public class Mafia : MonoBehaviour {
     foreach (Character character in characters) {
       character.Subscribe();
       Universe.root.entities.Add(character);
+    }
+
+
+    // Manually force certain attributes
+    for(int i = 0; i < characters.Length; ++i) {
+      var crewmember = characters[i];
+      foreach(var attr in crewmember.GetAttributeInstances()) {
+        if(attr.Prototype.Equals(repo.GetState("anger"))) {
+          var instance = attr as State.TransformedInstance;
+          if(i < ((characters.Length * 3) / 4)) {
+            instance.State = 0f;
+          } else {
+            instance.State = Random.Range(.85f, .95f);
+          }
+        }
+      }
     }
 
     // Unity hooks
