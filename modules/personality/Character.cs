@@ -180,7 +180,7 @@ namespace BehaviorEngine.Personality {
     protected void UpdateRelationship(
       Character character,
       InfluencedInteraction influencedInteraction,
-      IList<Effect> effects    
+      IList<Effect> effects
     ) {
       Relationship withHost = GetRelationship(character);
       if (withHost == null) {
