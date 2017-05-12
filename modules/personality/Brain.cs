@@ -88,7 +88,7 @@ namespace BehaviorEngine.Personality {
         score /= count;
       }
       //BehaviorEngine.Debug.Logger.Log("Calculated score");
-      //score *= StabilityScore(state, host, interaction, targets, repo);
+      score *= StabilityScore(state, host, interaction, targets, repo);
 
       return score;
     }
@@ -101,13 +101,16 @@ namespace BehaviorEngine.Personality {
     ) {
       float ownScore = 0f;
       int count = 0;
+
       foreach(State s in state) {
         State.TransformedInstance currState 
         = host[s] as State.TransformedInstance;
         ownScore += currState.TransformedState;
         count++;
       }
+
       ownScore /= count;
+
       float ease = .3f;
       if(ownScore < LOW_STABILITY) {
         ease = .5f;
@@ -149,17 +152,21 @@ namespace BehaviorEngine.Personality {
         var attrs = target.GetAttributeInstances();
         float stabilityValue = 0f;
         float weight = 1f;
+
         foreach(IAttributeInstance a in attrs) {
           NormalizedAttribute.Instance attr = a as NormalizedAttribute.Instance;
           stabilityValue += attr.State;
         }
+
         stabilityValue /= attrs.Count;
+
         weight = .3f;
         if(stabilityValue <= LOW_STABILITY) {
           weight = .5f;
         } else {
           weight = .1f;
         }
+
         var f = Transformations.EaseSquaredAtValue(weight);
         otherScore += f(modifyVal);
       }
@@ -220,19 +227,23 @@ namespace BehaviorEngine.Personality {
           float accumulatorVal = 0f;
           float modTotal = 0f;
           int numTraits = 0;
+
           foreach(var m in e.Modifiers) {
             var f = m as FloatModifier;
             float valCalc = 0f;
+
             foreach (var traitVal in traitValues) {
               foreach (var stateVal in stateValues) {
                 valCalc += stateVal;
               }
               numTraits++;
             }
+
             valCalc /= numTraits;
             accumulatorVal += valCalc;
             modTotal += f.offset;
           }
+
           accumulatorVal /= e.Modifiers.Count;
           modTotal /= e.Modifiers.Count;
 
@@ -245,6 +256,7 @@ namespace BehaviorEngine.Personality {
           modTotal < 0f && modTotal > -.2f) ||
           (accumulatorVal > HI_STABILITY &&
           modTotal <= -.2f);
+
           if(chosen) {
             effects.Add(e);
           } else {
