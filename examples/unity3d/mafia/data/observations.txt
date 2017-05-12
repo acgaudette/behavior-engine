@@ -2,9 +2,11 @@ anger_on_other
   yells at
     in anger
   throws %p fist at
-    . The other crewmembers prevent the two from fighting
+    %ns. The other crewmembers prevent the two from fighting
   stares at
     with seething eyes
+  shouts--%ns
+    seems to be %p target of aggression
 stress_on_self
   stares vacantly at a wall, eyes rolling all over.
   licks %p lips while pacing around the room.
