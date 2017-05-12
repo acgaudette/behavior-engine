@@ -44,7 +44,7 @@ namespace BehaviorEngine.Personality {
       Character host, // Unused
       BrainRepository repo
     ) {
-      var effects = GetStronglyInfluencedEffects(repo, i, host);
+      var effects = ChooseStronglyInfluencedEffects(repo, i, host);
       //TODO: Change selection via host/other methods; with the addtion of the
       //relationship module, this seems more reasonable
       return effects;
@@ -55,7 +55,7 @@ namespace BehaviorEngine.Personality {
       ICollection<IEntity> targets,
       BrainRepository repo
     ) {
-      var effects = GetStronglyInfluencedEffects(repo, interaction, host);
+      var effects = ChooseStronglyInfluencedEffects(repo, interaction, host);
       //TODO: Change selection via host/other methods; with the addtion of the
       //relationship module, this seems more reasonable
       return effects;
@@ -119,7 +119,7 @@ namespace BehaviorEngine.Personality {
 
       var func = Transformations.EaseSquaredAtValue(ease);
 
-      var effects = GetStronglyInfluencedEffects(repo, interaction, host);
+      var effects = ChooseStronglyInfluencedEffects(repo, interaction, host);
       //List<FloatModifier> modifiers = new List<FloatModifier>();
       float modifyVal = 0f;
       foreach(Effect e in effects) {
@@ -169,7 +169,7 @@ namespace BehaviorEngine.Personality {
       return score;
     }
 
-    private IList<Effect> GetStronglyInfluencedEffects(
+    private IList<Effect> ChooseStronglyInfluencedEffects(
       BrainRepository repo,
       InfluencedInteraction i,
       Character host
