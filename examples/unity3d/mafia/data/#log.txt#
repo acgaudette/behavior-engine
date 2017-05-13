@@ -1,0 +1,199 @@
+On the third rotation, Epoch 5, a derelict K-class freighter was found drifting near E202 (Sector 9). The craft was unlisted on any known register.
+
+During a routine investigation by safety craft from the nearest station, several bodies were discovered, as well as a curious tape hidden within a midship conference room.
+
+The tape was found to contain grainy, choppy footage from what appeared to be a hidden camera mounted in the conference room. There was no audio.
+
+The following is a transcript recorded manually by a local DIA employee while watching this footage.
+
+CREW REGISTER
+Burgstaller, Jurgen ... {Engineer}
+Bertrand, Francis ... {First Mate}
+Parsons, Eugene ... {Swabbie}
+Strickland, Peter ... {Security}
+Pahlavi, Yasmin ... {Navigator}
+Cruz, Leonie ... {Pilot}
+Valenti, Micaela ... {Quartermaster}
+Murphy, Nora ... {Captain}
+
+[ BEGIN TRANSCRIPT ]
+
+[ SHIP CYCLE 3474 ]
+
+[01:00:05]
+observation: The crew walks into the room.
+analysis: ...
+
+[01:00:19]
+observation: Jurgen Burgstaller (Engineer) is not present
+analysis: ?
+
+[01:00:27]
+observation: Bertrand runs through the hallways looking for Pahlavi
+analysis: ...
+
+[01:00:36]
+observation: Parsons continually talks to Bertrand regarding the current situation 
+analysis: Parsons 	's thoughts on the current situation Bertrand
+
+[01:00:36]
+BIOMETRICS AI -- PARSONS, EUGENE
+_anger +100.00% +/- 5% STATUS=LOW
+
+[01:00:39]
+observation: Strickland shouts--Pahlavi seems to be his target of aggression 
+analysis: Strickland is blinded by rage, believing that Pahlavi is the source of all of his problems 
+
+[01:00:39]
+BIOMETRICS AI -- STRICKLAND, PETER
+_stress +??.??% +/- 5% STATUS=UNCERTAIN
+
+[01:00:39]
+BIOMETRICS AI -- PAHLAVI, YASMIN
+_anger -17.76% +/- 5% STATUS=UNCERTAIN
+
+[01:00:53]
+observation: Pahlavi chews on her fingernails while talking with Bertrand
+analysis: Pahlavi 	's thoughts on the current situation Bertrand
+
+[01:00:53]
+BIOMETRICS AI -- PAHLAVI, YASMIN
+_anger -50.08% +/- 5% STATUS=UNCERTAIN
+
+[01:00:00]
+observation: Cruz attempts to sleep, but takes fleeting looks at Parsons every few seconds 
+analysis: Cruz is stressed about Parsons
+
+[01:00:00]
+BIOMETRICS AI -- PARSONS, EUGENE
+_stress +100.00% +/- 5% STATUS=UNCERTAIN
+
+[01:00:10]
+observation: Valenti growls at Pahlavi
+analysis: Valenti is unleashing her anger on Pahlavi
+
+[01:00:10]
+BIOMETRICS AI -- PAHLAVI, YASMIN
+_stress +61.02% +/- 5% STATUS=NORMAL
+
+[01:00:24]
+observation: Murphy jabs her finger at Valenti 's chest 
+analysis: Murphy 	's thoughts on the current situation Valenti
+
+[01:00:24]
+BIOMETRICS AI -- MURPHY, NORA
+_stress +31.66% +/- 5% STATUS=HIGH
+
+[01:00:35]
+observation: The group appears to be arguing and gesturing wildly
+analysis: They are arguing over the likely killer
+
+[01:00:43]
+observation: 
+Bertrand points at Cruz
+Parsons points at Cruz
+Strickland points at Pahlavi
+Pahlavi points at Parsons
+Cruz points at Parsons
+Valenti points at Parsons
+Murphy points at Parsons
+analysis: ...
+
+[01:00:51]
+observation: Eugene Parsons (Swabbie) is iced.
+analysis: ...
+
+[01:01:01]
+observation: The group investigates Parsons's body
+analysis: They are looking for evidence.
+
+[01:01:05]
+observation: No evidence to incriminate Parsons is found.
+analysis: Parsons is NOT the killer.
+
+[ SHIP CYCLE 3475 ]
+
+[02:00:04]
+observation: The crew enters the conference room.
+analysis: ...
+
+[02:00:11]
+observation: Francis Bertrand (First Mate) is not present
+analysis: Bertrand has been murdered.
+
+[02:00:24]
+observation: Strickland licks his lips while pacing around the room
+analysis: Strickland has too much stress, and it shows in his actions
+
+[02:00:24]
+BIOMETRICS AI -- STRICKLAND, PETER
+_stress +100.00% +/- 5% STATUS=LOW
+
+[02:00:31]
+observation: Pahlavi shakes visibly as Valenti walks into the room 
+analysis: Pahlavi 	's thoughts on the current situation Valenti
+
+[02:00:31]
+BIOMETRICS AI -- VALENTI, MICAELA
+_stress -43.33% +/- 5% STATUS=UNCERTAIN
+
+[02:00:42]
+observation: Cruz asks Pahlavi for potential ways to leave the station 
+analysis: Cruz is stressed about Pahlavi
+
+[02:00:42]
+BIOMETRICS AI -- CRUZ, LEONIE
+_anger ??.??% +/- 5% STATUS=HIGH
+
+[02:00:52]
+observation: Valenti continually talks to Murphy regarding the current situation 
+analysis: Valenti has no idea what Murphy is thinking about 
+
+[02:00:52]
+BIOMETRICS AI -- VALENTI, MICAELA
+_anger -15.47% +/- 5% STATUS=HIGH
+
+[02:00:52]
+BIOMETRICS AI -- MURPHY, NORA
+_stress +17.76% +/- 5% STATUS=HIGH
+
+[02:01:06]
+observation: Murphy taps away at keys on the terminal's keyboard in a seemingly random order
+analysis: Murphy is distressed about the disappearances, but doesn't want to bother anyone about her worries
+
+[02:01:14]
+observation: The group appears to be arguing and gesturing wildly
+analysis: They are arguing over the likely killer
+
+[02:01:24]
+observation: 
+Strickland points at Valenti
+Pahlavi points at Valenti
+:q
+////Cruz points at Murphy
+Valenti points at Cruz
+Murphy points at Valenti
+analysis: ...
+
+[02:01:35]
+observation: Micaela Valenti (Quartermaster) is iced.
+analysis: ...
+
+[02:01:45]
+observation: The group investigates Valenti's body
+analysis: They are looking for evidence.
+
+[02:01:54]
+observation: Incriminating evidence is located
+analysis: Valenti is the killer.
+
+[02:02:01]
+observation: Pahlavi reaches for the camera and breaks the connection
+analysis: ...
+
+[02:02:11]
+observation: The killer, Valenti, is dead--only Peter Strickland (Security), Yasmin Pahlavi (Navigator), Leonie Cruz (Pilot) and Nora Murphy (Captain) remain.
+analysis: ...
+
+[ END TRANSCRIPT ]
+

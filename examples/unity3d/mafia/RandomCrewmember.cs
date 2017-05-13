@@ -17,7 +17,8 @@ public class RandomCrewmember : Crewmember {
     // Select random Entity (hack)
     foreach (IEntity entity in Universe.root.entities) {
       // Skip dead targets
-      if ((entity as IDestroyable).Destroy) continue;
+      if ((entity as IDestroyable).Destroy || entity == this)
+        continue;
 
       targets.Add(entity as Crewmember);
     }
@@ -55,6 +56,6 @@ public class RandomCrewmember : Crewmember {
   protected override float Score(
     Interaction interaction, ICollection<IEntity> targets
   ) {
-    return Random.Range(0, 1);
+    return Random.Range(0, 1f);
   }
 }
