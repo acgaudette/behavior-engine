@@ -4,22 +4,24 @@ anger_on_other
   is blinded by rage, believing that
     is the source of all of %p problems
   is expressing anger in an unhealthy way at
-  can't control their explosive emotions and is using
+  can't control %p explosive emotions and is using
     as an outlet
 stress_on_self
   has too much stress, and it shows in %p actions
-  is distressed about the disappearances, but doesn't want to bother anyone about %p worries
+  doesn't want to bother anyone about %p worries
   wants to calm down, but is finding it hard to concentrate
   seems to be overthinking the situation, and wants to wind down
   does not seem to understand %p own actions due to %p stress
   ...
 stress_on_other
   thinks that
-    's actions are very stressful
+    %ns's actions are very stressful
   is stressed about
-  	's thoughts on the current situation
+    %ns's thoughts on the current situation
   can't stop thinking that
-    could know more than the rest of the crew regarding the current situation
+    could know more about the current situation
+  can't stop thinking that
+    might know more about what's going on
   has no idea what
     is thinking about
   ...

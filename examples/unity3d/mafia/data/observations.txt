@@ -7,8 +7,8 @@ anger_on_other
     with seething eyes
   shouts--%ns
     seems to be %p target of aggression
-  charges down the hallway in an attempt to chase
-    as other crewmembers stay in hot pursuit to restrain their movements
+  chases
+    down the hallway
   slams %p fist on the table, causing
     to flinch
   growls at
@@ -16,8 +16,9 @@ anger_on_other
   smashes the chair where
     had been sitting on the floor
   slaps
-    on the cheek
-  gnashes %p teeth at
+    across the face
+  shakes
+    by the shoulders
 stress_on_self
   stares vacantly at a wall
   nervously taps the conference room table
@@ -28,23 +29,22 @@ stress_on_self
   has an uncontrollable twitch in %p eye
   clasps %p hands and kneels on the floor
   stumbles around the living quarters with an uneven step
-  scrapes away at %p face with a frown
+  holds %p head in %p hands
   sucks on %p thumb
 stress_on_other
-  jabs %p finger at
-    's chest
+  paces in front of where
+    is sitting
   shakes visibly as
     walks into the room
-  stares at %p
+  stares at
     with a furrowed brow
-  continually taps
-    on the shoulder
-  asks
-    for potential ways to leave the station
-  continually talks to
+  taps
+    on the shoulder over and over again
+  engages in small talk with
     regarding the current situation
+  questions
+    repeatedly
   attempts to sleep, but takes fleeting looks at
     every few seconds
-  runs through the hallways looking for
   chews on %p fingernails while talking with
   runs from the room upon seeing

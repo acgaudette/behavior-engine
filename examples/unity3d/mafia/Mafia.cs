@@ -21,6 +21,7 @@ public static class MafiaExtensions {
 public class Mafia : MonoBehaviour {
 
   public bool forceRandomResults = false;
+  private const float MAX_OFFSET_ABS = 0.15f;
 
   // Macro
   static List<T> LS<T>(params T[] p) {
@@ -118,10 +119,9 @@ public class Mafia : MonoBehaviour {
 
     /* Relationships */
     /**
-     * Randomly assigning pos/neg agree/trust for the purposes of
-     * the relationship graph
-     * Ideally, this should not be randomly assigned, perhaps chosen when
-     * creating the characters
+     * Creates the initial alignments for each character for what increases/
+     * decreases trust/agreement. The actual relationships are taken care of
+     * as characters perform interactions and other characters observe them.
      */
     for (int i = 0; i < characters.Length; ++i) {
 
@@ -164,7 +164,7 @@ public class Mafia : MonoBehaviour {
 
     foreach (IAttribute prototype in repo.AttributePrototypes) {
       if (prototype is State) {
-        for (float o = -.3f; o < .4f; o += .15f) {
+        for (float o = -MAX_OFFSET_ABS; o < (MAX_OFFSET_ABS * 5f) /4f; o += (MAX_OFFSET_ABS/2)) {
           if (o == 0) continue;
 
           State state = prototype as State;
@@ -173,7 +173,7 @@ public class Mafia : MonoBehaviour {
             new InfluencedEffect(
               (o > 0 ? "raise-" : "lower-")
                 + state.name + "-"
-                + (Mathf.Abs(o) > .2f ? "strong" : "weak"),
+                + (Mathf.Abs(o) > (MAX_OFFSET_ABS * 3/ 4) ? "strong" : "weak"),
               TraitLinksFromState(state, repo),
               LS(state),
               LS(repo.MOD(state.name, o))

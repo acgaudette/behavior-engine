@@ -12,6 +12,8 @@ namespace BehaviorEngine.Personality {
     private const float LOW_STABILITY = .3f;
     private const float HI_STABILITY = .7f;
     private const float MIDPOINT = 0.5f;
+    //TODO: Move to appropriate module once we figure out best location
+    private const float MOD_OFFSET_LOW = 0.08f;
 
     static Random random = new Random();
 
@@ -130,6 +132,9 @@ namespace BehaviorEngine.Personality {
         foreach(IModifier m in e.Modifiers) {
           FloatModifier floatMod = m as FloatModifier;
           currMod = Math.Abs(floatMod.offset);
+          if (floatMod.Attribute.Equals(repo.GetState("anger"))) {
+
+          }
         }
         if (e.Modifiers.Count != 0) {
           currMod /= e.Modifiers.Count;
@@ -265,13 +270,13 @@ namespace BehaviorEngine.Personality {
 
           chosen
             = (accumulatorVal < LOW_STABILITY &&
-          modTotal > 0 && modTotal < .2f) ||
+          modTotal > 0 && modTotal < MOD_OFFSET_LOW) ||
           (accumulatorVal > LOW_STABILITY && accumulatorVal < MIDPOINT &&
-          modTotal >= .2f) ||
+          modTotal >= MOD_OFFSET_LOW) ||
           (accumulatorVal > MIDPOINT && accumulatorVal < HI_STABILITY &&
-          modTotal < 0f && modTotal > -.2f) ||
+          modTotal < 0f && modTotal > -MOD_OFFSET_LOW) ||
           (accumulatorVal > HI_STABILITY &&
-          modTotal <= -.2f);
+          modTotal <= -MOD_OFFSET_LOW);
 
           if(chosen) {
             effects.Add(e);
