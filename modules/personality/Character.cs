@@ -146,14 +146,17 @@ namespace BehaviorEngine.Personality {
       Character hostCharacter = host as Character;
       InfluencedInteraction influencedInteraction
         = interaction as InfluencedInteraction;
+
       // Black box
       var effects =  oracle.ReactionEffects(
         influencedInteraction,
         hostCharacter, BrainRepo
       );
+
       if (this != hostCharacter) {
         UpdateRelationship(hostCharacter, influencedInteraction, effects);
       }
+
       return effects;
     }
 
@@ -185,6 +188,7 @@ namespace BehaviorEngine.Personality {
       IList<Effect> effects
     ) {
       Relationship withHost = GetRelationship(character);
+
       if (withHost == null) {
         withHost = CreateRelationship(
           character, influencedInteraction
